@@ -44,6 +44,7 @@ Este proyecto consiste en un servidor que proporcionará información y almacena
 
 📦 **Base de Datos:** *(Esquema E/R adjunto)*
 
+![Base de datos del proyecto](assets/Database.png)
 ---
 
 
