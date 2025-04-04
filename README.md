@@ -47,6 +47,9 @@ Este proyecto consiste en un servidor que proporcionará información y almacena
 ![Base de datos del proyecto](assets/Database.png)
 ---
 
+## 🎨 Diseño 
+[![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white)](https://www.figma.com/design/yxJJMhDoufw6WK8nBnkZd3/Aplicaci%C3%B3n-gestion-gym?node-id=11-547&t=IyhWAoJk5Y5FJ5Dw-0)  
+🔗 [Ver diseño en Figma](https://www.figma.com/design/yxJJMhDoufw6WK8nBnkZd3/Aplicaci%C3%B3n-gestion-gym?node-id=11-547&t=IyhWAoJk5Y5FJ5Dw-0)
 
 🚀 **¡En desarrollo!** 
 
