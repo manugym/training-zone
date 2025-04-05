@@ -4,6 +4,7 @@ package com.TrainingZone.Server.Services;
 import com.TrainingZone.Server.Config.Jwt.JwtService;
 import com.TrainingZone.Server.Controllers.AuthRequest;
 import com.TrainingZone.Server.Controllers.AuthResponse;
+import com.TrainingZone.Server.Controllers.RegisterRequest;
 import com.TrainingZone.Server.Models.Role;
 import com.TrainingZone.Server.Models.User;
 import com.TrainingZone.Server.Repositories.UserRepository;
@@ -25,7 +26,7 @@ public class AuthService {
 
     public AuthResponse login(AuthRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getCredential(), request.getPassword()));
-        UserDetails user=userRepository.findByUsername(request.getCredential()).orElseThrow();
+        UserDetails user=userRepository.findByEmailOrPhone(request.getCredential(), request.getCredential()).orElseThrow();
         String token=jwtService.getToken(user);
         return AuthResponse.builder()
                 .token(token)
@@ -33,9 +34,11 @@ public class AuthService {
 
     }
 
-    public AuthResponse register(AuthRequest request) {
+    public AuthResponse register(RegisterRequest request) {
         User user = User.builder()
-                .username(request.getCredential())
+                .name(request.getName())
+                .email(request.getEmail())
+                .phone(request.getPhone())
                 .password(passwordEncoder.encode( request.getPassword()))
                 .role(Role.USER)
                 .build();

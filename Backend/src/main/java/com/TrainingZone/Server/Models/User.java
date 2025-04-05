@@ -27,14 +27,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="users", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
+@Table(name="users", uniqueConstraints = {@UniqueConstraint(columnNames = {"email", "phone"})})
 public class User implements UserDetails {
     @Id
     @GeneratedValue
     UUID id;
-    @Basic
+
     @Column(nullable = false)
-    String username;
+    String name;
+    @Column(nullable = false, unique = true)
+    String email;
+    @Column(nullable = false, unique = true)
+    String phone;
     @Column(nullable = false)
     String password;
     @Enumerated(EnumType.STRING)
@@ -44,6 +48,12 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority((role.name())));
     }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
