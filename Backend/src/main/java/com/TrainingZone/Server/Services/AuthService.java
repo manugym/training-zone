@@ -2,9 +2,9 @@ package com.TrainingZone.Server.Services;
 
 
 import com.TrainingZone.Server.Config.Jwt.JwtService;
-import com.TrainingZone.Server.Controllers.AuthRequest;
-import com.TrainingZone.Server.Controllers.AuthResponse;
-import com.TrainingZone.Server.Controllers.RegisterRequest;
+import com.TrainingZone.Server.Controllers.Auth.AuthRequest;
+import com.TrainingZone.Server.Controllers.Auth.AuthResponse;
+import com.TrainingZone.Server.Controllers.Auth.RegisterRequest;
 import com.TrainingZone.Server.Models.Role;
 import com.TrainingZone.Server.Models.User;
 import com.TrainingZone.Server.Repositories.UserRepository;

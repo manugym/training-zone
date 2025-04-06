@@ -47,6 +47,14 @@ public class UserDataInitializer implements ApplicationRunner {
                         .email("manu@gmail.com")
                         .password(passwordEncoder.encode("1234"))
                         .role(Role.ADMIN)
+                        .build(),
+
+                User.builder()
+                        .name("admin")
+                        .phone("1234")
+                        .email("admin")
+                        .password(passwordEncoder.encode("admin"))
+                        .role(Role.ADMIN)
                         .build()
         );
 

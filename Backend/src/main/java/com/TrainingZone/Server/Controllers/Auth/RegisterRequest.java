@@ -1,4 +1,4 @@
-package com.TrainingZone.Server.Controllers;
+package com.TrainingZone.Server.Controllers.Auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthRequest {
-    String credential;
+public class RegisterRequest {
+    String name;
+    String email;
+    String phone;
     String password;
 }

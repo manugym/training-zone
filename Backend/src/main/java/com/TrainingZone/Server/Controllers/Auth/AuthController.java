@@ -1,4 +1,4 @@
-package com.TrainingZone.Server.Controllers;
+package com.TrainingZone.Server.Controllers.Auth;
 
 import com.TrainingZone.Server.Services.AuthService;
 import lombok.RequiredArgsConstructor;
