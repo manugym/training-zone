@@ -16,7 +16,7 @@ Este proyecto consiste en un servidor que proporcionará información y almacena
 - Chat disponible para comunicación con el administrador del servicio reservado. 💬
 - Posibilidad de chat grupal para las personas que participan en la misma actividad.
 - Sistema de ficheros localmente en el servidor para almacenar imágenes tanto como de clientes, entrenadores y clases
-- Persistencia de datos local para almacenar la rutina creada por la IA
+- Persistencia de datos local del cliente para almacenar la rutina creada por la IA
 - La aplicación estará en Inglés y Español
 - Contará con temas claro y oscuro
   
