@@ -10,11 +10,16 @@
 Este proyecto consiste en un servidor que proporcionará información y almacenamiento a una página web y una aplicación multiplataforma. Está dirigido a gestores de gimnasios y entrenadores personales para que puedan ofrecer sus servicios en forma de clases o entrenamientos personalizados. Los usuarios podrán reservar estos servicios y gestionar sus actividades deportivas de manera fácil y eficiente.
 
 🔹 **Características principales:**
-- Los servicios se podrán ofertar desde la web y la app para usuarios con el rol de administrador.
-- Los usuarios con rol "user" podrán reservar servicios disponibles y consultar sus reservas previas.
+- Los usuarios con rol "user" tendrán acceso a todas las vistas disponibles que les permita su rol
+- Los usuarios con rol "admin" tendrán vistas especificas de administración de usuarios, entrenadores y clases
 - Envío de recordatorios antes de cada clase. ⏰
 - Chat disponible para comunicación con el administrador del servicio reservado. 💬
 - Posibilidad de chat grupal para las personas que participan en la misma actividad.
+- Sistema de ficheros localmente en el servidor para almacenar imágenes tanto como de clientes, entrenadores y clases
+- Persistencia de datos local para almacenar la rutina creada por la IA
+- La aplicación estará en Inglés y Español
+- Contará con temas claro y oscuro
+  
 
 🔸 **Opcionales en estudio:**
 - Implementación de pagos. 💳
