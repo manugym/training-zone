@@ -45,7 +45,7 @@ Este proyecto consiste en un servidor que proporcionará información y almacena
 
 📱 **Aplicación Móvil:** React Native ![React Native](https://img.shields.io/badge/React%20Native-61DAFB?style=for-the-badge&logo=react&logoColor=white)
 
-🔗 **Backend:** Spring Boot ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
+🔗 **Backend:** ASP .NET ![.Net](https://img.shields.io/badge/.NET-5C2D91?style=for-the-badge&logo=.net&logoColor=white)
 
 📦 **Base de Datos:** *(Esquema E/R adjunto)*
 
