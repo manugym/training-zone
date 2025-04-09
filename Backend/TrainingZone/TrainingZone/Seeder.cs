@@ -2,7 +2,7 @@
 using TrainingZone.Models.DataBase;
 using TrainingZone.Services;
 
-namespace TrainingZone.Repositories;
+namespace TrainingZone;
 public class Seeder
 {
     private readonly TrainingZoneContext _trainingZoneContext;
@@ -27,7 +27,7 @@ public class Seeder
         [
             new User(){
                 Name = "admin",
-                Email = "admin@gmail.com",
+                Email = "admin",
                 Phone = "123456789",
                 Password = _passwordService.Hash("admin"),
                 Role = "admin",

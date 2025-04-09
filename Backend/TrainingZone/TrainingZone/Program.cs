@@ -7,8 +7,8 @@ using Swashbuckle.AspNetCore.Filters;
 using System.Globalization;
 using System.Text.Json.Serialization;
 using System.Text;
-using TrainingZone.Repositories;
 using TrainingZone.Services;
+using TrainingZone.Mappers;
 
 namespace TrainingZone;
 
@@ -76,18 +76,18 @@ public class Program
 
         // Servicios
         builder.Services.AddScoped<PasswordService>();
-
-
-        //Matchmaking
-
+        builder.Services.AddScoped<ImageService>();
+        builder.Services.AddScoped<AuthService>();
 
 
 
+        //Settings
         builder.Services.Configure<Settings>(builder.Configuration.GetSection("Settings"));
         builder.Services.AddSingleton(sp => sp.GetRequiredService<IOptions<Settings>>().Value);
 
 
         // Mappers
+        builder.Services.AddTransient<UserMapper>();
 
 
         //Administrador de todos los websockets
