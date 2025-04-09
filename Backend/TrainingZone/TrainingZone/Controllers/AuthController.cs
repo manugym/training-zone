@@ -4,7 +4,7 @@ using TrainingZone.Models.DataBase;
 using TrainingZone.Models.Requests;
 using TrainingZone.Services;
 
-namespace TrainingZone.AuthController
+namespace TrainingZone.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
