@@ -1,80 +1,108 @@
 import React, { useState } from "react";
+import "./Register.css";
+import "../Login/Form.css";
+import defaultAvatar from "../../assets/default-avatar-.jpg";
 
 function Register() {
-  const [name, setName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [phone, setPhone] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [image, setImage] = useState<File | null>(null);
-  const [error, setError] = useState<string>("");
+  const [error, setError] = useState("");
+
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   return (
-    <div>
-      <h2>Registro</h2>
+    <div className="register-container">
+      <div className="profile-image-container">
+        <label htmlFor="image" className="image-label">
+          <img
+            src={imagePreview || defaultAvatar}
+            alt="profile"
+            className="profile-image"
+          />
+          <span className="add-image-btn">+</span>
+        </label>
+        <input
+          type="file"
+          id="image"
+          accept="image/*"
+          onChange={handleImageChange}
+          style={{ display: "none" }}
+        />
+      </div>
 
-      <form>
-        <div>
-          <label htmlFor="name">Nombre</label>
+      <form className="register-form">
+        <div className="form-group">
           <input
             type="text"
             id="name"
+            placeholder="Ej. Juan Pérez"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
           />
         </div>
 
-        <div>
-          <label htmlFor="email">Correo electrónico</label>
+        <div className="form-group">
           <input
             type="email"
             id="email"
+            placeholder="Ej. juan@email.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
         </div>
 
-        <div>
-          <label htmlFor="phone">Teléfono</label>
+        <div className="form-group">
           <input
             type="text"
             id="phone"
+            placeholder="Ej. 123456789"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             required
           />
         </div>
 
-        <div>
-          <label htmlFor="password">Contraseña</label>
+        <div className="form-group">
           <input
             type="password"
             id="password"
+            placeholder="••••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
         </div>
 
-        <div>
-          <label htmlFor="confirmPassword">Confirmar contraseña</label>
+        <div className="form-group">
           <input
             type="password"
             id="confirmPassword"
+            placeholder="••••••••"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
           />
         </div>
 
-        <div>
-          <label htmlFor="image">Imagen de perfil</label>
-          <input type="file" id="image" accept="image/*" required />
-        </div>
-
-        {error && <p>{error}</p>}
+        {error && <p className="error">{error}</p>}
 
         <button type="submit">Registrar</button>
       </form>

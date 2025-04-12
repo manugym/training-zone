@@ -17,32 +17,34 @@ function Auth() {
     <>
       <NavBar />
 
-      <main className="auth-main">
-        <div className="form-header">
-          <h1>{getFormText()}</h1>
-          <img
-            src={formType === "login" ? strongMan : fatMan}
-            alt={formType === "login" ? "Strong Man" : "Fat Man"}
-          />
-        </div>
-
-        <div className="form-container">
-          <div className="form-types">
-            <h3
-              className={formType === "login" ? "active" : ""}
-              onClick={() => setFormType("login")}
-            >
-              Login
-            </h3>
-            <h3
-              className={formType === "register" ? "active" : ""}
-              onClick={() => setFormType("register")}
-            >
-              Register
-            </h3>
+      <main className="auth-wrapper">
+        <div className="auth-main">
+          <div className="form-header">
+            <h1>{getFormText()}</h1>
+            <img
+              src={formType === "login" ? strongMan : fatMan}
+              alt={formType === "login" ? "Strong Man" : "Fat Man"}
+            />
           </div>
 
-          {formType === "login" ? <Login /> : <Register />}
+          <div className="form-container">
+            <div className="form-types">
+              <h3
+                className={formType === "login" ? "active" : ""}
+                onClick={() => setFormType("login")}
+              >
+                Login
+              </h3>
+              <h3
+                className={formType === "register" ? "active" : ""}
+                onClick={() => setFormType("register")}
+              >
+                Register
+              </h3>
+            </div>
+
+            {formType === "login" ? <Login /> : <Register />}
+          </div>
         </div>
       </main>
     </>
