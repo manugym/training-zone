@@ -1,13 +1,28 @@
 import React, { useState } from "react";
 import "../Form.css";
+import AuthService from "../../../services/auth.service";
 
 function Login() {
   const [credentials, setCredentials] = useState("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    setError("");
+    try {
+      const response = await AuthService.login({
+        credential: credentials,
+        password: password,
+      });
+    } catch (err: any) {
+      setError(err.message || "Login failed");
+    }
+  };
+
   return (
-    <form action="">
+    <form onSubmit={handleSubmit}>
       <label htmlFor="credential"></label>
       <input
         type="text"
