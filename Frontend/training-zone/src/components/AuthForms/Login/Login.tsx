@@ -6,19 +6,27 @@ function Login() {
   const [credentials, setCredentials] = useState("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const [rememberMe, setRememberMe] = useState<boolean>(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     setError("");
     try {
-      const response = await AuthService.login({
-        credential: credentials,
-        password: password,
-      });
+      await AuthService.login(
+        {
+          credential: credentials,
+          password: password,
+        },
+        rememberMe
+      );
     } catch (err: any) {
       setError(err.message || "Login failed");
     }
+  };
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRememberMe(e.target.checked);
   };
 
   return (
@@ -42,6 +50,16 @@ function Login() {
         onChange={(e) => setPassword(e.target.value)}
         required
       ></input>
+
+      <div className="remember-me">
+        <input
+          onChange={handleCheckboxChange}
+          type="checkbox"
+          name="remember"
+          id="remember"
+        ></input>
+        <label htmlFor="remember">Remember</label>
+      </div>
 
       {error && <span className="error">{error}</span>}
 

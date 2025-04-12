@@ -3,9 +3,15 @@ import { AuthResponse } from "../models/auth-response";
 import { NewUserRequest } from "../models/new-user-request";
 import ApiService from "./api.service";
 
-const AuthService = {
-  login: async (request: AuthRequest): Promise<AuthResponse> => {
-    const response = await ApiService.post<AuthResponse>("Auth/login", {
+class AuthService {
+  private readonly TOKEN_KEY = "token";
+  private readonly LOGIN_URL = "Auth/login";
+  private readonly REGISTER_URL = "Auth/register";
+
+  constructor() {}
+
+  async login(request: AuthRequest, remember: boolean): Promise<void> {
+    const response = await ApiService.post<AuthResponse>(this.LOGIN_URL, {
       credential: request.credential,
       password: request.password,
     });
@@ -14,11 +20,12 @@ const AuthService = {
       throw new Error("Login failed: Token not received");
     }
 
-    console.log("Login response:", response);
-    localStorage.setItem("token", response.data.accessToken);
-    return response.data;
-  },
-  register: async (request: NewUserRequest): Promise<AuthResponse> => {
+    console.log("Login successful:", response);
+
+    this.setSession(response.data.accessToken, remember);
+  }
+
+  async register(request: NewUserRequest, remember: boolean): Promise<void> {
     const formData = new FormData();
     formData.append("Name", request.name);
     formData.append("Phone", request.phone);
@@ -30,7 +37,7 @@ const AuthService = {
     }
 
     const response = await ApiService.post<AuthResponse>(
-      "Auth/register",
+      this.REGISTER_URL,
       formData
     );
 
@@ -38,10 +45,20 @@ const AuthService = {
       throw new Error("Registration failed: Token not received");
     }
 
-    console.log("Login response:", response);
-    localStorage.setItem("token", response.data.accessToken);
-    return response.data;
-  },
-};
+    console.log("Registration successful:", response);
+    this.setSession(response.data.accessToken, remember);
+  }
 
-export default AuthService;
+  private async setSession(token: string, remember: boolean): Promise<void> {
+    console.log("Setting session with token:", token, remember);
+    if (remember) {
+      localStorage.setItem(this.TOKEN_KEY, token);
+    } else {
+      localStorage.removeItem(this.TOKEN_KEY);
+    }
+
+    ApiService.jwt = token;
+  }
+}
+
+export default new AuthService();

@@ -12,6 +12,7 @@ function Register() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [error, setError] = useState("");
+  const [rememberMe, setRememberMe] = useState<boolean>(false);
 
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
@@ -25,6 +26,10 @@ function Register() {
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRememberMe(e.target.checked);
   };
 
   const validateForm = () => {
@@ -64,14 +69,16 @@ function Register() {
     }
 
     try {
-      const response = await AuthService.register({
-        name: name,
-        phone: phone,
-        email: email,
-        password: password,
-        image: image,
-      });
-      console.log("Usuario registrado con éxito:", response);
+      await AuthService.register(
+        {
+          name: name,
+          phone: phone,
+          email: email,
+          password: password,
+          image: image,
+        },
+        rememberMe
+      );
     } catch (err: any) {
       setError(err.message || "Error desconocido al registrar.");
     }
@@ -154,6 +161,16 @@ function Register() {
         </div>
 
         {error && <p className="error">{error}</p>}
+
+        <div className="remember-me">
+          <input
+            onChange={handleCheckboxChange}
+            type="checkbox"
+            name="remember"
+            id="remember"
+          ></input>
+          <label htmlFor="remember">Remember</label>
+        </div>
 
         <button type="submit">Registrar</button>
       </form>

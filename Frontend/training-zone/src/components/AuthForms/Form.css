@@ -57,3 +57,10 @@ form p {
   font-size: 14px;
   margin: -10px 0 5px 0;
 }
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}

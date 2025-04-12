@@ -76,18 +76,19 @@ public class AuthService
 
         User user = _userMapper.ToEntity(receivedUser);
 
+
         try
         {
             user.AvatarImageUrl = await _imageService.InsertAsync(receivedUser.ImagePath);
+            User newUser = await InsertUser(user);
+            return newUser;
         }
-        catch (Exception ex)
+        catch(Exception e)
         {
-            user.AvatarImageUrl = null;
-
+            Console.Error.WriteLine(e.ToString()); 
         }
 
-        User newUser = await InsertUser(user);
-        return newUser;
+        return null;
     }
 
     
