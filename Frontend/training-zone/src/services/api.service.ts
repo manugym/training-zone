@@ -61,6 +61,10 @@ const ApiService = {
       headers: getHeaders(undefined, contentType),
     };
 
+    if (body instanceof FormData) {
+      delete config.headers["Content-Type"];
+    }
+
     return sendRequest<T>(axios.post(`${BASE_URL}${path}`, body, config));
   },
 

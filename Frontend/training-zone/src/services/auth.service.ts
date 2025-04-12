@@ -19,13 +19,20 @@ const AuthService = {
     return response.data;
   },
   register: async (request: NewUserRequest): Promise<AuthResponse> => {
-    const response = await ApiService.post<AuthResponse>("Auth/register", {
-      name: request.name,
-      phone: request.phone,
-      email: request.email,
-      password: request.password,
-      imagePath: request.imagePath,
-    });
+    const formData = new FormData();
+    formData.append("Name", request.name);
+    formData.append("Phone", request.phone);
+    formData.append("Email", request.email);
+    formData.append("Password", request.password);
+
+    if (request.image) {
+      formData.append("ImagePath", request.image);
+    }
+
+    const response = await ApiService.post<AuthResponse>(
+      "Auth/register",
+      formData
+    );
 
     if (!response.success || !response.data?.accessToken) {
       throw new Error("Login failed: Token not received");

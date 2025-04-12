@@ -19,17 +19,13 @@ public class ImageService
         try
         {
             string relativePath;
-            if (image == null)
-            {
-                relativePath = $"{IMAGES_FOLDER}/{"perfil_por_defecto.png"}";
-            }
-            else
-            {
+            if (image != null)
+            { 
                 relativePath = $"{IMAGES_FOLDER}/{Guid.NewGuid()}_{image.FileName}";
                 await StoreImageAsync(relativePath, image);
+                return relativePath;
             }
 
-            return relativePath;
         }
         catch (Exception ex) { }
 

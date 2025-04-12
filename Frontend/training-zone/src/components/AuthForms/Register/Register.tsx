@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./Register.css";
 import "../Form.css";
 import defaultAvatar from "../../../assets/default-avatar-.jpg";
+import AuthService from "../../../services/auth.service";
 
 function Register() {
   const [name, setName] = useState("");
@@ -26,6 +27,23 @@ function Register() {
     }
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    try {
+      const response = await AuthService.register({
+        name: name,
+        phone: phone,
+        email: email,
+        password: password,
+        image: image,
+      });
+    } catch (err: any) {
+      setError(err.message || "Login failed");
+    }
+  };
+
   return (
     <div className="register-container">
       <div className="profile-image-container">
@@ -46,7 +64,7 @@ function Register() {
         />
       </div>
 
-      <form className="register-form">
+      <form className="register-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <input
             type="text"

@@ -3,5 +3,5 @@ export interface NewUserRequest {
   phone: string;
   email: string;
   password: string;
-  imagePath: File;
+  image?: File;
 }
