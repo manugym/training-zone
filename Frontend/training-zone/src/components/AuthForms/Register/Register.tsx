@@ -3,8 +3,15 @@ import "./Register.css";
 import "../Form.css";
 import defaultAvatar from "../../../assets/default-avatar-.jpg";
 import AuthService from "../../../services/auth.service";
+import { useNavigate } from "react-router-dom";
+import Alert from "../../alert";
 
 function Register() {
+  const navigate = useNavigate();
+  const alertTimer = 3000;
+
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -79,6 +86,13 @@ function Register() {
         },
         rememberMe
       );
+
+      setShowAlert(true);
+
+      setTimeout(() => {
+        setShowAlert(false);
+        navigate("/");
+      }, alertTimer);
     } catch (err: any) {
       setError(err.message || "Error desconocido al registrar.");
     }
@@ -174,6 +188,16 @@ function Register() {
 
         <button type="submit">Registrar</button>
       </form>
+
+      {showAlert && (
+        <Alert
+          icon="success"
+          text="Registro exitoso!"
+          position="top-right"
+          timer={alertTimer}
+          navigatePath="/"
+        />
+      )}
     </div>
   );
 }
