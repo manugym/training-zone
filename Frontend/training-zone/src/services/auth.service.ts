@@ -35,7 +35,7 @@ const AuthService = {
     );
 
     if (!response.success || !response.data?.accessToken) {
-      throw new Error("Login failed: Token not received");
+      throw new Error("Registration failed: Token not received");
     }
 
     console.log("Login response:", response);

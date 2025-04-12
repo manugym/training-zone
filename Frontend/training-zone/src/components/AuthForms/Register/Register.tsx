@@ -27,9 +27,41 @@ function Register() {
     }
   };
 
+  const validateForm = () => {
+    // Validación del correo
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+      return "Por favor, ingresa un correo electrónico válido.";
+    }
+
+    // Validación del teléfono (exactamente 9 dígitos)
+    const phoneRegex = /^[0-9]{9}$/;
+    if (!phone || !phoneRegex.test(phone)) {
+      return "El número de teléfono debe tener exactamente 9 dígitos.";
+    }
+
+    // Validación de la contraseña
+    if (password.length < 6) {
+      return "La contraseña debe tener al menos 6 caracteres.";
+    }
+
+    // Confirmación de contraseña
+    if (password !== confirmPassword) {
+      return "Las contraseñas no coinciden.";
+    }
+
+    return "";
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
 
     try {
       const response = await AuthService.register({
@@ -39,8 +71,9 @@ function Register() {
         password: password,
         image: image,
       });
+      console.log("Usuario registrado con éxito:", response);
     } catch (err: any) {
-      setError(err.message || "Login failed");
+      setError(err.message || "Error desconocido al registrar.");
     }
   };
 
