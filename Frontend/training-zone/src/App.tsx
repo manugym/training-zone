@@ -1,10 +1,13 @@
+import { BrowserRouter } from "react-router-dom";
 import "./App.css";
+import Main from "./pages/Home/Home";
+import AppRoutes from "./routes/app-routes";
 
 function App() {
   return (
-    <>
-      <h1>Training Zone</h1>
-    </>
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
   );
 }
 
