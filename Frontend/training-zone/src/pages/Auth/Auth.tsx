@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import NavBar from "../../components/NavBar/NavBar";
 import "./Auth.css";
-import Register from "../../components/Register/Register";
-import Login from "../../components/Login/Login";
+import Register from "../../components/AuthForms/Register/Register";
+import Login from "../../components/AuthForms/Login/Login";
 import strongMan from "../../assets/strong-man.png";
 import fatMan from "../../assets/fat-man.png";
 

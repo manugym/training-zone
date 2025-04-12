@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Register.css";
-import "../Login/Form.css";
-import defaultAvatar from "../../assets/default-avatar-.jpg";
+import "../Form.css";
+import defaultAvatar from "../../../assets/default-avatar-.jpg";
 
 function Register() {
   const [name, setName] = useState("");
