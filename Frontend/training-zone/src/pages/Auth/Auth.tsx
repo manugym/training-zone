@@ -10,7 +10,21 @@ function Auth() {
   const [formType, setFormType] = useState<"login" | "register">("login");
 
   const getFormText = () => {
-    return formType === "login" ? "Login" : "Register";
+    if (formType === "login") {
+      return (
+        <div className="form-text">
+          <h2>Welcome back! Please log in.</h2>
+          <p>We are glad to see you again!</p>
+        </div>
+      );
+    }
+
+    return (
+      <div className="form-text">
+        <h2>Join us today!</h2>
+        <p>Create an account to enjoy our services.</p>
+      </div>
+    );
   };
 
   return (
@@ -20,7 +34,7 @@ function Auth() {
       <main className="auth-wrapper">
         <div className="auth-main">
           <div className="form-header">
-            <h1>{getFormText()}</h1>
+            {getFormText()}
             <img
               src={formType === "login" ? strongMan : fatMan}
               alt={formType === "login" ? "Strong Man" : "Fat Man"}

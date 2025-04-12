@@ -20,6 +20,7 @@
 }
 
 /* Left: Image and title */
+
 .form-header {
   width: 35%;
   background-color: #0e2a47;
@@ -31,14 +32,32 @@
   padding: 2rem;
 }
 
+.form-header img {
+  max-width: 250px;
+  width: 100%;
+  height: auto;
+}
+
 .form-header h1 {
   margin-bottom: 2rem;
   font-size: 24px;
 }
 
-.form-header img {
-  max-width: 150px;
-  height: auto;
+.form-text {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.form-text h2 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.form-text p {
+  font-size: 16px;
+  color: #ccc;
 }
 
 /* Right: form */
