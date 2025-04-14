@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthRequest } from "../models/auth-request";
 import { AuthResponse } from "../models/auth-response";
 import { NewUserRequest } from "../models/new-user-request";
@@ -51,13 +52,18 @@ class AuthService {
 
   private async setSession(token: string, remember: boolean): Promise<void> {
     console.log("Setting session with token:", token, remember);
-    if (remember) {
-      localStorage.setItem(this.TOKEN_KEY, token);
-    } else {
-      localStorage.removeItem(this.TOKEN_KEY);
-    }
 
-    ApiService.jwt = token;
+    try {
+      if (remember) {
+        await AsyncStorage.setItem(this.TOKEN_KEY, token);
+      } else {
+        await AsyncStorage.removeItem(this.TOKEN_KEY);
+      }
+
+      ApiService.jwt = token;
+    } catch (error) {
+      console.error("Error while setting session:", error);
+    }
   }
 }
 

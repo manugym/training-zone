@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { Result } from "../models/result";
 import Config from "react-native-config";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 class ApiService {
   private readonly TOKEN_KEY = "token";
@@ -9,7 +10,16 @@ class ApiService {
   public jwt: string | null = null;
 
   constructor() {
-    this.jwt = localStorage.getItem(this.TOKEN_KEY) || null;
+    this.initializeJwt();
+  }
+
+  private async initializeJwt() {
+    try {
+      const token = await AsyncStorage.getItem(this.TOKEN_KEY);
+      this.jwt = token || null;
+    } catch (error) {
+      console.error("Error al obtener el token desde AsyncStorage:", error);
+    }
   }
 
   private getHeaders(

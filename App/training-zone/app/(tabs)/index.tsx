@@ -1,15 +1,22 @@
 import { StyleSheet, Platform, Button } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { useRouter } from "expo-router";
 
 export default function HomeScreen() {
+  const router = useRouter();
+
+  const goToAuth = () => {
+    router.push("/Auth");
+  };
+
   return (
     <ThemedView style={styles.container}>
       <ThemedText type="title" style={styles.title}>
         Welcome!
       </ThemedText>
 
-      <Button onPress={{}}>Login</Button>
+      <Button title="Go to Auth" onPress={goToAuth} />
     </ThemedView>
   );
 }
