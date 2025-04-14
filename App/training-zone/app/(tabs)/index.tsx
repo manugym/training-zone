@@ -1,4 +1,4 @@
-import { StyleSheet, Platform } from "react-native";
+import { StyleSheet, Platform, Button } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 
@@ -8,6 +8,8 @@ export default function HomeScreen() {
       <ThemedText type="title" style={styles.title}>
         Welcome!
       </ThemedText>
+
+      <Button onPress={{}}>Login</Button>
     </ThemedView>
   );
 }
