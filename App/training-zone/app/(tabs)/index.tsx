@@ -2,6 +2,7 @@ import { StyleSheet, Platform, Button } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useRouter } from "expo-router";
+import apiService from "@/services/api.service";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -14,6 +15,10 @@ export default function HomeScreen() {
     <ThemedView style={styles.container}>
       <ThemedText type="title" style={styles.title}>
         Welcome!
+      </ThemedText>
+
+      <ThemedText type="title" style={styles.title}>
+        {apiService.jwt}
       </ThemedText>
 
       <Button title="Go to Auth" onPress={goToAuth} />

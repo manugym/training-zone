@@ -115,6 +115,10 @@ public class Program
             });
         });
 
+        //Para que dispositivos locales puedan acceder
+        builder.WebHost.UseUrls("http://0.0.0.0:7089"); 
+
+
 
         var app = builder.Build();
 

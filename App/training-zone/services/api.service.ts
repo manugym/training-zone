@@ -1,11 +1,10 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { Result } from "../models/result";
-import Config from "react-native-config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 class ApiService {
   private readonly TOKEN_KEY = "token";
-  private readonly BASE_URL = Config.API_URL;
+  private readonly BASE_URL = "http://192.168.18.100:7089/api/";
 
   public jwt: string | null = null;
 
