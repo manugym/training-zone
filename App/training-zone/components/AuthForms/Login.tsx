@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   View,
   useColorScheme,
+  Alert,
 } from "react-native";
 import { ThemedText } from "../ThemedText";
 import { ThemedView } from "../ThemedView";
@@ -19,9 +20,33 @@ function Login() {
   const [password, setPassword] = useState<string>("");
   const [rememberMe, setRememberMe] = useState<boolean>(false);
 
-  useEffect(() => {
-    console.log(credentials);
-  }, [credentials]);
+  const [error, setError] = useState("");
+
+  const validateForm = () => {
+    if (!credentials) return "Email o teléfono requerido.";
+
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(credentials);
+    const isPhone = /^[0-9]{9}$/.test(credentials);
+
+    if (!isEmail && !isPhone) {
+      return "Ingresa un email o número de teléfono válido.";
+    }
+
+    if (!password) return "Contraseña requerida.";
+
+    return "";
+  };
+
+  const handleSubmit = async () => {
+    setError(validateForm());
+    if (error) return;
+
+    try {
+      Alert.alert("Inicio de sesión exitoso", "Bienvenido de nuevo!");
+    } catch (err) {
+      setError("Ocurrió un error. Intenta de nuevo.");
+    }
+  };
 
   return (
     <ThemedView
@@ -44,6 +69,12 @@ function Login() {
         onChangeText={setPassword}
       />
 
+      {error ? (
+        <ThemedText type="default" style={styles.error}>
+          {error}
+        </ThemedText>
+      ) : null}
+
       <View style={styles.rememberContainer}>
         <Checkbox
           value={rememberMe}
@@ -60,6 +91,7 @@ function Login() {
 
       <TouchableOpacity
         style={[styles.loginButton, { backgroundColor: theme.primary }]}
+        onPress={handleSubmit}
       >
         <ThemedText
           type="default"
@@ -108,6 +140,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: "center",
     fontWeight: "bold",
+  },
+  error: {
+    color: "#f87171",
+    marginBottom: 10,
+    alignSelf: "flex-start",
   },
 });
 
