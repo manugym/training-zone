@@ -17,10 +17,6 @@ export default function HomeScreen() {
         Welcome!
       </ThemedText>
 
-      <ThemedText type="title" style={styles.title}>
-        {apiService.jwt}
-      </ThemedText>
-
       <Button title="Go to Auth" onPress={goToAuth} />
     </ThemedView>
   );

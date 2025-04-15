@@ -11,8 +11,12 @@ import { ThemedText } from "../ThemedText";
 import { ThemedView } from "../ThemedView";
 import Checkbox from "expo-checkbox";
 import { Colors } from "@/constants/Colors";
+import authService from "@/services/auth.service";
+import { useNavigation, useRouter } from "expo-router";
 
 function Login() {
+  const router = useRouter();
+
   const colorScheme = useColorScheme() || "light";
   const theme = Colors[colorScheme];
 
@@ -42,9 +46,18 @@ function Login() {
     if (error) return;
 
     try {
+      await authService.login(
+        {
+          credential: credentials,
+          password: password,
+        },
+        rememberMe
+      );
+
       Alert.alert("Inicio de sesión exitoso", "Bienvenido de nuevo!");
+      router.push("/");
     } catch (err) {
-      setError("Ocurrió un error. Intenta de nuevo.");
+      setError(err.message || "Ocurrió un error. Intenta de nuevo.");
     }
   };
 
