@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../Form.css";
 import AuthService from "../../../services/auth.service";
-import Alert from "../../alert";
+import Alert from "../../Alert";
 import { useNavigate } from "react-router-dom";
 
 function Login() {

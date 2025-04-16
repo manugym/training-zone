@@ -27,8 +27,8 @@ public class Seeder
         [
             new User(){
                 Name = "admin",
-                Email = "admin",
-                Phone = "123456789",
+                Email = "admin@gmail.com",
+                Phone = "000000000",
                 Password = _passwordService.Hash("admin"),
                 Role = "admin",
             },

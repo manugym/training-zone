@@ -4,7 +4,7 @@ import "../Form.css";
 import defaultAvatar from "../../../assets/default-avatar-.jpg";
 import AuthService from "../../../services/auth.service";
 import { useNavigate } from "react-router-dom";
-import Alert from "../../alert";
+import Alert from "../../Alert";
 
 function Register() {
   const navigate = useNavigate();
