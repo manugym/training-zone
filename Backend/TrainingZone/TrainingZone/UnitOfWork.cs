@@ -1,0 +1,30 @@
+﻿using TrainingZone.Repositories;
+
+namespace TrainingZone;
+
+public class UnitOfWork
+{
+    private readonly TrainingZoneContext _context;
+
+    //private GameRepository _gameRepository;
+    private UserRepository _userRepository;
+
+
+
+    public UserRepository UserRepository => _userRepository ??= new UserRepository(_context);
+
+
+    public UnitOfWork(TrainingZoneContext context)
+    {
+        _context = context;
+    }
+
+    public TrainingZoneContext Context => _context;
+
+    public async Task<bool> SaveAsync()
+    {
+        return await _context.SaveChangesAsync() > 0;
+    }
+
+}
+
