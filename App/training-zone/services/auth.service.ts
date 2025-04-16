@@ -27,6 +27,8 @@ class AuthService {
   }
 
   async register(request: NewUserRequest, remember: boolean): Promise<void> {
+    console.log("Registering user:", request);
+
     const formData = new FormData();
     formData.append("Name", request.name);
     formData.append("Phone", request.phone);
@@ -34,13 +36,27 @@ class AuthService {
     formData.append("Password", request.password);
 
     if (request.image) {
-      formData.append("ImagePath", request.image);
+      try {
+        const response = await fetch(request.image);
+        const blob = await response.blob();
+        formData.append(
+          "ImagePath",
+          blob,
+          request.image.split("/").pop() || "image.jpg"
+        );
+      } catch (error) {
+        console.error("Error al convertir la imagen:", error);
+      }
     }
+
+    console.log("FormData for registration:", formData);
 
     const response = await ApiService.post<AuthResponse>(
       this.REGISTER_URL,
       formData
     );
+
+    console.log("Response from registration:", response);
 
     if (!response.success || !response.data?.accessToken) {
       throw new Error("Registration failed: Token not received");

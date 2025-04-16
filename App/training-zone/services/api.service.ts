@@ -27,11 +27,14 @@ class ApiService {
   ): Record<string, string> {
     const token = this.jwt;
     const headers: Record<string, string> = {
-      Authorization: token ? `Bearer ${token}` : "",
       "Content-Type": contentType,
     };
 
     if (accept) headers["Accept"] = accept;
+
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
 
     return headers;
   }
@@ -72,9 +75,12 @@ class ApiService {
       headers: this.getHeaders(undefined, contentType),
     };
 
+    // If the body is a FormData instance, set the Content-Type to multipart/form-data
     if (body instanceof FormData) {
-      delete config.headers["Content-Type"];
+      config.headers["Content-Type"] = "multipart/form-data";
     }
+
+    console.log("Headers", config.headers);
 
     return this.sendRequest<T>(
       axios.post(`${this.BASE_URL}${path}`, body, config)

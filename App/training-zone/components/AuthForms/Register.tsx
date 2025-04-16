@@ -14,6 +14,7 @@ import { Colors } from "@/constants/Colors";
 import { ThemedText } from "../ThemedText";
 import { ThemedView } from "../ThemedView";
 import defaultAvatar from "@/assets/images/default-avatar.jpg";
+import authService from "@/services/auth.service";
 
 export default function Register() {
   const colorScheme = useColorScheme() || "light";
@@ -25,7 +26,7 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-  const [image, setImage] = useState<string | null>(null);
+  const [image, setImage] = useState<string>(null);
 
   const [error, setError] = useState("");
 
@@ -35,6 +36,8 @@ export default function Register() {
       aspect: [1, 1],
       quality: 0.5,
     });
+
+    console.log(result);
 
     if (!result.canceled && result.assets.length > 0) {
       setImage(result.assets[0].uri);
@@ -60,6 +63,17 @@ export default function Register() {
     }
 
     try {
+      await authService.register(
+        {
+          name,
+          phone,
+          email,
+          password,
+          image,
+        },
+        rememberMe
+      );
+
       Alert.alert("Registro exitoso", "¡Te has registrado correctamente!");
     } catch (err) {
       setError("Ocurrió un error. Intenta de nuevo.");
