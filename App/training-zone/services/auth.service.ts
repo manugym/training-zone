@@ -36,17 +36,13 @@ class AuthService {
     formData.append("Password", request.password);
 
     if (request.image) {
-      try {
-        const response = await fetch(request.image);
-        const blob = await response.blob();
-        formData.append(
-          "ImagePath",
-          blob,
-          request.image.split("/").pop() || "image.jpg"
-        );
-      } catch (error) {
-        console.error("Error al convertir la imagen:", error);
-      }
+      const fileName = request.image.split("/").pop() || "image.jpg";
+
+      formData.append("ImagePath", {
+        uri: request.image,
+        name: fileName,
+        type: "image/jpeg",
+      } as any);
     }
 
     console.log("FormData for registration:", formData);
