@@ -1,6 +1,5 @@
 ﻿using TrainingZone.Models.DataBase;
-using TrainingZone.Models.Dtos;
-using TrainingZone.Models.Requests;
+using TrainingZone.Models.Dtos.User;
 using TrainingZone.Services;
 
 namespace TrainingZone.Mappers;

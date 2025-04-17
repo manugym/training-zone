@@ -6,7 +6,7 @@ using System.Security.Claims;
 using System.Text.RegularExpressions;
 using TrainingZone.Mappers;
 using TrainingZone.Models.DataBase;
-using TrainingZone.Models.Requests;
+using TrainingZone.Models.Dtos;
 
 namespace TrainingZone.Services;
 

@@ -1,4 +1,4 @@
-﻿namespace TrainingZone.Models.Dtos;
+﻿namespace TrainingZone.Models.Dtos.User;
 
 public class UserDto
 {
@@ -7,5 +7,5 @@ public class UserDto
     public string Phone { get; set; }
     public string Email { get; set; }
     public string Role { get; set; }
-    public string? AvatarImageUrl { get; set; }
+    public string AvatarImageUrl { get; set; }
 }
