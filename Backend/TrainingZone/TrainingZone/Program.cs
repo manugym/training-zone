@@ -80,7 +80,7 @@ public class Program
         builder.Services.AddScoped<ImageService>();
         builder.Services.AddScoped<AuthService>();
         builder.Services.AddScoped<TrainerService>();
-
+        builder.Services.AddScoped<TrainerSmartSearchService>();
 
 
 
