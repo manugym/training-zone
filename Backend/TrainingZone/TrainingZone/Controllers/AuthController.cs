@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TrainingZone.Models.DataBase;
-using TrainingZone.Models.Requests;
+using TrainingZone.Models.Dtos.User;
 using TrainingZone.Services;
 
 namespace TrainingZone.Controllers
@@ -18,7 +18,7 @@ namespace TrainingZone.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<string>> RegisterUserAsync([FromForm] NewUserRequest receivedUser)
+        public async Task<ActionResult<string>> RegisterUserAsync([FromForm] CreateUserDto receivedUser)
         {
             User newUser = await _authService.RegisterUser(receivedUser);
             if (newUser != null)
@@ -36,7 +36,7 @@ namespace TrainingZone.Controllers
         }
         
         [HttpPost("login")]
-        public async Task<ActionResult<string>> LoginUser([FromBody] LoginRequest userLogin)
+        public async Task<ActionResult<string>> LoginUser([FromBody] LoginDto userLogin)
         {
 
             User user = await _authService.GetUserByCredentialAndPassword(userLogin.Credential, userLogin.Password);

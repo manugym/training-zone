@@ -48,7 +48,7 @@ public class UserMapper
     }
 
     //Pasa el nuevo usuario a usuario a almacenar
-    public User ToEntity(NewUserRequest newUser)
+    public User ToEntity(CreateUserDto newUser)
     {
         PasswordService passwordService = new PasswordService();
 

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TrainingZone.Models.DataBase;
+using TrainingZone.Models.Dtos.Trainer;
+using TrainingZone.Models.Dtos.User;
 using TrainingZone.Services;
 
 namespace TrainingZone.Controllers;
@@ -17,12 +19,11 @@ public class TrainerController : ControllerBase
         _trainerService = trainerService;
     }
 
-    [HttpGet]
-    public async Task<List<User>> GetTrainers([FromBody] )
+    [HttpPost("allTrainers")]
+    public async Task<AllTrainersDto> GetTrainersAsync([FromBody] TrainerFilterDto filter)
     {
-
-
-
+        return await _trainerService.GetAllTrainersByFilter(filter);
+        
     }
 
     
