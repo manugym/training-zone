@@ -6,7 +6,8 @@ using System.Security.Claims;
 using System.Text.RegularExpressions;
 using TrainingZone.Mappers;
 using TrainingZone.Models.DataBase;
-using TrainingZone.Models.Requests;
+using TrainingZone.Models.Dtos;
+using TrainingZone.Models.Dtos.User;
 
 namespace TrainingZone.Services;
 
@@ -66,7 +67,7 @@ public class AuthService
         return tokenHandler.WriteToken(token);
     }
 
-    public async Task<User> RegisterUser(NewUserRequest receivedUser)
+    public async Task<User> RegisterUser(CreateUserDto receivedUser)
     {
 
         //Retorna nulo si el usuario es nulo o si el email o número de teléfono es incorrecto
@@ -94,7 +95,7 @@ public class AuthService
     
     public async Task<User> GetUserByCredentialAndPassword(string credential, string password)
     {
-        User user = await _unitOfWork.UserRepository.GetUserByCredential(credential);
+        User user = await _unitOfWork.UserRepository.GetUserByCredentialAsync(credential);
         if (user == null)
         {
             return null;

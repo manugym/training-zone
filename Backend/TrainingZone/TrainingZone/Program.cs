@@ -44,6 +44,7 @@ public class Program
         {
             options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
             {
+
                 BearerFormat = "JWT",
                 Name = "Authorization",
                 Description = "Escribe **_SOLO_** tu token JWT",
@@ -78,6 +79,8 @@ public class Program
         builder.Services.AddScoped<PasswordService>();
         builder.Services.AddScoped<ImageService>();
         builder.Services.AddScoped<AuthService>();
+        builder.Services.AddScoped<TrainerService>();
+
 
 
 
@@ -88,6 +91,7 @@ public class Program
 
         // Mappers
         builder.Services.AddTransient<UserMapper>();
+
 
 
         //Administrador de todos los websockets
@@ -114,6 +118,10 @@ public class Program
                        .WithMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
             });
         });
+
+        //Para que dispositivos locales puedan acceder
+        builder.WebHost.UseUrls("http://0.0.0.0:7089"); 
+
 
 
         var app = builder.Build();
