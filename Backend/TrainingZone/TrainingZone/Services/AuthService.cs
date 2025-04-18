@@ -28,16 +28,6 @@ public class AuthService
     }
 
 
-    public async Task<User> GetUserFromDbByStringId(string stringId)
-    {
-        return await _unitOfWork.UserRepository.GetByIdAsync(Int32.Parse(stringId));
-    }
-
-    public async Task<User> GetUserById(int id)
-    {
-        return await _unitOfWork.UserRepository.GetByIdAsync(id);
-    }
-
     public async Task<User> InsertUser(User user)
     {
         User newUser = await _unitOfWork.UserRepository.InsertAsync(user);
