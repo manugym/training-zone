@@ -1,16 +1,15 @@
 import React from "react";
+import './Home.css';
 import NavBar from "../../components/NavBar/NavBar";
+import SectionLogReg from "../../components/HomeSections/SectionLogReg";
 
-function Main() {
+const Home: React.FC = () => {
   return (
     <>
-      <NavBar />
-
-      <main>
-        <h1>Main</h1>
-      </main>
+    <NavBar />
+    <SectionLogReg />
     </>
-  );
+  )
 }
 
-export default Main;
+export default Home;
