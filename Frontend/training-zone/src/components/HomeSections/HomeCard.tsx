@@ -1,7 +1,7 @@
 import React from "react";
 import './HomeCard.css';
 
-interface CardProps{
+interface CardProps {
   icon: React.ReactNode;
   title: string;
   descriptionText: string;
@@ -9,8 +9,8 @@ interface CardProps{
   onClick: () => void;
 }
 
-const HomeCard: React.FC<CardProps> = ({icon, title, descriptionText, buttonText, onClick}) => {
-  return(
+const HomeCard: React.FC<CardProps> = ({ icon, title, descriptionText, buttonText, onClick }) => {
+  return (
     <div className="home-card">
       <div className="card-icon">{icon}</div>
       <h2 className="card-title">{title}</h2>

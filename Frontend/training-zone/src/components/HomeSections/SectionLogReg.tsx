@@ -26,7 +26,7 @@ const SectionLogReg: React.FC = () => {
   }, []);
 
   return (
-    <div className="home-section-one">
+    <section id="section-one" className="home-section-one">
       <div className="section-one-content">
         <div className="logo-wrapper">
           <div className="logo">
@@ -46,7 +46,7 @@ const SectionLogReg: React.FC = () => {
           </button>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

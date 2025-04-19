@@ -1,0 +1,43 @@
+.home-cards {
+  background-color: var(--color-secondary);
+  padding: 4rem 1rem;
+  min-height: calc(100vh - 80px);
+}
+
+.offer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.offer-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #f1f5f9;
+}
+
+.offer-description {
+  color: #f1f5f9;
+  margin: 0 auto;
+  width: 70%;
+  margin-bottom: 5rem;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 640px) {
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .cards-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

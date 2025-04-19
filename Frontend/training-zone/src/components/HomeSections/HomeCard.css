@@ -1,0 +1,44 @@
+.home-card {
+  background-color: var(--color-background);
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  padding: 1rem;
+  text-align: center;
+  max-width: 50vw;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card-icon {
+  color: var(--icon-color);
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 0.8rem;
+}
+
+.card-text {
+  color: var(--color-text);
+  font-size: 0.85rem;
+  margin-bottom: 0.8rem;
+}
+
+.card-button {
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 99px;
+  border: none;
+  cursor: pointer
+}
+
+.card-button:hover {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
