@@ -1,5 +1,5 @@
 .home-cards {
-  background-color: var(--color-secondary);
+  background-color: var(--color-primary);
   padding: 4rem 1rem;
   min-height: calc(100vh - 80px);
 }

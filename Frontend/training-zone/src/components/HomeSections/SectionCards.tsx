@@ -3,10 +3,9 @@ import HomeCard from "./HomeCard";
 import './SectionCards.css';
 import { PiUsersFourFill } from "react-icons/pi";
 import { MdOutlineSportsKabaddi } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { IoPhonePortraitOutline } from "react-icons/io5";
 
 const SectionCards: React.FC = () => {
-  const navigate = useNavigate();
   return(
     <section id="section-two" className="home-cards">
       <div className="offer-container">
@@ -30,6 +29,13 @@ const SectionCards: React.FC = () => {
             title="Entrenamiento en Grupo"
             descriptionText="El entrenamiento en grupo permite mejorar tu físico de una manera divertida"
             buttonText="Ver descripción"
+            scrollToId="section-one"
+            />
+            <HomeCard
+            icon={<IoPhonePortraitOutline />}
+            title="Plan de entrenamiento"
+            descriptionText="Consigue un plan de entrenamiento personalizado gracias a nuestra IA"
+            buttonText="Conocer más"
             scrollToId="section-one"
             />
         </div>
