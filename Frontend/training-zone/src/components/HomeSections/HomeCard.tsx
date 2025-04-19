@@ -6,16 +6,23 @@ interface CardProps {
   title: string;
   descriptionText: string;
   buttonText: string;
-  onClick: () => void;
+  scrollToId?: string;
 }
 
-const HomeCard: React.FC<CardProps> = ({ icon, title, descriptionText, buttonText, onClick }) => {
+const HomeCard: React.FC<CardProps> = ({ icon, title, descriptionText, buttonText, scrollToId}) => {
+  const handleClick = () => {
+    if (scrollToId) {
+      const section = document.getElementById(scrollToId);
+      section?.scrollIntoView({ behavior: 'smooth'});
+    }
+  };
+  
   return (
     <div className="home-card">
       <div className="card-icon">{icon}</div>
       <h2 className="card-title">{title}</h2>
       <p className="card-text">{descriptionText}</p>
-      <button className="card-button" onClick={onClick}>
+      <button className="card-button" onClick={handleClick}>
         {buttonText}
       </button>
     </div>

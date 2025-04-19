@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 const SectionCards: React.FC = () => {
   const navigate = useNavigate();
   return(
-    <section className="home-cards">
+    <section id="section-two" className="home-cards">
       <div className="offer-container">
         <h2 className="offer-title">¿Qué servicios ofrecemos?</h2>
         <p className="offer-description">
@@ -23,14 +23,14 @@ const SectionCards: React.FC = () => {
           title="Entrenamiento Personal"
           descriptionText="Logra tus objetivos de manera eficiente gracias a tu entrenador y clases personalizadas"
           buttonText="Conocer más"
-          onClick={()=>navigate("/home/section-logreg")}
+          scrollToId="section-one"
           />
           <HomeCard
             icon={<PiUsersFourFill />}
             title="Entrenamiento en Grupo"
             descriptionText="El entrenamiento en grupo permite mejorar tu físico de una manera divertida"
             buttonText="Ver descripción"
-            onClick={()=>navigate("/auth")}
+            scrollToId="section-one"
             />
         </div>
       </div>
