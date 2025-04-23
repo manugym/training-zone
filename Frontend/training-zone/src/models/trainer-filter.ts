@@ -4,5 +4,5 @@ export interface TrainerFilter {
   classType?: ClassType;
   name?: string;
   entitiesPerPage: number;
-  page: number;
+  actualPage: number;
 }

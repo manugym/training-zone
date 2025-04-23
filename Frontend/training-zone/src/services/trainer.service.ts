@@ -8,19 +8,10 @@ class TrainerService {
   private readonly TRAINER_URL = "Trainer";
 
   async getAllTrainers(filter: TrainerFilter): Promise<AllTrainers> {
-    var formData = new FormData();
-
-    if (filter.classType) {
-      formData.append("ClassType", filter.classType.toString());
-    }
-
-    formData.append("Name", filter.name || "");
-    formData.append("EntitiesPerPage", filter.entitiesPerPage.toString());
-    formData.append("Page", filter.page.toString());
-
-    const response = await apiService.post<AllTrainers>(this.ALL_TRAINER_URL, {
-      filter: formData,
-    });
+    const response = await apiService.post<AllTrainers>(
+      this.ALL_TRAINER_URL,
+      filter
+    );
 
     if (!response.success) {
       throw new Error("Failed to fetch trainers: " + response.error);

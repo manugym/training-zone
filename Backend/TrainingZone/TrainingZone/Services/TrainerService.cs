@@ -24,7 +24,7 @@ public class TrainerService
         //Todos los entrenadores filtrados por nombre y tipo de clase (implementar cuando tengamos las clases)
         List<TrainerDto> trainers = await _trainerSmartSearchService.Search(filter.Name, null);
 
-        int totalPages = trainers.Count / filter.EntitiesPerPage;
+        int totalPages = (int)Math.Ceiling((double)trainers.Count / filter.EntitiesPerPage);
 
         // Obtiene solo los entrenadores de la página actual
         int skip = (filter.ActualPage - 1) * filter.EntitiesPerPage;
@@ -38,7 +38,7 @@ public class TrainerService
         AllTrainersDto alltrainersDto = new AllTrainersDto
         {
             TotalPages = totalPages,
-            AllTrainers = pagedTrainers
+            Trainers = pagedTrainers
         };
 
         //Añadir las clases que imparte
