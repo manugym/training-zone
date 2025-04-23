@@ -1,4 +1,4 @@
-import { ClassType } from "./enums/ClassType";
+import { ClassType } from "./enums/class-type";
 
 export interface TrainerFilter {
   classType?: ClassType;

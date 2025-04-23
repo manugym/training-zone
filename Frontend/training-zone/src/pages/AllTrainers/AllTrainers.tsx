@@ -4,10 +4,12 @@ import NavBar from "../../components/NavBar/NavBar";
 import trainerService from "../../services/trainer.service";
 import { AllTrainers } from "../../models/all-trainers";
 import { TrainerFilter } from "../../models/trainer-filter";
-import { ClassType } from "../../models/enums/ClassType";
+import { ClassType } from "../../models/enums/class-type";
 
 function AllTrainersView() {
-  const SERVER_URL = `${import.meta.env.VITE_SERVER_URL}`;
+  const SERVER_IMAGE_URL = `${
+    import.meta.env.VITE_SERVER_URL
+  }/UserProfilePicture`;
 
   const [allTrainers, setAllTrainers] = useState<AllTrainers | null>(null);
 
@@ -72,78 +74,129 @@ function AllTrainersView() {
     <>
       <NavBar />
       <main>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Buscar entrenador..."
-        />
+        <div className="content-container">
+          <div className="search-container">
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Buscar entrenador..."
+            />
 
-        {allTrainers && allTrainers.trainers.length > 0 ? (
-          <div className="all-trainers-container">
-            {allTrainers.trainers.map((trainer) => (
-              <div key={trainer.user.id} className="trainer-card">
-                <h3>{trainer.user.name}</h3>
+            <select
+              value={classType !== null ? classType : ""}
+              onChange={(e) =>
+                setClassType(
+                  e.target.value === ""
+                    ? null
+                    : (Number(e.target.value) as ClassType)
+                )
+              }
+            >
+              <option value="">Todas las clases</option>
+              {Object.keys(ClassType)
+                .filter((key) => isNaN(Number(key)))
+                .map((key) => (
+                  <option
+                    key={key}
+                    value={ClassType[key as keyof typeof ClassType]}
+                  >
+                    {key}
+                  </option>
+                ))}
+            </select>
+          </div>
+
+          {allTrainers && allTrainers.trainers.length > 0 ? (
+            <div>
+              <div className="all-trainers-container">
+                {allTrainers.trainers.map((trainer) => (
+                  <div key={trainer.user.id} className="trainer-card">
+                    <div>
+                      <img
+                        src={`${SERVER_IMAGE_URL}/${
+                          trainer.user.avatarImageUrl || "default.png"
+                        }`}
+                        alt="Trainer"
+                        className="trainer-image"
+                      />
+                    </div>
+
+                    <div className="trainer-info">
+                      <h2>{trainer.user.name}</h2>
+                      {/*Añadir cuando estén las clases*/}
+                      <span>Especialidades</span>
+                      <button>Ver Perfil</button>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
 
-            <div className="pagination-container">
-              <div id="pagination">
-                <span
-                  className={actualPage === 1 ? "disabled" : "enabled"}
-                  onClick={() => setActualPage(1)}
-                >
-                  &laquo;
-                </span>
-                <span
-                  className={actualPage === 1 ? "disabled" : "enabled"}
-                  onClick={() => {
-                    if (actualPage > 1) {
-                      setActualPage(actualPage - 1);
+              <div className="pagination-container">
+                <div className="pagination">
+                  <span
+                    className={actualPage === 1 ? "disabled" : "enabled"}
+                    onClick={() => setActualPage(1)}
+                  >
+                    &laquo;
+                  </span>
+                  <span
+                    className={actualPage === 1 ? "disabled" : "enabled"}
+                    onClick={() => {
+                      if (actualPage > 1) {
+                        setActualPage(actualPage - 1);
+                      }
+                    }}
+                  >
+                    &lt;
+                  </span>
+                  <span>{actualPage}</span>
+                  <span
+                    className={
+                      actualPage === allTrainers.totalPages
+                        ? "disabled"
+                        : "enabled"
                     }
-                  }}
-                >
-                  &lt;
-                </span>
-                <span>{actualPage}</span>
-                <span
-                  className={actualPage === 1 ? "disabled" : "enabled"}
-                  onClick={() => {
-                    if (actualPage < allTrainers.totalPages) {
-                      setActualPage(actualPage + 1);
+                    onClick={() => {
+                      if (actualPage < allTrainers.totalPages) {
+                        setActualPage(actualPage + 1);
+                      }
+                    }}
+                  >
+                    &gt;
+                  </span>
+                  <span
+                    className={
+                      actualPage === allTrainers.totalPages
+                        ? "disabled"
+                        : "enabled"
                     }
-                  }}
-                >
-                  &gt;
-                </span>
-                <span
-                  className={actualPage === 1 ? "disabled" : "enabled"}
-                  onClick={() => setActualPage(allTrainers.totalPages)}
-                >
-                  &raquo;
-                </span>
-              </div>
+                    onClick={() => setActualPage(allTrainers.totalPages)}
+                  >
+                    &raquo;
+                  </span>
+                </div>
 
-              <div className="page-size-selector">
-                <label htmlFor="page-size">Entrenadores por página:</label>
-                <select
-                  id="page-size"
-                  value={entitiesPerPage}
-                  onChange={(e) => {
-                    setEntitiesPerPage(Number(e.target.value));
-                    setActualPage(1);
-                  }}
-                >
-                  <option value={5}>5</option>
-                  <option value={10}>10</option>
-                  <option value={20}>20</option>
-                </select>
+                <div className="page-size-selector">
+                  <select
+                    id="page-size"
+                    value={entitiesPerPage}
+                    onChange={(e) => {
+                      setEntitiesPerPage(Number(e.target.value));
+                      setActualPage(1);
+                    }}
+                  >
+                    <option value={5}>5</option>
+                    <option value={10}>10</option>
+                    <option value={20}>20</option>
+                  </select>
+                </div>
               </div>
             </div>
-          </div>
-        ) : (
-          <div className="no-trainers-message">No trainers available</div>
-        )}
+          ) : (
+            <div className="no-trainers-message">No trainers available</div>
+          )}
+        </div>
       </main>
     </>
   );

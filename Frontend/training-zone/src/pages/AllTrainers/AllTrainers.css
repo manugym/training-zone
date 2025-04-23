@@ -1,0 +1,120 @@
+main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.content-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.all-trainers-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 1300px;
+  justify-items: center;
+}
+
+.trainer-card {
+  display: flex;
+  align-items: center;
+  padding: 30px;
+  margin: 10px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px var(--color-details);
+  min-height: 180px;
+  width: 100%;
+  max-width: 400px;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  border: 1px solid var(--color-details);
+}
+
+.trainer-card img {
+  width: 120px;
+  height: 220px;
+  margin-right: 20px;
+  object-fit: cover;
+}
+
+.trainer-info h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--color-text);
+}
+
+.trainer-info span {
+  display: block;
+  margin-top: 10px;
+  color: var(--color-secondary);
+}
+
+.trainer-info button {
+  margin-top: 10px;
+  padding: 8px 16px;
+  border: none;
+  background-color: var(--color-primary);
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.trainer-info button:hover {
+  background-color: var(--color-secondary);
+}
+
+/* PAGINACIÓN */
+
+.pagination-container {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 50px;
+  align-items: center;
+}
+
+.pagination {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.pagination span {
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: var(--color-details);
+  color: var(--color-text);
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.pagination span:hover:not(.disabled) {
+  background-color: var(--color-secondary);
+  color: #fff;
+}
+
+.pagination .disabled {
+  color: #aaa;
+  cursor: not-allowed;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.page-size-selector select {
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid var(--color-details);
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
