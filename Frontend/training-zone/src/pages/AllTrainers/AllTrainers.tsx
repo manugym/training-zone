@@ -4,13 +4,21 @@ import NavBar from "../../components/NavBar/NavBar";
 import trainerService from "../../services/trainer.service";
 import { AllTrainers } from "../../models/all-trainers";
 import { TrainerFilter } from "../../models/trainer-filter";
+import { ClassType } from "../../models/enums/ClassType";
 
 function AllTrainersView() {
+  const SERVER_URL = `${import.meta.env.VITE_SERVER_URL}`;
+
   const [allTrainers, setAllTrainers] = useState<AllTrainers | null>(null);
+
+  const [classType, setClassType] = useState<ClassType | null>(null);
+  const [name, setName] = useState<string>("");
+  const [entitiesPerPage, setEntitiesPerPage] = useState<number>(5);
+  const [actualPage, setActualPage] = useState<number>(1);
 
   // Initial filter
   const [filter, setFilter] = useState<TrainerFilter>({
-    classType: 0,
+    classType: null,
     name: "",
     entitiesPerPage: 5,
     actualPage: 1,
@@ -18,6 +26,30 @@ function AllTrainersView() {
 
   const [loading, setLoading] = useState(false);
 
+  // Handle filter changes
+  useEffect(() => {
+    setFilter({
+      classType: classType,
+      name: name,
+      entitiesPerPage: entitiesPerPage,
+      actualPage: actualPage,
+    });
+  }, [classType, entitiesPerPage, actualPage]);
+
+  // Debounce the name input to avoid too many requests
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setFilter((prev) => ({
+        ...prev,
+        name: name,
+        actualPage: 1,
+      }));
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [name]);
+
+  // Fetch trainers when the filter changes
   useEffect(() => {
     const fetchTrainers = async () => {
       try {
@@ -40,6 +72,13 @@ function AllTrainersView() {
     <>
       <NavBar />
       <main>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Buscar entrenador..."
+        />
+
         {allTrainers && allTrainers.trainers.length > 0 ? (
           <div className="all-trainers-container">
             {allTrainers.trainers.map((trainer) => (
@@ -47,6 +86,12 @@ function AllTrainersView() {
                 <h3>{trainer.user.name}</h3>
               </div>
             ))}
+
+            <div className="pagination-container">
+              <div id="pagination"></div>
+
+              <div className="entities-per-page"></div>
+            </div>
           </div>
         ) : (
           <div className="no-trainers-message">No trainers available</div>
