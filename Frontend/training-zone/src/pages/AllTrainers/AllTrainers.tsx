@@ -88,9 +88,57 @@ function AllTrainersView() {
             ))}
 
             <div className="pagination-container">
-              <div id="pagination"></div>
+              <div id="pagination">
+                <span
+                  className={actualPage === 1 ? "disabled" : "enabled"}
+                  onClick={() => setActualPage(1)}
+                >
+                  &laquo;
+                </span>
+                <span
+                  className={actualPage === 1 ? "disabled" : "enabled"}
+                  onClick={() => {
+                    if (actualPage > 1) {
+                      setActualPage(actualPage - 1);
+                    }
+                  }}
+                >
+                  &lt;
+                </span>
+                <span>{actualPage}</span>
+                <span
+                  className={actualPage === 1 ? "disabled" : "enabled"}
+                  onClick={() => {
+                    if (actualPage < allTrainers.totalPages) {
+                      setActualPage(actualPage + 1);
+                    }
+                  }}
+                >
+                  &gt;
+                </span>
+                <span
+                  className={actualPage === 1 ? "disabled" : "enabled"}
+                  onClick={() => setActualPage(allTrainers.totalPages)}
+                >
+                  &raquo;
+                </span>
+              </div>
 
-              <div className="entities-per-page"></div>
+              <div className="page-size-selector">
+                <label htmlFor="page-size">Entrenadores por página:</label>
+                <select
+                  id="page-size"
+                  value={entitiesPerPage}
+                  onChange={(e) => {
+                    setEntitiesPerPage(Number(e.target.value));
+                    setActualPage(1);
+                  }}
+                >
+                  <option value={5}>5</option>
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
+                </select>
+              </div>
             </div>
           </div>
         ) : (
