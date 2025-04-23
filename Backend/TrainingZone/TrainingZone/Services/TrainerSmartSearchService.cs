@@ -4,6 +4,8 @@ using System.Globalization;
 using System.Text;
 using TrainingZone.Models.DataBase;
 using TrainingZone.Enums;
+using TrainingZone.Models.Dtos.Trainer;
+using TrainingZone.Mappers;
 
 namespace TrainingZone.Services;
 
@@ -11,22 +13,35 @@ public class TrainerSmartSearchService
 {
     private const double THRESHOLD = 0.75;
     private readonly UnitOfWork _unitOfWork;
+    private readonly UserMapper _userMapper;
     private readonly INormalizedStringSimilarity _stringSimilarityComparer;
 
-    public TrainerSmartSearchService(UnitOfWork unitOfWork)
+    public TrainerSmartSearchService(UnitOfWork unitOfWork, UserMapper userMapper)
     {
         _unitOfWork = unitOfWork;
+        _userMapper = userMapper;
         _stringSimilarityComparer = new JaroWinkler();
     }
 
-    public async Task<List<User>> Search(string query, ClassType? classType = null)
+    public async Task<List<TrainerDto>> Search(string query, ClassType? classType = null)
     {
         //Filtra por clase (implementación cuando tengamos el servicio de las clases )
         if (classType != null)
             throw new NotImplementedException();
 
         //Obtiene todos los entrenadores 
-        List<User> trainers = await _unitOfWork.UserRepository.GetAllTrainersAsync();
+        List<User> users = await _unitOfWork.UserRepository.GetAllTrainersAsync();
+
+        List<TrainerDto> trainers = new List<TrainerDto>();
+
+        foreach(var user in users)
+        {
+            trainers.Add(new TrainerDto
+            {
+                User = _userMapper.ToDto(user)
+            });
+
+        }
 
         if (query == null || query.Equals(""))
         {
@@ -34,23 +49,23 @@ public class TrainerSmartSearchService
         }
 
         //Filtra por el nombre
-        List<User> matchingTrainers = FindMatchingTrainers(query, trainers);
+        List<TrainerDto> matchingTrainers = FindMatchingTrainers(query, trainers);
 
         return matchingTrainers;
     }
 
-    public List<User> FindMatchingTrainers(string query, List<User> trainers)
+    public List<TrainerDto> FindMatchingTrainers(string query, List<TrainerDto> trainers)
     {
         string[] queryKeys = GetKeys(ClearText(query));
-        List<User> matchingTrainers = new List<User>();
+        List<TrainerDto> matchingTrainers = new List<TrainerDto>();
 
-        foreach (var product in trainers)
+        foreach (var trainer in trainers)
         {
-            string[] productKeys = GetKeys(ClearText(product.Name));
+            string[] productKeys = GetKeys(ClearText(trainer.User.Name));
 
             if (IsMatch(queryKeys, productKeys))
             {
-                matchingTrainers.Add(product);
+                matchingTrainers.Add(trainer);
             }
         }
 
