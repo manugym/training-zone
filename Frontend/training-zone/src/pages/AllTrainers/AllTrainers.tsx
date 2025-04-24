@@ -74,6 +74,8 @@ function AllTrainersView() {
     <>
       <NavBar />
       <main>
+        <h1>Nuestros Entrenadores</h1>
+
         <div className="content-container">
           <div className="search-container">
             <input
@@ -112,7 +114,7 @@ function AllTrainersView() {
               <div className="all-trainers-container">
                 {allTrainers.trainers.map((trainer) => (
                   <div key={trainer.user.id} className="trainer-card">
-                    <div>
+                    <div className="trainer-image-container">
                       <img
                         src={`${SERVER_IMAGE_URL}/${
                           trainer.user.avatarImageUrl || "default.png"
@@ -121,11 +123,11 @@ function AllTrainersView() {
                         className="trainer-image"
                       />
                     </div>
-
                     <div className="trainer-info">
-                      <h2>{trainer.user.name}</h2>
-                      {/*Añadir cuando estén las clases*/}
-                      <span>Especialidades</span>
+                      <div className="trainer-info-top">
+                        <h2>{trainer.user.name}</h2>
+                        <span>Especialidades</span>
+                      </div>
                       <button>Ver Perfil</button>
                     </div>
                   </div>

@@ -1,11 +1,19 @@
 main {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 20px;
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
+}
+
+h1 {
+  font-size: 2.5rem;
+  color: var(--color-text);
+  margin: 20px 0;
+  text-align: center;
 }
 
 .content-container {
@@ -16,6 +24,54 @@ main {
   width: 100%;
 }
 
+/* SEARCH BAR */
+
+.search-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+  width: 100%;
+  max-width: 800px;
+}
+
+.search-container input,
+.search-container select {
+  padding: 10px 14px;
+  font-size: 1rem;
+  border: 1px solid var(--color-details);
+  border-radius: 8px;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  min-width: 200px;
+  flex: 1;
+}
+
+.search-container input {
+  flex: 5;
+}
+
+.search-container input::placeholder {
+  color: var(--color-text);
+  opacity: 0.6;
+}
+
+.search-container select {
+  flex: 3;
+}
+
+.search-container input:focus,
+.search-container select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+}
+
+/*TRAINERS*/
+
 .all-trainers-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
@@ -25,63 +81,77 @@ main {
   justify-items: center;
 }
 
+/*CARD*/
+
 .trainer-card {
   display: flex;
-  align-items: center;
-  padding: 30px;
-  margin: 10px;
+  width: 100%;
+  max-width: 600px;
   border-radius: 12px;
   box-shadow: 0 2px 8px var(--color-details);
-  min-height: 180px;
-  width: 100%;
-  max-width: 400px;
   background-color: var(--color-background);
   color: var(--color-text);
   border: 1px solid var(--color-details);
+  overflow: hidden;
+  min-height: 220px;
 }
 
-.trainer-card img {
-  width: 120px;
-  height: 220px;
-  margin-right: 20px;
+.trainer-image-container {
+  width: 50%;
+  height: 100%;
+}
+
+.trainer-image {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+  padding: 10px;
 }
 
-.trainer-info h2 {
+.trainer-info {
+  width: 50%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.trainer-info-top h2 {
   margin: 0;
   font-size: 1.5rem;
   color: var(--color-text);
 }
 
-.trainer-info span {
-  display: block;
-  margin-top: 10px;
+.trainer-info-top span {
+  margin-top: 8px;
   color: var(--color-secondary);
+  display: block;
 }
 
 .trainer-info button {
-  margin-top: 10px;
+  align-self: flex-start;
   padding: 8px 16px;
   border: none;
   background-color: var(--color-primary);
   color: #fff;
   border-radius: 4px;
   cursor: pointer;
+  margin-top: 20px;
 }
 
 .trainer-info button:hover {
   background-color: var(--color-secondary);
 }
 
-/* PAGINACIÓN */
+/* PAGINATION */
 
 .pagination-container {
-  margin-top: 30px;
   display: flex;
   flex-direction: row;
   justify-content: center;
-  gap: 50px;
   align-items: center;
+  gap: 20px;
+  margin-top: 30px;
 }
 
 .pagination {
@@ -112,9 +182,19 @@ main {
 }
 
 .page-size-selector select {
-  padding: 6px 10px;
-  border-radius: 4px;
+  margin-top: -10px;
+  padding: 10px 14px;
+  height: 40px;
+  font-size: 1rem;
+  border-radius: 8px;
   border: 1px solid var(--color-details);
   background-color: var(--color-background);
   color: var(--color-text);
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.page-size-selector select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
 }
