@@ -56,6 +56,13 @@
   align-self: center;
 }
 
+.trainer-not-found {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
 @media (max-width: 768px) {
   .trainer-image {
     width: 80%;

@@ -74,7 +74,7 @@ function TrainerPage() {
             </div>
           )}
 
-          {!trainer && (
+          {!loading && !trainer && (
             <div className="trainer-not-found">
               <h2>Entrenador no encontrado</h2>
             </div>
