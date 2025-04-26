@@ -63,10 +63,10 @@ function AllTrainersView() {
         const allTrainers = await trainerService.getAllTrainers(filter);
         console.log("Trainers", allTrainers);
         setAllTrainers(allTrainers);
-
-        setLoading(false);
       } catch (error) {
         console.error("Error fetching trainers", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -77,135 +77,151 @@ function AllTrainersView() {
     <>
       <NavBar />
       <main>
-        <h1>Nuestros Entrenadores</h1>
+        {!loading && (
+          <div>
+            <div className="content-container">
+              {allTrainers && allTrainers.trainers.length > 0 && (
+                <div>
+                  <h1>Nuestros Entrenadores</h1>
 
-        <div className="content-container">
-          <div className="search-container">
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Buscar entrenador..."
-            />
+                  <div className="search-container">
+                    <input
+                      type="text"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="Buscar entrenador..."
+                    />
 
-            <select
-              value={classType !== null ? classType : ""}
-              onChange={(e) =>
-                setClassType(
-                  e.target.value === ""
-                    ? null
-                    : (Number(e.target.value) as ClassType)
-                )
-              }
-            >
-              <option value="">Todas las clases</option>
-              {Object.keys(ClassType)
-                .filter((key) => isNaN(Number(key)))
-                .map((key) => (
-                  <option
-                    key={key}
-                    value={ClassType[key as keyof typeof ClassType]}
-                  >
-                    {key}
-                  </option>
-                ))}
-            </select>
-          </div>
+                    <select
+                      value={classType !== null ? classType : ""}
+                      onChange={(e) =>
+                        setClassType(
+                          e.target.value === ""
+                            ? null
+                            : (Number(e.target.value) as ClassType)
+                        )
+                      }
+                    >
+                      <option value="">Todas las clases</option>
+                      {Object.keys(ClassType)
+                        .filter((key) => isNaN(Number(key)))
+                        .map((key) => (
+                          <option
+                            key={key}
+                            value={ClassType[key as keyof typeof ClassType]}
+                          >
+                            {key}
+                          </option>
+                        ))}
+                    </select>
+                  </div>
 
-          {allTrainers && allTrainers.trainers.length > 0 ? (
-            <div>
-              <div className="all-trainers-container">
-                {allTrainers.trainers.map((trainer) => (
-                  <div key={trainer.user.id} className="trainer-card">
-                    <div className="trainer-image-container">
-                      <img
-                        src={`${SERVER_IMAGE_URL}/${
-                          trainer.user.avatarImageUrl || "default.png"
-                        }`}
-                        alt="Trainer"
-                        className="trainer-image"
-                      />
-                    </div>
-                    <div className="trainer-info">
-                      <div className="trainer-info-top">
-                        <h2>{trainer.user.name}</h2>
-                        <span>Especialidades</span>
+                  <div className="all-trainers-container">
+                    {allTrainers.trainers.map((trainer) => (
+                      <div key={trainer.user.id} className="trainer-card">
+                        <div className="trainer-image-container">
+                          <img
+                            src={`${SERVER_IMAGE_URL}/${
+                              trainer.user.avatarImageUrl || "default.png"
+                            }`}
+                            alt="Trainer"
+                            className="trainer-image"
+                          />
+                        </div>
+                        <div className="trainer-info">
+                          <div className="trainer-info-top">
+                            <h2>{trainer.user.name}</h2>
+                            <span>Especialidades</span>
+                          </div>
+                          <button
+                            onClick={() =>
+                              navigate(`/trainer/${trainer.user.id}`)
+                            }
+                          >
+                            Ver Perfil
+                          </button>
+                        </div>
                       </div>
-                      <button
-                        onClick={() => navigate(`/trainer/${trainer.user.id}`)}
+                    ))}
+                  </div>
+
+                  <div className="pagination-container">
+                    <div className="pagination">
+                      <span
+                        className={actualPage === 1 ? "disabled" : "enabled"}
+                        onClick={() => setActualPage(1)}
                       >
-                        Ver Perfil
-                      </button>
+                        &laquo;
+                      </span>
+                      <span
+                        className={actualPage === 1 ? "disabled" : "enabled"}
+                        onClick={() => {
+                          if (actualPage > 1) {
+                            setActualPage(actualPage - 1);
+                          }
+                        }}
+                      >
+                        &lt;
+                      </span>
+                      <span>{actualPage}</span>
+                      <span
+                        className={
+                          actualPage === allTrainers.totalPages
+                            ? "disabled"
+                            : "enabled"
+                        }
+                        onClick={() => {
+                          if (actualPage < allTrainers.totalPages) {
+                            setActualPage(actualPage + 1);
+                          }
+                        }}
+                      >
+                        &gt;
+                      </span>
+                      <span
+                        className={
+                          actualPage === allTrainers.totalPages
+                            ? "disabled"
+                            : "enabled"
+                        }
+                        onClick={() => setActualPage(allTrainers.totalPages)}
+                      >
+                        &raquo;
+                      </span>
+                    </div>
+
+                    <div className="page-size-selector">
+                      <select
+                        id="page-size"
+                        value={entitiesPerPage}
+                        onChange={(e) => {
+                          setEntitiesPerPage(Number(e.target.value));
+                          setActualPage(1);
+                        }}
+                      >
+                        <option value={5}>5</option>
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
+                      </select>
                     </div>
                   </div>
-                ))}
-              </div>
-
-              <div className="pagination-container">
-                <div className="pagination">
-                  <span
-                    className={actualPage === 1 ? "disabled" : "enabled"}
-                    onClick={() => setActualPage(1)}
-                  >
-                    &laquo;
-                  </span>
-                  <span
-                    className={actualPage === 1 ? "disabled" : "enabled"}
-                    onClick={() => {
-                      if (actualPage > 1) {
-                        setActualPage(actualPage - 1);
-                      }
-                    }}
-                  >
-                    &lt;
-                  </span>
-                  <span>{actualPage}</span>
-                  <span
-                    className={
-                      actualPage === allTrainers.totalPages
-                        ? "disabled"
-                        : "enabled"
-                    }
-                    onClick={() => {
-                      if (actualPage < allTrainers.totalPages) {
-                        setActualPage(actualPage + 1);
-                      }
-                    }}
-                  >
-                    &gt;
-                  </span>
-                  <span
-                    className={
-                      actualPage === allTrainers.totalPages
-                        ? "disabled"
-                        : "enabled"
-                    }
-                    onClick={() => setActualPage(allTrainers.totalPages)}
-                  >
-                    &raquo;
-                  </span>
                 </div>
-
-                <div className="page-size-selector">
-                  <select
-                    id="page-size"
-                    value={entitiesPerPage}
-                    onChange={(e) => {
-                      setEntitiesPerPage(Number(e.target.value));
-                      setActualPage(1);
-                    }}
-                  >
-                    <option value={5}>5</option>
-                    <option value={10}>10</option>
-                    <option value={20}>20</option>
-                  </select>
-                </div>
-              </div>
+              )}
             </div>
-          ) : (
-            <div className="no-trainers-message">No trainers available</div>
-          )}
-        </div>
+          </div>
+        )}
+
+        {!loading && (!allTrainers || allTrainers.trainers.length === 0) && (
+          <div className="no-trainers-message">
+            <h2>No se encontraron entrenadores</h2>
+          </div>
+        )}
+
+        {loading && (
+          <div className="loading-container">
+            <div className="spinner"></div>
+          </div>
+        )}
       </main>
     </>
   );
