@@ -5,11 +5,14 @@ import trainerService from "../../services/trainer.service";
 import { AllTrainers } from "../../models/all-trainers";
 import { TrainerFilter } from "../../models/trainer-filter";
 import { ClassType } from "../../models/enums/class-type";
+import { useNavigate } from "react-router-dom";
 
 function AllTrainersView() {
   const SERVER_IMAGE_URL = `${
     import.meta.env.VITE_SERVER_URL
   }/UserProfilePicture`;
+
+  const navigate = useNavigate();
 
   const [allTrainers, setAllTrainers] = useState<AllTrainers | null>(null);
 
@@ -128,7 +131,11 @@ function AllTrainersView() {
                         <h2>{trainer.user.name}</h2>
                         <span>Especialidades</span>
                       </div>
-                      <button>Ver Perfil</button>
+                      <button
+                        onClick={() => navigate(`/trainer/${trainer.user.id}`)}
+                      >
+                        Ver Perfil
+                      </button>
                     </div>
                   </div>
                 ))}
