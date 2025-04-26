@@ -44,6 +44,7 @@ public class Program
         {
             options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
             {
+
                 BearerFormat = "JWT",
                 Name = "Authorization",
                 Description = "Escribe **_SOLO_** tu token JWT",
@@ -78,6 +79,9 @@ public class Program
         builder.Services.AddScoped<PasswordService>();
         builder.Services.AddScoped<ImageService>();
         builder.Services.AddScoped<AuthService>();
+        builder.Services.AddScoped<UserService>();
+        builder.Services.AddScoped<TrainerService>();
+        builder.Services.AddScoped<TrainerSmartSearchService>();
 
 
 
@@ -88,6 +92,7 @@ public class Program
 
         // Mappers
         builder.Services.AddTransient<UserMapper>();
+
 
 
         //Administrador de todos los websockets
