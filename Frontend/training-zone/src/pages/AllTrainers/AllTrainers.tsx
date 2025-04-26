@@ -129,7 +129,7 @@ function AllTrainersView() {
                             className="trainer-image"
                           />
                         </div>
-                        <div className="trainer-info">
+                        <div className="trainer-information-container">
                           <div className="trainer-info-top">
                             <h2>{trainer.user.name}</h2>
                             <span>Especialidades</span>
