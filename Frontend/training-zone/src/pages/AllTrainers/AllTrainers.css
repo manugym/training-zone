@@ -1,3 +1,9 @@
+main {
+  width: 100%;
+  height: auto;
+  min-height: 100vh;
+}
+
 h1 {
   font-size: 2.5rem;
   color: var(--color-text);
@@ -8,8 +14,7 @@ h1 {
 .content-container {
   width: 100%;
   max-width: 1200px;
-  height: auto;
-  min-height: 100vh;
+
   margin: 0 auto;
   padding: 0 20px;
 }
@@ -196,6 +201,13 @@ h1 {
   justify-content: center;
   align-items: center;
   padding: 2rem;
+}
+
+.no-trainers-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 @media (max-width: 768px) {
