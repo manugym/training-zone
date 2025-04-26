@@ -1,14 +1,79 @@
-.trainer-not-found {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+.trainer-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
-/*Spinner*/
-.loading-container {
+.trainer-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  width: 100%;
+  justify-items: center;
+  padding: 0 20px;
+}
+
+.trainer-info,
+.schedule-container {
+  width: 100%;
+  max-width: 500px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  padding: 2rem;
+  justify-content: flex-start;
+  padding: 10px 14px;
+  border: 1px solid var(--color-details);
+  border-radius: 8px;
+  height: auto;
+  flex: none;
+  box-sizing: border-box;
+}
+
+.trainer-image {
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.question-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  padding: 10px 14px;
+}
+
+.question-container button {
+  padding: 8px 16px;
+  border: none;
+  background-color: var(--color-primary);
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 20px;
+  align-self: center;
+}
+
+@media (max-width: 768px) {
+  .trainer-image {
+    width: 80%;
+    height: auto;
+  }
+
+  .trainer-info h1 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .trainer-info h1 {
+    font-size: 1.2rem;
+  }
+
+  .trainer-info p,
+  .question-container h2 {
+    font-size: 0.9rem;
+  }
 }

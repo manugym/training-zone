@@ -48,14 +48,29 @@ function TrainerPage() {
         <div className="trainer-container">
           {!loading && trainer && (
             <div className="trainer-details">
-              <h1>{trainer.user.name}</h1>
-              <img
-                src={`${SERVER_IMAGE_URL}/${
-                  trainer.user.avatarImageUrl || "default.png"
-                }`}
-                alt="Trainer"
-                className="trainer-image"
-              />
+              <div className="trainer-info">
+                <h1>{trainer.user.name}</h1>
+                <img
+                  src={`${SERVER_IMAGE_URL}/${
+                    trainer.user.avatarImageUrl || "default.png"
+                  }`}
+                  alt="Trainer"
+                  className="trainer-image"
+                />
+
+                <p>Especialidades</p>
+
+                <div className="question-container">
+                  <h2>¿Tienes alguna duda?</h2>
+
+                  <button>Enviar Mensaje</button>
+                </div>
+              </div>
+
+              <div className="schedule-container">
+                <h1>Horarios</h1>
+                <p>Implementar con las clases</p>
+              </div>
             </div>
           )}
 
