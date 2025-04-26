@@ -6,6 +6,7 @@ import { AllTrainers } from "../../models/all-trainers";
 import { TrainerFilter } from "../../models/trainer-filter";
 import { ClassType } from "../../models/enums/class-type";
 import { useNavigate } from "react-router-dom";
+import Spinner from "../../components/Spinner/Spinner";
 
 function AllTrainersView() {
   const SERVER_IMAGE_URL = `${
@@ -219,7 +220,7 @@ function AllTrainersView() {
 
         {loading && (
           <div className="loading-container">
-            <div className="spinner"></div>
+            <Spinner />
           </div>
         )}
       </main>
