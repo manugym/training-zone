@@ -19,15 +19,23 @@ public class TrainerController : ControllerBase
         _trainerService = trainerService;
     }
 
+    [HttpGet("{id}")]
+    public async Task<TrainerDto> GetTrainerById(int id)
+    {
+        TrainerDto trainer = await _trainerService.GetTrainerById(id);
+        if (trainer == null)
+        {
+            HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+        }
+
+        return trainer;
+    }
+
     [HttpPost("allTrainers")]
     public async Task<AllTrainersDto> GetTrainersAsync([FromBody] TrainerFilterDto filter)
     {
         return await _trainerService.GetAllTrainersByFilter(filter);
         
     }
-
-    
-
-
 
 }
