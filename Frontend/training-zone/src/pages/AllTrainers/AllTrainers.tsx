@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./AllTrainers.css";
 import NavBar from "../../components/NavBar/NavBar";
 import trainerService from "../../services/trainer.service";

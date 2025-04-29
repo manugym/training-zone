@@ -13,7 +13,7 @@
   width: 100%;
   max-width: 1000px;
   height: 100%;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 12px var(--color-details);
   border-radius: 12px;
   overflow: hidden;
   font-family: sans-serif;
@@ -23,8 +23,7 @@
 
 .form-header {
   width: 35%;
-  background-color: #0e2a47;
-  color: white;
+  background-color: var(--color-background);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -51,19 +50,20 @@
 .form-text h2 {
   font-size: 24px;
   font-weight: bold;
-  color: #fff;
+  color: var(--color-text);
   margin-bottom: 0.5rem;
 }
 
 .form-text p {
+  opacity: 0.8;
   font-size: 16px;
-  color: #ccc;
+  color: var(--color-text);
 }
 
 /* Right: form */
 .form-container {
   width: 65%;
-  background-color: #2e4661;
+  background-color: var(--color-background-secondary);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -80,17 +80,19 @@
 }
 
 .form-types h3 {
-  color: #ccc;
+  color: var(--color-text);
+  opacity: 0.5;
   cursor: pointer;
   padding-bottom: 4px;
-  border-bottom: 2px solid transparent;
+  border-bottom: 3px solid transparent;
   transition: 0.2s;
 }
 
 .form-types .active {
-  color: #fff;
+  color: var(--color-text);
+  opacity: 1;
   font-weight: bold;
-  border-color: #fff;
+  border-color: var(--color-text);
 }
 
 @media (max-height: 600px) {

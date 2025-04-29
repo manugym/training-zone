@@ -10,33 +10,34 @@ form {
 }
 
 label {
-  color: #fff;
+  color: var(--color-text);
   font-size: 14px;
   margin-bottom: 4px;
 }
 
 input {
-  background-color: #1f2c3b;
+  background-color: var(--color-background);
   border: 2px solid transparent;
   border-radius: 8px;
   padding: 12px 15px;
   font-size: 15px;
-  color: #fff;
+  color: var(--color-text);
   transition: border 0.3s ease;
 }
 
 input:focus {
   outline: none;
-  border-color: #2daae1;
+  border-color: var(--color-primary);
 }
 
 ::placeholder {
-  color: #ccc;
+  color: var(--color-text);
+  opacity: 0.5;
 }
 
 button {
   margin-top: 10px;
-  background-color: #2daae1;
+  background-color: var(--color-primary);
   border: none;
   border-radius: 8px;
   padding: 12px;
@@ -48,7 +49,7 @@ button {
 }
 
 button:hover {
-  background-color: #2199cd;
+  background-color: var(--color-secondary);
 }
 
 .error,
