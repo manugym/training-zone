@@ -6,7 +6,9 @@
   --color-primary: #1565c0;
   --color-secondary: #0d47a1;
   --color-details: #90caf9;
-  --color-error: #ff4d4f;
+  --button-bg: rgba(152, 206, 244, 0.635);
+  --button-bg-alt: rgba(152, 206, 244, 0.301);
+  --icon-color: #0a192f;
 }
 
 /*Dark Theme*/
@@ -17,6 +19,7 @@
   --color-primary: #1e40af;
   --color-secondary: #3b82f6;
   --color-details: #60a5fa;
+  --icon-color: #e3f2fd;
 }
 
 * {

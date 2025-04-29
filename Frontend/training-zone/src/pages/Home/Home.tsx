@@ -1,16 +1,16 @@
 import React from "react";
 import NavBar from "../../components/NavBar/NavBar";
+import SectionLogReg from "../../components/HomeSections/SectionLogReg";
+import SectionCards from "../../components/HomeSections/SectionCards";
 
-function Main() {
+const Home: React.FC = () => {
   return (
     <>
-      <NavBar />
-
-      <main>
-        <h1>Main</h1>
-      </main>
+    <NavBar />
+    <SectionLogReg />
+    <SectionCards />
     </>
-  );
+  )
 }
 
-export default Main;
+export default Home;
