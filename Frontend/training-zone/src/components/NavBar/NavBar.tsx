@@ -1,4 +1,3 @@
-import React from "react";
 import ToggleTheme from "../ToggleTheme/ToggleTheme";
 import "./NavBar.css";
 
