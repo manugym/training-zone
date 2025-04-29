@@ -1,15 +1,18 @@
 /*Light Theme*/
 :root {
   --color-background: #e3f2fd;
+  --color-background-secondary: #81d0e6;
   --color-text: #0a192f;
   --color-primary: #1565c0;
   --color-secondary: #0d47a1;
   --color-details: #90caf9;
+  --color-error: #ff4d4f;
 }
 
 /*Dark Theme*/
 [data-theme="dark"] {
   --color-background: #0a192f;
+  --color-background-secondary: #0e2a47;
   --color-text: #f1f5f9;
   --color-primary: #1e40af;
   --color-secondary: #3b82f6;
