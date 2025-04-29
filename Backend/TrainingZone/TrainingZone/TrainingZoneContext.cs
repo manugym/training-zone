@@ -25,7 +25,7 @@ public class TrainingZoneContext : DbContext
         string baseDir = AppDomain.CurrentDomain.BaseDirectory;
         optionsBuilder.UseSqlite($"DataSource={baseDir}{DATABASE_PATH}");
 #else
-            string connection = "Server=db14304.databaseasp.net; Database=db14304; Uid=db14304; Pwd=pT@45eW!S?d8;";
+            string connection = "Server=db18405.databaseasp.net; Database=db18405; Uid=db18405; Pwd=gR@5_3Bj6z%G;";
             optionsBuilder.UseMySql(connection, ServerVersion.AutoDetect(connection));
 #endif
     }
