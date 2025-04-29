@@ -29,3 +29,19 @@
 .navbar > div:last-child {
   margin-left: auto;
 }
+
+.nav-icon {
+  padding-left: 4vh;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+}
+
+.icon {
+  width: 1.8em;
+  height: 1.8em;
+}
