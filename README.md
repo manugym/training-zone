@@ -1,60 +1,128 @@
-# 📌 Proyecto: PeakZone / BookZone (Nombre por definir)
+# Proyecto: TrainingZone
 
-## 👥 Autores del Proyecto:
-✍️ *(Gálvez Madueño, Alejandro - Muñoz Marín, Manuel José)*
+## Índice
+
+- [Autores del Proyecto](#autores-del-proyecto)
+- [Descripción](#descripción)
+- [Objetivos del Proyecto](#objetivos-del-proyecto)
+- [Tecnologías Utilizadas](#tecnologías-utilizadas)
+- [Base de Datos](#base-de-datos)
+- [Despliegue](#despliegue)
+- [Diseño de la Aplicación](#diseño-de-la-aplicación)
+- [Tutorial de Uso](#tutorial-de-uso)
+- [Presentación PDF](#presentación-pdf)
+- [Bitácora de Tareas](#bitácora-de-tareas)
+- [Bibliografía](#bibliografía)
+- [Vídeo del Proyecto](#vídeo-del-proyecto)
 
 ---
 
-## 📖 Descripción del Proyecto
+## Autores del Proyecto
+
+*(Gálvez Madueño, Alejandro - Muñoz Marín, Manuel José)*
+
+---
+
+## Descripción
 
 Este proyecto consiste en un servidor que proporcionará información y almacenamiento a una página web y una aplicación multiplataforma. Está dirigido a gestores de gimnasios y entrenadores personales para que puedan ofrecer sus servicios en forma de clases o entrenamientos personalizados. Los usuarios podrán reservar estos servicios y gestionar sus actividades deportivas de manera fácil y eficiente.
 
-🔹 **Características principales:**
-- Los usuarios con rol "user" tendrán acceso a todas las vistas disponibles que les permita su rol
-- Los usuarios con rol "admin" tendrán vistas especificas de administración de usuarios, entrenadores y clases
-- Envío de recordatorios antes de cada clase. ⏰
-- Chat disponible para comunicación con el administrador del servicio reservado. 💬
-- Posibilidad de chat grupal para las personas que participan en la misma actividad.
-- Sistema de ficheros localmente en el servidor para almacenar imágenes tanto como de clientes, entrenadores y clases
-- Persistencia de datos local del cliente para almacenar la rutina creada por la IA
-- La aplicación estará en Inglés y Español
-- Contará con temas claro y oscuro
-  
+**Características principales:**
 
-🔸 **Opcionales en estudio:**
-- Implementación de pagos. 💳
-- Búsqueda global o por centro/entrenador específico.
+- Vistas adaptadas según el rol (user/admin)
+- Envío de recordatorios antes de cada clase
+- Chat directo con el administrador y posibilidad de chat grupal
+- Sistema de almacenamiento de imágenes en servidor
+- Persistencia local para rutinas generadas por IA
+- Idioma inglés/español
+- Tema claro y oscuro
 
----
+**Opcionales en estudio:**
 
-## 🎯 Objetivos del Proyecto
-
-### ✅ Principal:
-- 🏋️ Aplicación multiplataforma para la administración de reservas de actividades deportivas.
-- 🗣️ Interacción con los entrenadores mediante chats en la app.
-
-### 🔹 Secundarios:
-- 🤖 Implementación de IA generativa para la creación de rutinas personalizadas.
-- 📊 Seguimiento de marcas y generación de gráficas de rendimiento.
+- Implementación de pagos
+- Búsqueda por centro o entrenador
 
 ---
 
-## 🛠️ Tecnologías Utilizadas
+## Objetivos del Proyecto
 
-🌐 **Frontend Web:** React ![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=white)
+**Principal:**
 
-📱 **Aplicación Móvil:** React Native ![React Native](https://img.shields.io/badge/React%20Native-61DAFB?style=for-the-badge&logo=react&logoColor=white)
+- Aplicación multiplataforma para gestionar reservas deportivas
+- Interacción entre usuarios y entrenadores
 
-🔗 **Backend:** ASP .NET ![.Net](https://img.shields.io/badge/.NET-5C2D91?style=for-the-badge&logo=.net&logoColor=white)
+**Secundarios:**
 
-📦 **Base de Datos:** *(Esquema E/R adjunto)*
+- Generación de rutinas mediante IA
+- Seguimiento de métricas y gráficas de rendimiento
+
+---
+
+## Tecnologías Utilizadas
+
+- **Frontend Web:** React
+- **Aplicación Móvil:** React Native
+- **Backend:** ASP .NET
+- **Base de Datos:** SQLite en desarrollo | MySQL en producción
+
+---
+
+## Base de Datos
+
+Esquema E/R utilizado:
 
 ![Base de datos del proyecto](assets/Database.png)
+
 ---
 
-## 🎨 Diseño 
-[![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white)](https://www.figma.com/design/yxJJMhDoufw6WK8nBnkZd3/Aplicaci%C3%B3n-gestion-gym?node-id=11-547&t=IyhWAoJk5Y5FJ5Dw-0)  
-🔗 [Ver diseño en Figma](https://www.figma.com/design/yxJJMhDoufw6WK8nBnkZd3/Aplicaci%C3%B3n-gestion-gym?node-id=11-547&t=IyhWAoJk5Y5FJ5Dw-0)
+## Diseño de la Aplicación
 
-🚀 **¡En desarrollo!** 
+[Ver diseño en Figma](https://www.figma.com/design/yxJJMhDoufw6WK8nBnkZd3/Aplicaci%C3%B3n-gestion-gym?node-id=11-547&t=IyhWAoJk5Y5FJ5Dw-0)
+
+---
+
+## Tutorial de Uso
+
+*Aquí irán capturas de pantalla, instrucciones paso a paso, y demostraciones del uso de la aplicación.*
+
+> ⚠️ **En desarrollo.**
+
+---
+
+## Despliegue
+
+### WEB
+
+### Android (APK):
+
+[Descargar APK](https://drive.google.com/file/d/1mZhf6vSjB8J9pnyOHAFvkeCu--3yySLC/view?usp=sharing)
+
+> Instálala manualmente en tu dispositivo Android. Es posible que necesites habilitar la instalación desde "fuentes desconocidas".
+
+### iOS (solo emulador):
+
+[Descargar iOS (.tar.gz)](https://drive.google.com/file/d/1ZLtSCgYWWa9QkLjk5U3iGSPONtbsoyZo/view?usp=drive_link)
+
+> Actualmente, la versión iOS **solo funciona en simuladores (Xcode)** y **no puede instalarse en iPhones físicos sin una cuenta de desarrollador de Apple**.
+---
+
+
+## Presentación PDF
+
+
+---
+
+## Bitácora de Tareas
+
+[Ver Bitácora en Notion](https://orchid-bill-0c6.notion.site/1cb62914266b803d8ba3f6f4a7f7235c?v=1cb62914266b807c81a3000c3464d94a)
+
+---
+
+## Bibliografía
+
+[Ver bibliografía en Notion](https://orchid-bill-0c6.notion.site/1cb62914266b80b297c4c8b4fdd877e8?v=1cb62914266b80e7b13f000ca548157e)
+
+---
+
+## Vídeo del Proyecto
 
