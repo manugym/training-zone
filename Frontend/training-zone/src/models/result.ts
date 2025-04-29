@@ -1,7 +1,4 @@
 export class Result<T = void> {
-  message(arg0: string, message: any) {
-    throw new Error("Method not implemented.");
-  }
   success: boolean;
   statusCode: number;
   error: string;
@@ -17,6 +14,10 @@ export class Result<T = void> {
     this.error = error;
     this.statusCode = statusCode;
     this.data = data;
+  }
+
+  message(message: string): Result<T> {
+    return new Result(this.success, this.statusCode, message, this.data);
   }
 
   throwIfError() {
