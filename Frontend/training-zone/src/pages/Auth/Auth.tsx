@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import NavBar from "../../components/NavBar/NavBar";
 import "./Auth.css";
 import Register from "../../components/AuthForms/Register/Register";
