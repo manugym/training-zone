@@ -16,6 +16,8 @@ public class TrainingZoneContext : DbContext
 
 
     public DbSet<User> Users { get; set; }
+    public DbSet<Class> Classes { get; set; }
+    public DbSet<Schedule> Schedules { get; set; }
 
 
 
