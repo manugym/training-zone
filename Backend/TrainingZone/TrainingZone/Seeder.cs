@@ -21,6 +21,9 @@ public class Seeder
         await SeedTrainersAsync();
         await _trainingZoneContext.SaveChangesAsync();
 
+        await SeedChatsAsync(); 
+        await _trainingZoneContext.SaveChangesAsync();
+
     }
 
     private async Task SeedUsersAsync()
@@ -34,7 +37,21 @@ public class Seeder
                 Password = _passwordService.Hash("admin"),
                 Role = Role.ADMIN.ToString().ToLower(),
             },
-            
+             new User(){
+                Name = "ale",
+                Email = "ale@gmail.com",
+                Phone = "192837465",
+                Password = _passwordService.Hash("admin"),
+                Role = Role.ADMIN.ToString().ToLower(),
+            },
+             new User(){
+                Name = "manu",
+                Email = "manu@gmail.com",
+                Phone = "918273465",
+                Password = _passwordService.Hash("admin"),
+                Role = Role.ADMIN.ToString().ToLower(),
+            },
+
         ];
 
         await _trainingZoneContext.Users.AddRangeAsync(users);
@@ -133,6 +150,97 @@ public class Seeder
 
 
 
+    private async Task SeedChatsAsync()
+    {
+        var users = _trainingZoneContext.Users.ToList();
+
+        var ale = users.FirstOrDefault(u => u.Name == "ale");
+        var manu = users.FirstOrDefault(u => u.Name == "manu");
+
+        var trainer1 = users.FirstOrDefault(u => u.Name == "Ana López");
+        var trainer2 = users.FirstOrDefault(u => u.Name == "Carlos Pérez");
+
+        if (ale == null || manu == null || trainer1 == null || trainer2 == null)
+            return;
+
+        var chats = new List<Chat>
+    {
+        new Chat
+        {
+            UserOriginId = ale.Id,
+            UserDestinationId = trainer1.Id,
+            ChatMessages = new List<ChatMessage>
+            {
+                new ChatMessage
+                {
+                    Message = "Hola Ana, ¿qué ejercicios me recomiendas para piernas?",
+                    MessageDateTime = DateTime.UtcNow.AddMinutes(-10)
+                },
+                new ChatMessage
+                {
+                    Message = "Hola Ale, te recomiendo sentadillas y peso muerto.",
+                    MessageDateTime = DateTime.UtcNow.AddMinutes(-9)
+                }
+            }
+        },
+        new Chat
+        {
+            UserOriginId = manu.Id,
+            UserDestinationId = trainer2.Id,
+            ChatMessages = new List<ChatMessage>
+            {
+                new ChatMessage
+                {
+                    Message = "Hola Carlos, ¿cómo empiezo la rutina de fuerza?",
+                    MessageDateTime = DateTime.UtcNow.AddMinutes(-8)
+                },
+                new ChatMessage
+                {
+                    Message = "Hola Manu, empieza con press de banca y remo con barra.",
+                    MessageDateTime = DateTime.UtcNow.AddMinutes(-7)
+                }
+            }
+        },
+        new Chat
+        {
+            UserOriginId = ale.Id,
+            UserDestinationId = trainer2.Id,
+            ChatMessages = new List<ChatMessage>
+            {
+                new ChatMessage
+                {
+                    Message = "Carlos, ¿cuántos días a la semana entreno?",
+                    MessageDateTime = DateTime.UtcNow.AddMinutes(-6)
+                },
+                new ChatMessage
+                {
+                    Message = "Depende de tu objetivo, pero 3-4 días es un buen inicio.",
+                    MessageDateTime = DateTime.UtcNow.AddMinutes(-5)
+                }
+            }
+        },
+        new Chat
+        {
+            UserOriginId = manu.Id,
+            UserDestinationId = trainer1.Id,
+            ChatMessages = new List<ChatMessage>
+            {
+                new ChatMessage
+                {
+                    Message = "Ana, ¿puedo hacer cardio todos los días?",
+                    MessageDateTime = DateTime.UtcNow.AddMinutes(-4)
+                },
+                new ChatMessage
+                {
+                    Message = "Sí, pero varía la intensidad para evitar sobreentrenamiento.",
+                    MessageDateTime = DateTime.UtcNow.AddMinutes(-3)
+                }
+            }
+        }
+    };
+
+        await _trainingZoneContext.Chats.AddRangeAsync(chats);
+    }
 
 
 

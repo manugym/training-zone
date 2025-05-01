@@ -16,8 +16,8 @@ public class TrainingZoneContext : DbContext
 
 
     public DbSet<User> Users { get; set; }
-    public DbSet<Chat> Chat { get; set; }
-    public DbSet<ChatMessage> ChatMessages { get; set; }
+    public DbSet<Chat> Chats { get; set; }
+    public DbSet<ChatMessage> ChatsMessages { get; set; }
 
 
 
