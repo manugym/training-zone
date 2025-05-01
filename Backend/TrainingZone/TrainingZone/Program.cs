@@ -9,6 +9,8 @@ using System.Text.Json.Serialization;
 using System.Text;
 using TrainingZone.Services;
 using TrainingZone.Mappers;
+using TrainingZone.MiddleWares;
+using TrainingZone.WebSocketAdministration;
 
 namespace TrainingZone;
 
@@ -98,10 +100,12 @@ public class Program
 
 
         //Administrador de todos los websockets
+        builder.Services.AddSingleton<WebSocketNetwork>();
 
 
 
         //MiddleWare
+        builder.Services.AddTransient<WebSocketMiddleWare>();
 
 
 
@@ -146,6 +150,7 @@ public class Program
         app.UseWebSockets();
 
         //MiddleWare 
+        app.UseMiddleware<WebSocketMiddleWare>();
 
 
         app.UseHttpsRedirection();

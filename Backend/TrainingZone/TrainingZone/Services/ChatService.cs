@@ -16,4 +16,9 @@ public class ChatService
     {
         return await _unitOfWork.ChatRepository.GetChatByUserIdAndUserDestinationIdAsync(userId, userDestinationId);
     }
+
+    internal void HandleMessage(string message)
+    {
+        throw new NotImplementedException();
+    }
 }
