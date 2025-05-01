@@ -41,15 +41,15 @@ public class Seeder
                 Name = "ale",
                 Email = "ale@gmail.com",
                 Phone = "192837465",
-                Password = _passwordService.Hash("admin"),
-                Role = Role.ADMIN.ToString().ToLower(),
+                Password = _passwordService.Hash("1234"),
+                Role = Role.USER.ToString().ToLower(),
             },
              new User(){
                 Name = "manu",
                 Email = "manu@gmail.com",
                 Phone = "918273465",
-                Password = _passwordService.Hash("admin"),
-                Role = Role.ADMIN.ToString().ToLower(),
+                Password = _passwordService.Hash("1234"),
+                Role = Role.USER.ToString().ToLower(),
             },
 
         ];
