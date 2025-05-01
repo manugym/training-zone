@@ -8,10 +8,13 @@ public class UnitOfWork
 
     //private GameRepository _gameRepository;
     private UserRepository _userRepository;
-
+    private ChatRepository _chatRepository ;
+    private ChatMessageRepository _chatMessageRepository;
 
 
     public UserRepository UserRepository => _userRepository ??= new UserRepository(_context);
+    public ChatRepository ChatRepository => _chatRepository ??= new ChatRepository(_context);
+    public ChatMessageRepository ChatMessageRepository => _chatMessageRepository ??= new ChatMessageRepository(_context);
 
 
     public UnitOfWork(TrainingZoneContext context)
