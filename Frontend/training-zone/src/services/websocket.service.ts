@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { Subject } from "rxjs";
 import { webSocket, WebSocketSubject } from "rxjs/webSocket";
 import Swal from "sweetalert2";
@@ -6,8 +5,6 @@ import apiService from "./api.service";
 
 class WebSocketService {
   private readonly SOCKET_URL = `${import.meta.env.VITE_SERVER_URL}/socket`;
-
-  navigate = useNavigate();
 
   connected = new Subject<void>();
   messageReceived = new Subject<any>();
@@ -53,7 +50,6 @@ class WebSocketService {
   private onDisconnected() {
     console.log("WebSocket connection closed");
     this.disconnected.next();
-    this.navigate("/");
   }
 
   rxjsSocket: WebSocketSubject<string>;
@@ -63,6 +59,11 @@ class WebSocketService {
   }
 
   async connect() {
+    if (this.isConnected()) {
+      console.log("Ya está conectado");
+      return;
+    }
+
     if (!this.isConnected() && apiService.jwt) {
       console.log(
         "Conectando a WebSocket",
