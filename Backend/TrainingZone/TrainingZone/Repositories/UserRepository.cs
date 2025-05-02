@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TrainingZone.Enums;
 using TrainingZone.Models.DataBase;
+using TrainingZone.Models.Enums;
 using TrainingZone.Repositories.Base;
 
 namespace TrainingZone.Repositories;

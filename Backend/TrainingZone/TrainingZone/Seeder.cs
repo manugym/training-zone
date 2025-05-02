@@ -1,6 +1,6 @@
 ﻿using System;
-using TrainingZone.Enums;
 using TrainingZone.Models.DataBase;
+using TrainingZone.Models.Enums;
 using TrainingZone.Services;
 
 namespace TrainingZone;
