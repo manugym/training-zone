@@ -6,7 +6,7 @@ public class ChatRequest
 }
 public class GetChatRequest : ChatRequest
 {
-    public override ChatRequestType ChatRequestType => ChatRequestType.GET;
+    public override ChatRequestType ChatRequestType => ChatRequestType.GET_CHAT;
     public int UserId { get; set; }
 }
 
@@ -14,7 +14,7 @@ public class SendChatMessageRequest : ChatRequest
 {
     public override ChatRequestType ChatRequestType => ChatRequestType.SEND;
     public int DestinationUserId { get; set; }
-    public string message { get; set; }
+    public string Message { get; set; }
 
 }
 

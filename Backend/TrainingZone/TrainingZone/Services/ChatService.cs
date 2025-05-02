@@ -25,7 +25,13 @@ public class ChatService
 
         switch (recived.Data.ChatRequestType)
         {
-            case ChatRequestType.GET:
+            case ChatRequestType.GET_ALL_USERS_WITH_CONVERSATION:
+
+
+
+
+                break;
+            case ChatRequestType.GET_CHAT:
                 SocketMessage<GetChatRequest> getChatRequest = JsonSerializer.Deserialize<SocketMessage<GetChatRequest>>(message);
 
 
