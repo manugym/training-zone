@@ -1,7 +1,7 @@
 import { Subscription } from "rxjs";
 import {
   ChatRequestBase,
-  GetChatRequest,
+  ChatRequestGeneric,
 } from "../models/websocket/chat-request";
 import { SocketMessageGeneric } from "../models/websocket/socket-message";
 import websocketService from "./websocket.service";
@@ -42,7 +42,7 @@ class ChatService {
 
   async sendGetAllUsersWithChatRequest(): Promise<void> {
     const request: ChatRequestBase = {
-      ChatRequestType: ChatRequestType.GET_ALL_USERS_WITH_CONVERSATION,
+      ChatRequestType: ChatRequestType.ALL_USERS_WITH_CONVERSATION,
     };
 
     const socketMessage = new SocketMessageGeneric<ChatRequestBase>();
@@ -53,12 +53,14 @@ class ChatService {
   }
 
   async sendGetChatRequest(userId: number): Promise<void> {
-    const request: GetChatRequest = {
-      ChatRequestType: ChatRequestType.GET_CHAT,
-      UserId: userId,
+    const request: ChatRequestGeneric<number> = {
+      ChatRequestType: ChatRequestType.CONVERSATION,
+      Data: userId,
     };
 
-    const socketMessage = new SocketMessageGeneric<GetChatRequest>();
+    const socketMessage = new SocketMessageGeneric<
+      ChatRequestGeneric<number>
+    >();
     socketMessage.Type = SocketCommunicationType.CHAT;
     socketMessage.Data = request;
 

@@ -6,8 +6,6 @@ import apiService from "../../services/api.service";
 import { User } from "../../models/user";
 
 function Chat() {
-  const [userChat, setUserChat] = useState<User | null>(null);
-
   //Connect to the WebSocket server
   useEffect(() => {
     async function connectSocket() {

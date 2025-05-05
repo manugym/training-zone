@@ -2,8 +2,8 @@
 
 public enum ChatRequestType
 {
-    GET_ALL_USERS_WITH_CONVERSATION,
-    GET_CHAT,
+    ALL_USERS_WITH_CONVERSATION,
+    CONVERSATION,
     SEND,
     MODIFY,
     DELETE,

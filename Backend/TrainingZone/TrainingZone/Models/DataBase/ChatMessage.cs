@@ -8,6 +8,4 @@ public class ChatMessage
     public DateTime MessageDateTime { get; set; } 
     public bool Viewed { get; set; } = false;
 
-    public Chat Chat { get; set; }
-
 }
