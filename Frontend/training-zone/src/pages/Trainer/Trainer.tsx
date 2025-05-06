@@ -49,10 +49,10 @@ function TrainerPage() {
           {!loading && trainer && (
             <div className="trainer-details">
               <div className="trainer-info">
-                <h1>{trainer.user.name}</h1>
+                <h1>{trainer.user.Name}</h1>
                 <img
                   src={`${SERVER_IMAGE_URL}/${
-                    trainer.user.avatarImageUrl || "default.png"
+                    trainer.user.AvatarImageUrl || "default.png"
                   }`}
                   alt="Trainer"
                   className="trainer-image"

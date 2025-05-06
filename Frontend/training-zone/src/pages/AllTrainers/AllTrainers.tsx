@@ -119,11 +119,11 @@ function AllTrainersView() {
 
                   <div className="all-trainers-container">
                     {allTrainers.trainers.map((trainer) => (
-                      <div key={trainer.user.id} className="trainer-card">
+                      <div key={trainer.user.Id} className="trainer-card">
                         <div className="trainer-image-container">
                           <img
                             src={`${SERVER_IMAGE_URL}/${
-                              trainer.user.avatarImageUrl || "default.png"
+                              trainer.user.AvatarImageUrl || "default.png"
                             }`}
                             alt="Trainer"
                             className="trainer-image"
@@ -131,12 +131,12 @@ function AllTrainersView() {
                         </div>
                         <div className="trainer-information-container">
                           <div className="trainer-info-top">
-                            <h2>{trainer.user.name}</h2>
+                            <h2>{trainer.user.Name}</h2>
                             <span>Especialidades</span>
                           </div>
                           <button
                             onClick={() =>
-                              navigate(`/trainer/${trainer.user.id}`)
+                              navigate(`/trainer/${trainer.user.Id}`)
                             }
                           >
                             Ver Perfil

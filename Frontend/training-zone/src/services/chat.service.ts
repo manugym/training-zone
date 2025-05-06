@@ -1,4 +1,4 @@
-import { Subscription } from "rxjs";
+import { BehaviorSubject, Subscription } from "rxjs";
 import {
   ChatRequestBase,
   ChatRequestGeneric,
@@ -7,8 +7,14 @@ import { SocketMessageGeneric } from "../models/websocket/socket-message";
 import websocketService from "./websocket.service";
 import { SocketCommunicationType } from "../models/enums/socket-communication-type";
 import { ChatRequestType } from "../models/enums/chat-request-type";
+import { User } from "../models/user";
+import { Chat } from "../models/chat";
 
 class ChatService {
+  private _usersWithConversations = new BehaviorSubject<User[] | null>(null);
+  //observable that can be used outside of the service
+  public usersWithConversations$ = this._usersWithConversations.asObservable();
+
   messageReceived$: Subscription;
 
   constructor() {
@@ -36,6 +42,23 @@ class ChatService {
     switch (message.Type) {
       case SocketCommunicationType.CHAT:
         console.log("Mensaje de chat recibido:", message.Data);
+
+        switch (message.Data.ChatRequestType) {
+          case ChatRequestType.ALL_USERS_WITH_CONVERSATION:
+            this._usersWithConversations.next(message.Data.Data);
+
+            break;
+          case ChatRequestType.CONVERSATION:
+            break;
+          case ChatRequestType.SEND:
+            break;
+          case ChatRequestType.MODIFY:
+            break;
+          case ChatRequestType.DELETE:
+            break;
+          default:
+            console.error("Tipo de solicitud no reconocido");
+        }
         break;
     }
   }
