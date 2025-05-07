@@ -1,6 +1,6 @@
 import { User } from "./user";
 
 export interface Trainer {
-  user: User;
+  User: User;
   //clases
 }

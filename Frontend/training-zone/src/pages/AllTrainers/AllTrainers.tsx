@@ -24,8 +24,8 @@ function AllTrainersView() {
 
   // Initial filter
   const [filter, setFilter] = useState<TrainerFilter>({
-    classType: null,
-    name: "",
+    ClassType: null,
+    Name: "",
     entitiesPerPage: 5,
     actualPage: 1,
   });
@@ -35,8 +35,8 @@ function AllTrainersView() {
   // Handle filter changes
   useEffect(() => {
     setFilter({
-      classType: classType,
-      name: name,
+      ClassType: classType,
+      Name: name,
       entitiesPerPage: entitiesPerPage,
       actualPage: actualPage,
     });
@@ -47,7 +47,7 @@ function AllTrainersView() {
     const timer = setTimeout(() => {
       setFilter((prev) => ({
         ...prev,
-        name: name,
+        Name: name,
         actualPage: 1,
       }));
     }, 400);
@@ -81,7 +81,7 @@ function AllTrainersView() {
         {!loading && (
           <div>
             <div className="content-container">
-              {allTrainers && allTrainers.trainers.length > 0 && (
+              {allTrainers && allTrainers.Trainers.length > 0 && (
                 <div>
                   <h1>Nuestros Entrenadores</h1>
 
@@ -118,12 +118,12 @@ function AllTrainersView() {
                   </div>
 
                   <div className="all-trainers-container">
-                    {allTrainers.trainers.map((trainer) => (
-                      <div key={trainer.user.Id} className="trainer-card">
+                    {allTrainers.Trainers.map((trainer) => (
+                      <div key={trainer.User.Id} className="trainer-card">
                         <div className="trainer-image-container">
                           <img
                             src={`${SERVER_IMAGE_URL}/${
-                              trainer.user.AvatarImageUrl || "default.png"
+                              trainer.User.AvatarImageUrl || "default.png"
                             }`}
                             alt="Trainer"
                             className="trainer-image"
@@ -131,12 +131,12 @@ function AllTrainersView() {
                         </div>
                         <div className="trainer-information-container">
                           <div className="trainer-info-top">
-                            <h2>{trainer.user.Name}</h2>
+                            <h2>{trainer.User.Name}</h2>
                             <span>Especialidades</span>
                           </div>
                           <button
                             onClick={() =>
-                              navigate(`/trainer/${trainer.user.Id}`)
+                              navigate(`/trainer/${trainer.User.Id}`)
                             }
                           >
                             Ver Perfil
@@ -167,12 +167,12 @@ function AllTrainersView() {
                       <span>{actualPage}</span>
                       <span
                         className={
-                          actualPage === allTrainers.totalPages
+                          actualPage === allTrainers.TotalPages
                             ? "disabled"
                             : "enabled"
                         }
                         onClick={() => {
-                          if (actualPage < allTrainers.totalPages) {
+                          if (actualPage < allTrainers.TotalPages) {
                             setActualPage(actualPage + 1);
                           }
                         }}
@@ -181,11 +181,11 @@ function AllTrainersView() {
                       </span>
                       <span
                         className={
-                          actualPage === allTrainers.totalPages
+                          actualPage === allTrainers.TotalPages
                             ? "disabled"
                             : "enabled"
                         }
-                        onClick={() => setActualPage(allTrainers.totalPages)}
+                        onClick={() => setActualPage(allTrainers.TotalPages)}
                       >
                         &raquo;
                       </span>
@@ -212,7 +212,7 @@ function AllTrainersView() {
           </div>
         )}
 
-        {!loading && (!allTrainers || allTrainers.trainers.length === 0) && (
+        {!loading && (!allTrainers || allTrainers.Trainers.length === 0) && (
           <div className="no-trainers-message">
             <h2>No se encontraron entrenadores</h2>
           </div>

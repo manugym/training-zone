@@ -18,7 +18,8 @@
   background-color: var(--color-background);
 }
 
-.user_item:hover {
+.user_item:hover,
+.selected {
   background-color: var(--color-background-secondary);
 }
 

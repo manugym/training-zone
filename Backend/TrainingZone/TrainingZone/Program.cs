@@ -11,6 +11,7 @@ using TrainingZone.Services;
 using TrainingZone.Mappers;
 using TrainingZone.MiddleWares;
 using TrainingZone.WebSocketAdministration;
+using System.Text.Json;
 
 namespace TrainingZone;
 
@@ -39,6 +40,8 @@ public class Program
         builder.Services.AddControllers().AddJsonOptions(options =>
         {
             options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+            options.JsonSerializerOptions.PropertyNamingPolicy = null;
+
         });
 
         // Configuración para poder usar JWT en las peticiones de Swagger

@@ -12,6 +12,8 @@ function All_Users_With_Conversation() {
     User[] | null
   >(null);
 
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+
   useEffect(() => {
     const subscription = chatService.usersWithConversations$.subscribe(
       (users) => {
@@ -24,11 +26,23 @@ function All_Users_With_Conversation() {
     };
   }, []);
 
+  useEffect(() => {
+    async function sendGetChatRequest() {
+      await chatService.sendGetChatRequest(selectedUser.Id);
+    }
+
+    sendGetChatRequest();
+  }, [selectedUser]);
+
   return (
     <section className="users_container">
       {usersWithConversations && usersWithConversations.length > 0 ? (
         usersWithConversations.map((user) => (
-          <div key={user.Id} className="user_item">
+          <div
+            key={user.Id}
+            className={`user_item ${selectedUser === user ? "selected" : ""}`}
+            onClick={() => setSelectedUser(user)}
+          >
             <img
               src={`${SERVER_IMAGE_URL}/${
                 user.AvatarImageUrl || "default.png"

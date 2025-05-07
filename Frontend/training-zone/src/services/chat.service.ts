@@ -15,6 +15,9 @@ class ChatService {
   //observable that can be used outside of the service
   public usersWithConversations$ = this._usersWithConversations.asObservable();
 
+  private _actualConversation = new BehaviorSubject<Chat | null>(null);
+  public actualConversation$ = this._actualConversation.asObservable();
+
   messageReceived$: Subscription;
 
   constructor() {
@@ -49,6 +52,8 @@ class ChatService {
 
             break;
           case ChatRequestType.CONVERSATION:
+            this._actualConversation.next(message.Data.Data);
+
             break;
           case ChatRequestType.SEND:
             break;

@@ -173,11 +173,13 @@ public class Seeder
             {
                 new ChatMessage
                 {
+                    UserId = ale.Id,
                     Message = "Hola Ana, ¿qué ejercicios me recomiendas para piernas?",
                     MessageDateTime = DateTime.UtcNow.AddMinutes(-10)
                 },
                 new ChatMessage
                 {
+                    UserId = trainer1.Id,
                     Message = "Hola Ale, te recomiendo sentadillas y peso muerto.",
                     MessageDateTime = DateTime.UtcNow.AddMinutes(-9)
                 }
@@ -191,11 +193,13 @@ public class Seeder
             {
                 new ChatMessage
                 {
+                    UserId = manu.Id,
                     Message = "Hola Carlos, ¿cómo empiezo la rutina de fuerza?",
                     MessageDateTime = DateTime.UtcNow.AddMinutes(-8)
                 },
                 new ChatMessage
                 {
+                    UserId = trainer2.Id,
                     Message = "Hola Manu, empieza con press de banca y remo con barra.",
                     MessageDateTime = DateTime.UtcNow.AddMinutes(-7)
                 }
@@ -209,11 +213,13 @@ public class Seeder
             {
                 new ChatMessage
                 {
+                    UserId = ale.Id,
                     Message = "Carlos, ¿cuántos días a la semana entreno?",
                     MessageDateTime = DateTime.UtcNow.AddMinutes(-6)
                 },
                 new ChatMessage
                 {
+                    UserId = trainer2.Id,
                     Message = "Depende de tu objetivo, pero 3-4 días es un buen inicio.",
                     MessageDateTime = DateTime.UtcNow.AddMinutes(-5)
                 }
@@ -227,11 +233,13 @@ public class Seeder
             {
                 new ChatMessage
                 {
+                    UserId = manu.Id,
                     Message = "Ana, ¿puedo hacer cardio todos los días?",
                     MessageDateTime = DateTime.UtcNow.AddMinutes(-4)
                 },
                 new ChatMessage
                 {
+                    UserId = trainer1.Id,
                     Message = "Sí, pero varía la intensidad para evitar sobreentrenamiento.",
                     MessageDateTime = DateTime.UtcNow.AddMinutes(-3)
                 }
@@ -241,9 +249,6 @@ public class Seeder
 
         await _trainingZoneContext.Chats.AddRangeAsync(chats);
     }
-
-
-
 
 
 }

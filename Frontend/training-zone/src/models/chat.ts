@@ -1,6 +1,8 @@
+import { ChatMessage } from "./chat_message";
+
 export interface Chat {
-  id: number;
-  userOriginId: number;
-  userDestinationId: number;
-  chatMessages: Chat[];
+  Id: number;
+  UserOriginId: number;
+  UserDestinationId: number;
+  ChatMessages: ChatMessage[];
 }
