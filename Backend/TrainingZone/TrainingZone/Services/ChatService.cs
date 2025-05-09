@@ -96,8 +96,7 @@ public class ChatService
 
                 try
                 {
-                    //If chat doesn´t exist, crete it
-
+                    //If the chat doesn´t exist, crete it
                     Chat chat = await _unitOfWork.ChatRepository.GetChatByUserIdAndUserDestinationIdAsync(userId, sendMessageRequest.UserId);
 
                     if(chat == null)
@@ -130,17 +129,13 @@ public class ChatService
                     if (handler == null)
                         return;
 
-                    var messageToSend = new SocketMessage<SocketChatMessage<MessageReceived>>()
+                    var messageToSend = new SocketMessage<SocketChatMessage<ChatMessage>>()
                     {
                         Type = SocketCommunicationType.CHAT,
-                        Data = new SocketChatMessage<MessageReceived>()
+                        Data = new SocketChatMessage<ChatMessage>()
                         {
-                            ChatRequestType = ChatRequestType.CONVERSATION,
-                            Data = new MessageReceived
-                            {
-                                Message = sendMessageRequest.Message,
-                                UserId = userId
-                            }
+                            ChatRequestType = ChatRequestType.SEND,
+                            Data = newMessage
                         }
                     };
 

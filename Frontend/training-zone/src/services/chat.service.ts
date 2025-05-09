@@ -11,7 +11,7 @@ import { User } from "../models/user";
 import { Chat } from "../models/chat";
 import { SendMessageRequest } from "../models/send-message-request";
 import userService from "./user.service";
-import { firstValueFrom } from "rxjs";
+import { ChatMessage } from "../models/chat_message";
 
 class ChatService {
   private _usersWithConversations = new BehaviorSubject<User[] | null>(null);
@@ -59,6 +59,25 @@ class ChatService {
 
             break;
           case ChatRequestType.SEND:
+            const newMessage: ChatMessage = message.Data.Data;
+            console.log("mensaje recibido : ", newMessage);
+
+            const currentConversation = this._actualConversation.getValue();
+
+            if (
+              currentConversation?.UserDestinationId === newMessage.UserId ||
+              currentConversation?.UserOriginId === newMessage.UserId
+            ) {
+              const updatedConversation = {
+                ...currentConversation,
+                ChatMessages: [
+                  ...(currentConversation.ChatMessages || []),
+                  newMessage,
+                ],
+              };
+
+              this._actualConversation.next(updatedConversation);
+            }
             break;
           case ChatRequestType.MODIFY:
             break;
