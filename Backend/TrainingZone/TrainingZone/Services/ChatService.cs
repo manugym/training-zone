@@ -123,12 +123,8 @@ public class ChatService
                     _unitOfWork.ChatMessageRepository.Add(newMessage);
                     await _unitOfWork.SaveAsync();
 
-                    //Send to user destination
-                    WebSocketHandler handler = _webSocketNetwork.GetSocketByUserId(sendMessageRequest.UserId);
 
-                    if (handler == null)
-                        return;
-
+                    //If everything went well, the message is sent to the users if they are connected.
                     var messageToSend = new SocketMessage<SocketChatMessage<ChatMessage>>()
                     {
                         Type = SocketCommunicationType.CHAT,
@@ -139,16 +135,15 @@ public class ChatService
                         }
                     };
 
-                    await handler.SendAsync(JsonSerializer.Serialize(messageToSend));
-
-
+                   
+                    await _webSocketNetwork.GetSocketByUserId(userId)?.SendAsync(JsonSerializer.Serialize(messageToSend));
+                    await _webSocketNetwork.GetSocketByUserId(sendMessageRequest.UserId)?.SendAsync(JsonSerializer.Serialize(messageToSend));
                 }
 
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
                 }
-
 
 
 

@@ -42,6 +42,7 @@ function Conversation() {
     }
 
     sendMessage();
+    setMessage("");
   };
 
   return (
