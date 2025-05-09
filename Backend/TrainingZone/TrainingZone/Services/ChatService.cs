@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using TrainingZone.Mappers;
 using TrainingZone.Models.DataBase;
+using TrainingZone.Models.Dtos.Chat;
 using TrainingZone.Models.Dtos.User;
 using TrainingZone.Models.WebSocket;
 using TrainingZone.Repositories;
@@ -90,7 +91,69 @@ public class ChatService
 
                 break;
             case ChatRequestType.SEND:
-                SocketMessage<SocketChatMessage> sendMessageRequest = JsonSerializer.Deserialize<SocketMessage<SocketChatMessage>>(message);
+                MessageReceived sendMessageRequest = JsonSerializer.Deserialize<SocketMessage<SocketChatMessage<MessageReceived>>>(message).Data.Data;
+
+
+                try
+                {
+                    //If chat doesn´t exist, crete it
+
+                    Chat chat = await _unitOfWork.ChatRepository.GetChatByUserIdAndUserDestinationIdAsync(userId, sendMessageRequest.UserId);
+
+                    if(chat == null)
+                    {
+                        chat = new Chat
+                        {
+                            UserOriginId = userId,
+                            UserDestinationId = sendMessageRequest.UserId,
+                        };
+
+                        _unitOfWork.ChatRepository.Add(chat);
+                        await _unitOfWork.SaveAsync();
+                    }
+
+                    //Save the Message
+                    ChatMessage newMessage = new ChatMessage
+                    {
+                        ChatId = chat.Id,
+                        UserId = userId,
+                        Message = sendMessageRequest.Message,
+                        MessageDateTime = DateTime.Now,
+
+                    };
+                    _unitOfWork.ChatMessageRepository.Add(newMessage);
+                    await _unitOfWork.SaveAsync();
+
+                    //Send to user destination
+                    WebSocketHandler handler = _webSocketNetwork.GetSocketByUserId(sendMessageRequest.UserId);
+
+                    if (handler == null)
+                        return;
+
+                    var messageToSend = new SocketMessage<SocketChatMessage<MessageReceived>>()
+                    {
+                        Type = SocketCommunicationType.CHAT,
+                        Data = new SocketChatMessage<MessageReceived>()
+                        {
+                            ChatRequestType = ChatRequestType.CONVERSATION,
+                            Data = new MessageReceived
+                            {
+                                Message = sendMessageRequest.Message,
+                                UserId = userId
+                            }
+                        }
+                    };
+
+                    await handler.SendAsync(JsonSerializer.Serialize(messageToSend));
+
+
+                }
+
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+
 
 
 

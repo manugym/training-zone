@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { Chat } from "../../models/chat";
 import chatService from "../../services/chat.service";
 import userService from "../../services/user.service";
 import "./Conversation.css";
 import { User } from "../../models/user";
+import SendIcon from "../../assets/send_icon.png";
 
 function Conversation() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [conversation, setConversation] = useState<Chat | null>(null);
+
+  const [message, setMessage] = useState("");
 
   //subscription to get the current user
   useEffect(() => {
@@ -31,21 +34,21 @@ function Conversation() {
     };
   }, []);
 
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+
+    async function sendMessage() {
+      await chatService.sendMessage(message);
+    }
+
+    sendMessage();
+  };
+
   return (
     <section className="conversation-container">
       {conversation && conversation.ChatMessages.length > 0 ? (
         conversation.ChatMessages.map((message) => {
-          console.log("Comparando IDs →", {
-            messageUserId: message.UserId,
-            currentUserId: currentUser.Id,
-            equal: message.UserId === currentUser.Id,
-            types: {
-              messageUserId: typeof message.UserId,
-              currentUserId: typeof currentUser.Id,
-            },
-          });
-
-          const isMine = message.UserId === currentUser.Id;
+          const isMine = message.UserId === currentUser?.Id;
 
           return (
             <div
@@ -65,6 +68,19 @@ function Conversation() {
       ) : (
         <p>No hay mensajes</p>
       )}
+
+      <form onSubmit={handleSubmit} className="message-form">
+        <input
+          type="text"
+          placeholder="Escribe un mensaje"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          required
+        />
+        <button type="submit" className="send-button">
+          <img src={SendIcon} alt="Enviar" />
+        </button>
+      </form>
     </section>
   );
 }

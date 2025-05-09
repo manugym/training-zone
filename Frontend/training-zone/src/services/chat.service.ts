@@ -9,6 +9,9 @@ import { SocketCommunicationType } from "../models/enums/socket-communication-ty
 import { ChatRequestType } from "../models/enums/chat-request-type";
 import { User } from "../models/user";
 import { Chat } from "../models/chat";
+import { SendMessageRequest } from "../models/send-message-request";
+import userService from "./user.service";
+import { firstValueFrom } from "rxjs";
 
 class ChatService {
   private _usersWithConversations = new BehaviorSubject<User[] | null>(null);
@@ -91,6 +94,32 @@ class ChatService {
     >();
     socketMessage.Type = SocketCommunicationType.CHAT;
     socketMessage.Data = request;
+
+    websocketService.send(JSON.stringify(socketMessage));
+  }
+
+  async sendMessage(message: string): Promise<void> {
+    const currentUser = userService.getCurrentUser();
+
+    const request: ChatRequestGeneric<SendMessageRequest> = {
+      ChatRequestType: ChatRequestType.SEND,
+      Data: {
+        UserId:
+          this._actualConversation.getValue()?.UserOriginId === currentUser.Id
+            ? this._actualConversation.getValue()?.UserDestinationId
+            : this._actualConversation.getValue()?.UserOriginId,
+
+        Message: message,
+      },
+    };
+
+    const socketMessage = new SocketMessageGeneric<
+      ChatRequestGeneric<SendMessageRequest>
+    >();
+    socketMessage.Type = SocketCommunicationType.CHAT;
+    socketMessage.Data = request;
+
+    console.log("Envinado Mensaje ...", socketMessage);
 
     websocketService.send(JSON.stringify(socketMessage));
   }

@@ -30,6 +30,10 @@ class UserService {
     console.log("Usuario autenticado", response);
     return response.data;
   }
+
+  public getCurrentUser(): User {
+    return this._currentUser.value;
+  }
 }
 
 export default new UserService();
