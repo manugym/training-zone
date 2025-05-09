@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useRef, useState } from "react";
 import { Chat } from "../../models/chat";
 import chatService from "../../services/chat.service";
 import userService from "../../services/user.service";
@@ -11,6 +11,12 @@ function Conversation() {
   const [conversation, setConversation] = useState<Chat | null>(null);
 
   const [message, setMessage] = useState("");
+
+  const bottomRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "auto" });
+  }, [conversation?.ChatMessages.length]);
 
   //subscription to get the current user
   useEffect(() => {
@@ -46,29 +52,33 @@ function Conversation() {
   };
 
   return (
-    <section className="conversation-container">
-      {conversation && conversation.ChatMessages.length > 0 ? (
-        conversation.ChatMessages.map((message) => {
-          const isMine = message.UserId === currentUser?.Id;
-
-          return (
-            <div
-              key={message.Id}
-              className={`message-box ${isMine ? "mine" : "other"}`}
-            >
-              <p className="message-text">{message.Message}</p>
-              <span className="message-time">
-                {new Date(message.MessageDateTime).toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </span>
-            </div>
-          );
-        })
-      ) : (
-        <p>No hay mensajes</p>
-      )}
+    <section className="conversation-panel">
+      <div className="conversation-container">
+        {conversation && conversation.ChatMessages.length > 0 ? (
+          <>
+            {conversation.ChatMessages.map((message) => {
+              const isMine = message.UserId === currentUser?.Id;
+              return (
+                <div
+                  key={message.Id}
+                  className={`message-box ${isMine ? "mine" : "other"}`}
+                >
+                  <p className="message-text">{message.Message}</p>
+                  <span className="message-time">
+                    {new Date(message.MessageDateTime).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
+                </div>
+              );
+            })}
+            <div ref={bottomRef} />
+          </>
+        ) : (
+          <p>No hay mensajes</p>
+        )}
+      </div>
 
       <form onSubmit={handleSubmit} className="message-form">
         <input
@@ -78,7 +88,7 @@ function Conversation() {
           onChange={(e) => setMessage(e.target.value)}
           required
         />
-        <button type="submit" className="send-button">
+        <button type="submit">
           <img src={SendIcon} alt="Enviar" />
         </button>
       </form>
