@@ -4,5 +4,5 @@ export interface ChatMessage {
   UserId: number;
   Message: string;
   MessageDateTime: Date;
-  Viewed: boolean;
+  IsViewed: boolean;
 }

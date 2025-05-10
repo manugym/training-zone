@@ -69,6 +69,8 @@ function Conversation() {
                       hour: "2-digit",
                       minute: "2-digit",
                     })}
+
+                    {message.IsViewed ? "!" : "?"}
                   </span>
                 </div>
               );

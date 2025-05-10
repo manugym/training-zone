@@ -65,11 +65,24 @@ public class ChatService
 
                 try
                 {
-                    WebSocketHandler handler = _webSocketNetwork.GetSocketByUserId(userId);
 
-                    SocketChatMessage<int> getChatRequest = JsonSerializer.Deserialize<SocketMessage<SocketChatMessage<int>>>(message).Data;
+                    int destinationUserId = JsonSerializer.Deserialize<SocketMessage<SocketChatMessage<int>>>(message).Data.Data;
+                    Chat userChat = await _unitOfWork.ChatRepository.GetChatByUserIdAndUserDestinationIdAsync(userId, destinationUserId);
 
-                    Chat userChat = await _unitOfWork.ChatRepository.GetChatByUserIdAndUserDestinationIdAsync(userId, getChatRequest.Data);
+                    //If there are unread messages, mark them as read
+                    var unreadMessages = userChat.ChatMessages
+                        .Where(message => message.UserId == destinationUserId && !message.IsViewed)
+                        .ToList();
+
+                    foreach (var chatMessage in unreadMessages)
+                    {
+                        chatMessage.IsViewed = true;
+                        _unitOfWork.ChatMessageRepository.Update(chatMessage);
+
+                    }
+
+                    await _unitOfWork.SaveAsync();
+
 
                     var messageToSend = new SocketMessage<SocketChatMessage<Chat>>()
                     {
@@ -81,7 +94,9 @@ public class ChatService
                         }
                     };
 
-                    await handler.SendAsync(JsonSerializer.Serialize(messageToSend));
+                    //Send the conversation to both users if they are online
+                    await _webSocketNetwork.GetSocketByUserId(userId)?.SendAsync(JsonSerializer.Serialize(messageToSend));
+                    await _webSocketNetwork.GetSocketByUserId(destinationUserId)?.SendAsync(JsonSerializer.Serialize(messageToSend));
                 }
 
                 catch (Exception e)

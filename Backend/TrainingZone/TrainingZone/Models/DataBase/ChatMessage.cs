@@ -7,6 +7,6 @@ public class ChatMessage
     public int UserId { get; set; }
     public string Message { get; set; }
     public DateTime MessageDateTime { get; set; } 
-    public bool Viewed { get; set; } = false;
+    public bool IsViewed { get; set; } = false;
 
 }
