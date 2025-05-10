@@ -15,6 +15,18 @@ public class ChatRepository : Repository<Chat, int>
             .FirstOrDefaultAsync
                 (chat => (chat.UserOriginId == userId && chat.UserDestinationId == userDestinationId) ||
                 (chat.UserOriginId == userDestinationId && chat.UserDestinationId == userId));
-                
+
     }
+
+
+    //Gets all the users you have had a conversation with
+    internal async Task<List<User>> GetAllUsersWithChatAsync(int userId)
+    {
+        return await GetQueryable()
+            .Where(chat => chat.UserOriginId == userId || chat.UserDestinationId == userId)
+            .Select(chat => chat.UserOriginId == userId ? chat.UserDestination : chat.UserOrigin)
+            .Distinct()
+            .ToListAsync();
+    }
+
 }

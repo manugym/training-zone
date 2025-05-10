@@ -1,20 +1,21 @@
 import { FaDumbbell } from "react-icons/fa";
 import ToggleTheme from "../ToggleTheme/ToggleTheme";
 import "./NavBar.css";
+import { Link } from "react-router-dom";
 
 function NavBar() {
   return (
     <nav className="navbar">
       <div className="nav-icon">
-        <a href="/" className="nav-logo">
+        <Link to="/" className="nav-logo">
           <FaDumbbell className="icon" />
-        </a>
+        </Link>
       </div>
 
       <div className="nav-links">
-        <a href="#home">Entrenadores</a>
-        <a href="#services">Clases</a>
-        <a href="#contact">Chat</a>
+        <Link to="/trainers">Entrenadores</Link>
+        <Link to="/classes">Clases</Link>
+        <Link to="/chat">Chat</Link>
       </div>
       <ToggleTheme />
     </nav>

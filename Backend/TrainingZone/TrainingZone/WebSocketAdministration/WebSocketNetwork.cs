@@ -3,6 +3,7 @@ using System.Net.WebSockets;
 using System.Text.Json;
 using TrainingZone.Models.DataBase;
 using TrainingZone.Models.Dtos.User;
+using TrainingZone.Models.WebSocket;
 using TrainingZone.Services;
 
 namespace TrainingZone.WebSocketAdministration;
@@ -81,13 +82,22 @@ public class WebSocketNetwork
 
     private async Task OnMessageReceivedAsync(WebSocketHandler webSocketHandler, string message)
     {
-
-        //Identifica el tipo de mensaje y lo envia a su respectivo servicio
-
-        //Chat
+        //Servicios necesarios
         using var scope = _serviceProvider.CreateScope();
         var chatService = scope.ServiceProvider.GetRequiredService<ChatService>();
-        chatService.HandleMessage(message);
+
+        //Identifica el tipo de mensaje y lo envia a su respectivo servicio
+        SocketMessage recived = JsonSerializer.Deserialize<SocketMessage>(message);
+
+        switch (recived.Type)
+        {
+            case SocketCommunicationType.CHAT:
+                await chatService.HandleMessage(webSocketHandler.Id,message);
+                break;
+        }
+
+        
+
 
     }
 

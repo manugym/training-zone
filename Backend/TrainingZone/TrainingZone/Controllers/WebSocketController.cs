@@ -10,7 +10,7 @@ using TrainingZone.WebSocketAdministration;
 
 namespace TrainingZone.Controllers;
 
-[Route("api/[controller]")]
+[Route("socket")]
 [ApiController]
 public class WebSocketController : ControllerBase
 {
