@@ -86,6 +86,7 @@ public class Program
         builder.Services.AddScoped<AuthService>();
         builder.Services.AddScoped<UserService>();
         builder.Services.AddScoped<TrainerService>();
+        builder.Services.AddScoped<ClassService>();
         builder.Services.AddScoped<TrainerSmartSearchService>();
         builder.Services.AddScoped<ChatService>();
 

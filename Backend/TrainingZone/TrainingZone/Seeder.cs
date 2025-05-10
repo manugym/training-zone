@@ -1,5 +1,4 @@
-﻿using System;
-using TrainingZone.Models.DataBase;
+﻿using TrainingZone.Models.DataBase;
 using TrainingZone.Models.Enums;
 using TrainingZone.Services;
 
@@ -21,9 +20,11 @@ public class Seeder
         await SeedTrainersAsync();
         await _trainingZoneContext.SaveChangesAsync();
 
-        await SeedChatsAsync(); 
+        await SeedChatsAsync();
         await _trainingZoneContext.SaveChangesAsync();
 
+        await seedClassesAsync();
+        await _trainingZoneContext.SaveChangesAsync();
     }
 
     private async Task SeedUsersAsync()
@@ -250,6 +251,23 @@ public class Seeder
         await _trainingZoneContext.Chats.AddRangeAsync(chats);
     }
 
+    private async Task seedClassesAsync()
+    {
+        Class[] Classes =
+        [
+        new Class
+        {
+            Name = "Spinning",
+            Description = "Clase de ciclo indoor",
+            UserId = 5
+        },
+        new Class
+        {
 
+        }
+
+        ];
+        await _trainingZoneContext.Classes.AddRangeAsync(Classes);
+    }
 }
 

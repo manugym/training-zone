@@ -10,12 +10,14 @@ public class UnitOfWork
     private UserRepository _userRepository;
     private ChatRepository _chatRepository ;
     private ChatMessageRepository _chatMessageRepository;
+    private ClassRepository _classRepository;
 
 
     public UserRepository UserRepository => _userRepository ??= new UserRepository(_context);
     public ChatRepository ChatRepository => _chatRepository ??= new ChatRepository(_context);
     public ChatMessageRepository ChatMessageRepository => _chatMessageRepository ??= new ChatMessageRepository(_context);
 
+    public ClassRepository ClassRepository => _classRepository ??= new ClassRepository(_context);
 
     public UnitOfWork(TrainingZoneContext context)
     {
