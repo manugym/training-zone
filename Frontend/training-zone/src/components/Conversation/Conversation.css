@@ -1,0 +1,78 @@
+.conversation-panel {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.conversation-container {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: var(--color-background);
+  padding-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.message-box {
+  max-width: 70%;
+  padding: 0.75rem 1rem;
+  border-radius: 15px;
+  position: relative;
+  word-wrap: break-word;
+  display: inline-block;
+}
+
+.mine {
+  align-self: flex-end;
+  background-color: var(--color-primary);
+  border-bottom-right-radius: 0;
+}
+
+.other {
+  align-self: flex-start;
+  background-color: var(--color-secondary);
+  color: var(--color-text);
+  border-bottom-left-radius: 0;
+}
+
+.message-text {
+  color: white;
+  margin-right: 30px;
+}
+
+.message-time {
+  font-size: 0.7rem;
+  color: var(--color-text);
+  position: absolute;
+  bottom: 4px;
+  right: 10px;
+}
+
+.message-form {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 40px;
+  padding: 0 0.5rem;
+}
+
+.message-form input {
+  border: 2px solid var(--color-primary);
+  flex: 1;
+  height: 100%;
+}
+
+.message-form button {
+  margin-top: 0;
+  height: 100%;
+  width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

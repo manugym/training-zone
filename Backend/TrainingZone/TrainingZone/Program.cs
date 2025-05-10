@@ -9,6 +9,9 @@ using System.Text.Json.Serialization;
 using System.Text;
 using TrainingZone.Services;
 using TrainingZone.Mappers;
+using TrainingZone.MiddleWares;
+using TrainingZone.WebSocketAdministration;
+using System.Text.Json;
 
 namespace TrainingZone;
 
@@ -37,6 +40,8 @@ public class Program
         builder.Services.AddControllers().AddJsonOptions(options =>
         {
             options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+            options.JsonSerializerOptions.PropertyNamingPolicy = null;
+
         });
 
         // Configuración para poder usar JWT en las peticiones de Swagger
@@ -82,6 +87,8 @@ public class Program
         builder.Services.AddScoped<UserService>();
         builder.Services.AddScoped<TrainerService>();
         builder.Services.AddScoped<TrainerSmartSearchService>();
+        builder.Services.AddScoped<ChatService>();
+
 
 
 
@@ -96,10 +103,12 @@ public class Program
 
 
         //Administrador de todos los websockets
+        builder.Services.AddSingleton<WebSocketNetwork>();
 
 
 
         //MiddleWare
+        builder.Services.AddTransient<WebSocketMiddleWare>();
 
 
 
@@ -144,6 +153,7 @@ public class Program
         app.UseWebSockets();
 
         //MiddleWare 
+        app.UseMiddleware<WebSocketMiddleWare>();
 
 
         app.UseHttpsRedirection();

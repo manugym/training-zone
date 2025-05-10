@@ -1,8 +1,8 @@
 import { ClassType } from "./enums/class-type";
 
 export interface TrainerFilter {
-  classType?: ClassType;
-  name?: string;
+  ClassType?: ClassType;
+  Name?: string;
   entitiesPerPage: number;
   actualPage: number;
 }

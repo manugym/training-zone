@@ -1,4 +1,4 @@
-﻿namespace TrainingZone.Enums;
+﻿namespace TrainingZone.Models.Enums;
 
 public enum ClassType
 {

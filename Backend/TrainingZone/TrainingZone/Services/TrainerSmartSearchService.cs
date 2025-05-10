@@ -3,9 +3,9 @@ using F23.StringSimilarity;
 using System.Globalization;
 using System.Text;
 using TrainingZone.Models.DataBase;
-using TrainingZone.Enums;
 using TrainingZone.Models.Dtos.Trainer;
 using TrainingZone.Mappers;
+using TrainingZone.Models.Enums;
 
 namespace TrainingZone.Services;
 

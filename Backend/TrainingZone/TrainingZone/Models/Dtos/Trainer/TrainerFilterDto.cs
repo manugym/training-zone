@@ -1,4 +1,4 @@
-﻿using TrainingZone.Enums;
+﻿using TrainingZone.Models.Enums;
 
 namespace TrainingZone.Models.Dtos.Trainer;
 
