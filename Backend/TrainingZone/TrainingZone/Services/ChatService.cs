@@ -164,9 +164,49 @@ public class ChatService
 
                 break;
             case ChatRequestType.MODIFY:
-                SocketMessage<SocketChatMessage> ModifyMessageRequest = JsonSerializer.Deserialize<SocketMessage<SocketChatMessage>>(message);
 
+                try
+                {
+                    ModifyChatMessage modifyMessageRequest = JsonSerializer.Deserialize<SocketMessage<SocketChatMessage<ModifyChatMessage>>>(message).Data.Data;
 
+                    ChatMessage chatMessage = await _unitOfWork.ChatMessageRepository.GetByIdAsync(modifyMessageRequest.Id);
+
+                    //If the data is correct, update the message
+                    if (chatMessage == null)
+                        return;
+
+                    if (modifyMessageRequest.IsViewed != null)
+                        chatMessage.IsViewed = modifyMessageRequest.IsViewed.Value;
+
+                    if (modifyMessageRequest.Message != null)
+                        chatMessage.Message = modifyMessageRequest.Message;
+
+                    _unitOfWork.ChatMessageRepository.Update(chatMessage);
+                    await _unitOfWork.SaveAsync();
+
+                    //Send changes to users
+                    var messageToSend = new SocketMessage<SocketChatMessage<ChatMessage>>()
+                    {
+                        Type = SocketCommunicationType.CHAT,
+                        Data = new SocketChatMessage<ChatMessage>()
+                        {
+                            ChatRequestType = ChatRequestType.MODIFY,
+                            Data = chatMessage
+                        }
+                    };
+
+                    Chat currentChat = await _unitOfWork.ChatRepository.GetByIdAsync(chatMessage.ChatId);
+
+                    await _webSocketNetwork.GetSocketByUserId(userId)?
+                        .SendAsync(JsonSerializer.Serialize(messageToSend));
+                    await _webSocketNetwork.GetSocketByUserId(currentChat.UserOriginId == userId ? currentChat.UserDestinationId : currentChat.UserOriginId)?
+                        .SendAsync(JsonSerializer.Serialize(messageToSend));
+
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
 
                 break;
             case ChatRequestType.DELETE:

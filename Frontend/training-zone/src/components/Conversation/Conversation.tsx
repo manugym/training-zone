@@ -4,7 +4,9 @@ import chatService from "../../services/chat.service";
 import userService from "../../services/user.service";
 import "./Conversation.css";
 import { User } from "../../models/user";
-import SendIcon from "../../assets/send_icon.png";
+import SendIcon from "../../assets/chat/send_icon.png";
+import NotViewedIcon from "../../assets/chat/not-viewed-icon.png";
+import ViewedIcon from "../../assets/chat/viewed-icon.png";
 
 function Conversation() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -40,6 +42,21 @@ function Conversation() {
     };
   }, []);
 
+  //If a message arrives and the user is in the conversation, it is marked as read.
+  useEffect(() => {
+    async function markMessageAsViewed() {
+      if (conversation.ChatMessages.length <= 0) return;
+
+      const latestMessage =
+        conversation.ChatMessages[conversation.ChatMessages.length - 1];
+
+      if (latestMessage.UserId != currentUser.Id && !latestMessage.IsViewed)
+        await chatService.markMessageAsViewed(latestMessage.Id);
+    }
+
+    markMessageAsViewed();
+  }, [conversation]);
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
@@ -64,13 +81,18 @@ function Conversation() {
                   className={`message-box ${isMine ? "mine" : "other"}`}
                 >
                   <p className="message-text">{message.Message}</p>
-                  <span className="message-time">
+                  <span className="message-info">
                     {new Date(message.MessageDateTime).toLocaleTimeString([], {
                       hour: "2-digit",
                       minute: "2-digit",
                     })}
 
-                    {message.IsViewed ? "!" : "?"}
+                    {message.UserId == currentUser.Id && (
+                      <img
+                        src={message.IsViewed ? ViewedIcon : NotViewedIcon}
+                        alt="Viewed Icon"
+                      />
+                    )}
                   </span>
                 </div>
               );

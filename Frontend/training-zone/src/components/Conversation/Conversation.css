@@ -43,12 +43,20 @@
   margin-right: 30px;
 }
 
-.message-time {
-  font-size: 0.7rem;
-  color: var(--color-text);
+.message-info {
   position: absolute;
   bottom: 4px;
   right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7rem;
+  color: white;
+}
+
+.message-info img {
+  width: 16px;
+  height: 16px;
 }
 
 .message-form {
