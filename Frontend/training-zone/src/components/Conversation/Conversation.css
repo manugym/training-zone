@@ -71,7 +71,7 @@
   margin-top: 20px;
 }
 
-.message-form input {
+.message-form textarea {
   border: 2px solid var(--color-primary);
   flex: 1;
   height: 100%;

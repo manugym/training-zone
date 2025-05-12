@@ -193,6 +193,26 @@ class ChatService {
 
     websocketService.send(JSON.stringify(socketMessage));
   }
+
+  async sendEditMessageRequest(messageId: number, text: string): Promise<void> {
+    const request: ChatRequestGeneric<ModifyChatMessage> = {
+      ChatRequestType: ChatRequestType.MODIFY,
+      Data: {
+        Id: messageId,
+        Message: text,
+      },
+    };
+
+    const socketMessage = new SocketMessageGeneric<
+      ChatRequestGeneric<ModifyChatMessage>
+    >();
+    socketMessage.Type = SocketCommunicationType.CHAT;
+    socketMessage.Data = request;
+
+    console.log(`Editando el mensaje ${messageId}`, socketMessage);
+
+    websocketService.send(JSON.stringify(socketMessage));
+  }
 }
 
 export default new ChatService();

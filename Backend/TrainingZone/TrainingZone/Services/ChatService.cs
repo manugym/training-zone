@@ -95,8 +95,19 @@ public class ChatService
                     };
 
                     //Send the conversation to both users if they are online
-                    await _webSocketNetwork.GetSocketByUserId(userId)?.SendAsync(JsonSerializer.Serialize(messageToSend));
-                    await _webSocketNetwork.GetSocketByUserId(destinationUserId)?.SendAsync(JsonSerializer.Serialize(messageToSend));
+                    var currentSocket = _webSocketNetwork.GetSocketByUserId(userId);
+
+                    if (currentSocket != null)
+                    {
+                        await currentSocket.SendAsync(JsonSerializer.Serialize(messageToSend));
+                    }
+
+                    var destinationSocket = _webSocketNetwork.GetSocketByUserId(destinationUserId);
+
+                    if (destinationSocket != null)
+                    {
+                        await destinationSocket.SendAsync(JsonSerializer.Serialize(messageToSend));
+                    }
                 }
 
                 catch (Exception e)
@@ -150,9 +161,20 @@ public class ChatService
                         }
                     };
 
-                   
-                    await _webSocketNetwork.GetSocketByUserId(userId)?.SendAsync(JsonSerializer.Serialize(messageToSend));
-                    await _webSocketNetwork.GetSocketByUserId(sendMessageRequest.UserId)?.SendAsync(JsonSerializer.Serialize(messageToSend));
+
+                    var currentSocket = _webSocketNetwork.GetSocketByUserId(userId);
+
+                    if (currentSocket != null)
+                    {
+                        await currentSocket.SendAsync(JsonSerializer.Serialize(messageToSend));
+                    }
+
+                    var destinationSocket = _webSocketNetwork.GetSocketByUserId(sendMessageRequest.UserId);
+
+                    if (destinationSocket != null)
+                    {
+                        await destinationSocket.SendAsync(JsonSerializer.Serialize(messageToSend));
+                    }
                 }
 
                 catch (Exception e)
@@ -197,10 +219,20 @@ public class ChatService
 
                     Chat currentChat = await _unitOfWork.ChatRepository.GetByIdAsync(chatMessage.ChatId);
 
-                    await _webSocketNetwork.GetSocketByUserId(userId)?
-                        .SendAsync(JsonSerializer.Serialize(messageToSend));
-                    await _webSocketNetwork.GetSocketByUserId(currentChat.UserOriginId == userId ? currentChat.UserDestinationId : currentChat.UserOriginId)?
-                        .SendAsync(JsonSerializer.Serialize(messageToSend));
+                    var currentSocket = _webSocketNetwork.GetSocketByUserId(userId);
+
+                    if (currentSocket != null)
+                    {
+                        await currentSocket.SendAsync(JsonSerializer.Serialize(messageToSend));
+                    }
+
+                    var destinationSocket = _webSocketNetwork.GetSocketByUserId(currentChat.UserOriginId == userId ? currentChat.UserDestinationId : currentChat.UserOriginId);
+
+                    if (destinationSocket != null)
+                    {
+                        await destinationSocket.SendAsync(JsonSerializer.Serialize(messageToSend));
+                    }
+
 
                 }
                 catch (Exception e)
