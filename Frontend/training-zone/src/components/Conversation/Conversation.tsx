@@ -78,15 +78,23 @@ function Conversation() {
   const handleEditMessageSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    async function sendEditMessage() {
+    async function sendEditMessageRequest() {
       await chatService.sendEditMessageRequest(
         messageToEdit.Id,
         messageToEditContent
       );
     }
 
-    sendEditMessage();
+    sendEditMessageRequest();
     setMessageToEdit(null);
+  };
+
+  const handleDeleteMessage = (messageId: number) => {
+    async function sendDeleteMessageRequest() {
+      await chatService.sendDeleteMessageRequest(messageId);
+    }
+
+    sendDeleteMessageRequest();
   };
 
   //If click outside the message to edit, the edit modal closes.
@@ -170,7 +178,9 @@ function Conversation() {
                       >
                         Editar
                       </button>
-                      <button>Eliminar</button>
+                      <button onClick={() => handleDeleteMessage(message.Id)}>
+                        Eliminar
+                      </button>
 
                       {/*If the user is going to modify the message, a text area appears */}
                       {showEditMessage ? (

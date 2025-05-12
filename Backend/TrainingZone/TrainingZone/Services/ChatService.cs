@@ -242,9 +242,49 @@ public class ChatService
 
                 break;
             case ChatRequestType.DELETE:
-                SocketMessage<SocketChatMessage> deleteMessageRequest = JsonSerializer.Deserialize<SocketMessage<SocketChatMessage>>(message);
+                int messageId = JsonSerializer.Deserialize<SocketMessage<SocketChatMessage<int>>>(message).Data.Data;
 
+                try
+                {
+                    ChatMessage messageToDelete = await _unitOfWork.ChatMessageRepository.GetByIdAsync(messageId);
 
+                    if(messageToDelete == null)
+                        return;
+
+                    _unitOfWork.ChatMessageRepository.Delete(messageToDelete);
+                    await _unitOfWork.SaveAsync();
+
+                    var messageToSend = new SocketMessage<SocketChatMessage<int>>()
+                    {
+                        Type = SocketCommunicationType.CHAT,
+                        Data = new SocketChatMessage<int>()
+                        {
+                            ChatRequestType = ChatRequestType.DELETE,
+                            Data = messageId
+                        }
+                    };
+
+                    var currentSocket = _webSocketNetwork.GetSocketByUserId(userId);
+
+                    if (currentSocket != null)
+                    {
+                        await currentSocket.SendAsync(JsonSerializer.Serialize(messageToSend));
+                    }
+
+                    Chat currentChat = await _unitOfWork.ChatRepository.GetByIdAsync(messageToDelete.ChatId);
+
+                    var destinationSocket = _webSocketNetwork.GetSocketByUserId(currentChat.UserOriginId == userId ? currentChat.UserDestinationId : currentChat.UserOriginId);
+
+                    if (destinationSocket != null)
+                    {
+                        await destinationSocket.SendAsync(JsonSerializer.Serialize(messageToSend));
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
 
                 break;
         }

@@ -113,6 +113,19 @@ class ChatService {
             }
             break;
           case ChatRequestType.DELETE:
+            const messageId: number = message.Data.Data;
+
+            const currentConversation = this._actualConversation.value;
+
+            const updatedConversation = {
+              ...currentConversation,
+              ChatMessages: currentConversation.ChatMessages.filter(
+                (message) => message.Id !== messageId
+              ),
+            };
+
+            this._actualConversation.next(updatedConversation);
+
             break;
           default:
             console.error("Tipo de solicitud no reconocido");
@@ -210,6 +223,23 @@ class ChatService {
     socketMessage.Data = request;
 
     console.log(`Editando el mensaje ${messageId}`, socketMessage);
+
+    websocketService.send(JSON.stringify(socketMessage));
+  }
+
+  async sendDeleteMessageRequest(messageId: number): Promise<void> {
+    const request: ChatRequestGeneric<number> = {
+      ChatRequestType: ChatRequestType.DELETE,
+      Data: messageId,
+    };
+
+    const socketMessage = new SocketMessageGeneric<
+      ChatRequestGeneric<number>
+    >();
+    socketMessage.Type = SocketCommunicationType.CHAT;
+    socketMessage.Data = request;
+
+    console.log(`Eliminando el mensaje ${messageId}`, socketMessage);
 
     websocketService.send(JSON.stringify(socketMessage));
   }
