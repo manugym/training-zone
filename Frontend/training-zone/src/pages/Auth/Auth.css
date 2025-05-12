@@ -1,18 +1,20 @@
 /*General*/
 .auth-wrapper {
+  height: calc(100vh - 80px);
   display: flex;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - 80px);
   padding: 1rem;
+  margin-top: 40px;
   overflow: auto;
 }
 
 .auth-main {
   display: flex;
+  align-self: center;
   width: 100%;
   max-width: 1000px;
-  height: 100%;
+  min-height: 80%;
   box-shadow: 0 0 12px var(--color-details);
   border-radius: 12px;
   overflow: hidden;
