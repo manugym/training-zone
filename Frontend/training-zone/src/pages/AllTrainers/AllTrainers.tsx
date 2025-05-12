@@ -77,7 +77,7 @@ function AllTrainersView() {
   return (
     <>
       <NavBar />
-      <main>
+      <main className="view-container">
         {!loading && (
           <div>
             <div className="content-container">

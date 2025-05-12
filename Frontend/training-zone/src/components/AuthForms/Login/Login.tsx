@@ -44,7 +44,7 @@ function Login() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="form" onSubmit={handleSubmit}>
       <label htmlFor="credential"></label>
       <input
         type="text"

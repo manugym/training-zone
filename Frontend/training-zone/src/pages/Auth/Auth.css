@@ -1,6 +1,6 @@
 /*General*/
 .auth-wrapper {
-  height: calc(100vh - 80px);
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;

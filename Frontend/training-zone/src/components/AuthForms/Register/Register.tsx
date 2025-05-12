@@ -118,7 +118,7 @@ function Register() {
         />
       </div>
 
-      <form className="register-form" onSubmit={handleSubmit}>
+      <form className="form register-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <input
             type="text"
