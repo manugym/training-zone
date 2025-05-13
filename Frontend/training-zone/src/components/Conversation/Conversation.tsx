@@ -239,7 +239,6 @@ function Conversation() {
             })}
             <div ref={bottomRef} />
           </>
-        ) : (
         ) : conversation ? (
           <div className="no-messages">
             <h2>
