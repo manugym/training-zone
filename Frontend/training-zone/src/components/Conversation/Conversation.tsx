@@ -240,9 +240,18 @@ function Conversation() {
             <div ref={bottomRef} />
           </>
         ) : (
+        ) : conversation ? (
           <div className="no-messages">
-            <h2>No hay mensajes aún</h2>
+            <h2>
+              No tienes mensajes con <b>{conversation.UserDestination.Name}</b>{" "}
+              aún
+            </h2>
             <p>Envía el primero para comenzar la conversación</p>
+          </div>
+        ) : (
+          <div className="no-messages">
+            <h2>Ningún chat seleccionado </h2>
+            <p>Selecciona un chat para empezar a hablar</p>
           </div>
         )}
       </div>

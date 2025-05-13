@@ -18,7 +18,7 @@ function Chat() {
     connectSocket();
   }, []);
 
-  //Sends the request to get all users who have had conversations with the current user
+  //Sends the request to get all users chats
   useEffect(() => {
     async function sendGetAllUsersWithChatRequest() {
       await chatService.sendGetAllChatsRequest();

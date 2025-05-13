@@ -12,6 +12,7 @@ import { SendMessageRequest } from "../models/send-message-request";
 import userService from "./user.service";
 import { ChatMessage } from "../models/chat_message";
 import { ModifyChatMessage } from "../models/modify-chat-message";
+import { User } from "../models/user";
 
 class ChatService {
   private _allChats = new BehaviorSubject<Chat[] | null>(null);
@@ -27,10 +28,35 @@ class ChatService {
     this.messageReceived$ = websocketService.messageReceived.subscribe(
       async (message) => await this.readMessage(message)
     );
+
+    this.sendGetAllChatsRequest();
   }
 
   setActualConversation(chat: Chat | null): void {
     this._actualConversation.next(chat);
+  }
+
+  newConversation(user: User): void {
+    const conversation = this._allChats.value.find(
+      (chat) =>
+        chat.UserOriginId === user.Id || chat.UserDestinationId === user.Id
+    );
+
+    if (conversation != null) {
+      this._actualConversation.next(conversation);
+      return;
+    }
+
+    const currentUser = userService.getCurrentUser();
+
+    const newConversation: Chat = {
+      UserDestination: user,
+      UserOrigin: currentUser,
+      UserDestinationId: user.Id,
+      UserOriginId: currentUser.Id,
+    };
+
+    this._actualConversation.next(newConversation);
   }
 
   private async readMessage(message: string): Promise<void> {

@@ -8,6 +8,7 @@ import Spinner from "../../components/Spinner/Spinner";
 import chatService from "../../services/chat.service";
 import websocketService from "../../services/websocket.service";
 import apiService from "../../services/api.service";
+import { User } from "../../models/user";
 
 function TrainerPage() {
   const SERVER_IMAGE_URL = `${
@@ -46,7 +47,10 @@ function TrainerPage() {
     fetchTrainer();
   }, [id]);
 
-  const handleClick = async () => {};
+  const handleClick = (user: User) => {
+    chatService.newConversation(user);
+    navigate("/chat");
+  };
 
   return (
     <>
@@ -70,7 +74,9 @@ function TrainerPage() {
                 <div className="question-container">
                   <h2>¿Tienes alguna duda?</h2>
 
-                  <button onClick={handleClick}>Enviar Mensaje</button>
+                  <button onClick={() => handleClick(trainer.User)}>
+                    Enviar Mensaje
+                  </button>
                 </div>
               </div>
 

@@ -37,6 +37,17 @@ function All_Users_With_Conversation() {
     };
   }, []);
 
+  //subscription to get the current conversation
+  useEffect(() => {
+    const subscription = chatService.actualConversation$.subscribe((chat) => {
+      setSelectedChat(chat);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
   //get all users chats request
   useEffect(() => {
     if (!selectedChat) return;
@@ -77,8 +88,8 @@ function All_Users_With_Conversation() {
             <div className="user_info">
               <p className="user_name">
                 {chat.UserOriginId === currentUser.Id
-                  ? chat.UserDestination.Name
-                  : chat.UserOrigin.Name}
+                  ? chat.UserDestination?.Name
+                  : chat.UserOrigin?.Name}
               </p>
 
               <p className="last-message">

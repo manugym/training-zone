@@ -110,3 +110,7 @@
 .no-messages p {
   font-style: italic;
 }
+
+.no-messages b {
+  color: var(--color-details);
+}
