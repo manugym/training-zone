@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import "./Trainer.css";
 import NavBar from "../../components/NavBar/NavBar";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import trainerService from "../../services/trainer.service";
 import { Trainer } from "../../models/trainer";
 import Spinner from "../../components/Spinner/Spinner";
+import chatService from "../../services/chat.service";
+import websocketService from "../../services/websocket.service";
+import apiService from "../../services/api.service";
 
 function TrainerPage() {
   const SERVER_IMAGE_URL = `${
@@ -12,6 +15,8 @@ function TrainerPage() {
   }/UserProfilePicture`;
 
   const { id } = useParams<{ id: string }>();
+
+  const navigate = useNavigate();
 
   if (!id) {
     return <h1>Trainer ID not found</h1>;
@@ -41,11 +46,13 @@ function TrainerPage() {
     fetchTrainer();
   }, [id]);
 
+  const handleClick = async () => {};
+
   return (
     <>
       <NavBar />
-      <main>
-        <div className="trainer-container">
+      <main className="trainer-container">
+        <div className="trainer-panel">
           {!loading && trainer && (
             <div className="trainer-details">
               <div className="trainer-info">
@@ -63,7 +70,7 @@ function TrainerPage() {
                 <div className="question-container">
                   <h2>¿Tienes alguna duda?</h2>
 
-                  <button>Enviar Mensaje</button>
+                  <button onClick={handleClick}>Enviar Mensaje</button>
                 </div>
               </div>
 

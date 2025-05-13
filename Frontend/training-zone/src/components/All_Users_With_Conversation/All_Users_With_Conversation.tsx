@@ -27,6 +27,8 @@ function All_Users_With_Conversation() {
   }, []);
 
   useEffect(() => {
+    if (!selectedUser) return;
+
     async function sendGetChatRequest() {
       await chatService.sendGetChatRequest(selectedUser.Id);
     }

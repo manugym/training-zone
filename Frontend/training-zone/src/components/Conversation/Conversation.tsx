@@ -24,8 +24,10 @@ function Conversation() {
   //scroll to the bottom of the message
   const bottomRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "auto" });
-  }, [conversation?.ChatMessages.length]);
+    if (conversation?.ChatMessages?.length) {
+      bottomRef.current?.scrollIntoView({ behavior: "auto" });
+    }
+  }, [conversation?.ChatMessages?.length]);
 
   //subscription to get the current user
   useEffect(() => {
@@ -52,13 +54,21 @@ function Conversation() {
   //If a message arrives and the user is in the conversation, it is marked as read.
   useEffect(() => {
     async function markMessageAsViewed() {
-      if (conversation.ChatMessages.length <= 0) return;
+      if (
+        !conversation ||
+        !conversation.ChatMessages ||
+        conversation.ChatMessages.length === 0 ||
+        !currentUser
+      ) {
+        return;
+      }
 
       const latestMessage =
         conversation.ChatMessages[conversation.ChatMessages.length - 1];
 
-      if (latestMessage.UserId != currentUser.Id && !latestMessage.IsViewed)
+      if (latestMessage.UserId !== currentUser.Id && !latestMessage.IsViewed) {
         await chatService.markMessageAsViewed(latestMessage.Id);
+      }
     }
 
     markMessageAsViewed();
@@ -150,7 +160,7 @@ function Conversation() {
   return (
     <section className="conversation-panel">
       <div className="conversation-container">
-        {conversation && conversation.ChatMessages.length > 0 ? (
+        {conversation && conversation?.ChatMessages?.length > 0 ? (
           <>
             {conversation.ChatMessages.map((message) => {
               const isMine = message.UserId === currentUser?.Id;
@@ -230,7 +240,10 @@ function Conversation() {
             <div ref={bottomRef} />
           </>
         ) : (
-          <p>No hay mensajes</p>
+          <div className="no-messages">
+            <h2>No hay mensajes aún</h2>
+            <p>Envía el primero para comenzar la conversación</p>
+          </div>
         )}
       </div>
 
