@@ -18,15 +18,16 @@ public class ChatRepository : Repository<Chat, int>
 
     }
 
-
-    //Gets all the users you have had a conversation with
-    internal async Task<List<User>> GetAllUsersWithChatAsync(int userId)
+    internal async Task<List<Chat>> GetAllChatsByUserIdAsync(int userId)
     {
         return await GetQueryable()
             .Where(chat => chat.UserOriginId == userId || chat.UserDestinationId == userId)
-            .Select(chat => chat.UserOriginId == userId ? chat.UserDestination : chat.UserOrigin)
-            .Distinct()
+            .Include(chat => chat.ChatMessages)
+            .Include(chat => chat.UserOrigin)
+            .Include(chat => chat.UserDestination)
+            .OrderByDescending(chat => chat.ChatMessages.Max(m => (DateTime?)m.MessageDateTime))
             .ToListAsync();
     }
+
 
 }

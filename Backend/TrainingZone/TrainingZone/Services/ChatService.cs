@@ -33,21 +33,21 @@ public class ChatService
 
         switch (recived.Data.ChatRequestType)
         {
-            case ChatRequestType.ALL_USERS_WITH_CONVERSATION:
+            case ChatRequestType.ALL_CHATS:
 
                 try
                 {
                     WebSocketHandler handler = _webSocketNetwork.GetSocketByUserId(userId);
 
-                    List<User> users = await _unitOfWork.ChatRepository.GetAllUsersWithChatAsync(userId);
+                    List<Chat> allChats = await _unitOfWork.ChatRepository.GetAllChatsByUserIdAsync(userId);
 
-                    var messageToSend = new SocketMessage<SocketChatMessage<List<UserDto>>>()
+                    var messageToSend = new SocketMessage<SocketChatMessage<List<Chat>>>()
                     {
                         Type = SocketCommunicationType.CHAT,
-                        Data = new SocketChatMessage<List<UserDto>>()
+                        Data = new SocketChatMessage<List<Chat>>()
                         {
-                            ChatRequestType = ChatRequestType.ALL_USERS_WITH_CONVERSATION,
-                            Data = _userMapper.ToDto(users)
+                            ChatRequestType = ChatRequestType.ALL_CHATS,
+                            Data = allChats
                         }
                     };
 
@@ -60,63 +60,7 @@ public class ChatService
 
                 break;
 
-            case ChatRequestType.CONVERSATION:
-
-
-                try
-                {
-
-                    int destinationUserId = JsonSerializer.Deserialize<SocketMessage<SocketChatMessage<int>>>(message).Data.Data;
-                    Chat userChat = await _unitOfWork.ChatRepository.GetChatByUserIdAndUserDestinationIdAsync(userId, destinationUserId);
-
-                    //If there are unread messages, mark them as read
-                    var unreadMessages = userChat.ChatMessages
-                        .Where(message => message.UserId == destinationUserId && !message.IsViewed)
-                        .ToList();
-
-                    foreach (var chatMessage in unreadMessages)
-                    {
-                        chatMessage.IsViewed = true;
-                        _unitOfWork.ChatMessageRepository.Update(chatMessage);
-
-                    }
-
-                    await _unitOfWork.SaveAsync();
-
-
-                    var messageToSend = new SocketMessage<SocketChatMessage<Chat>>()
-                    {
-                        Type = SocketCommunicationType.CHAT,
-                        Data = new SocketChatMessage<Chat>()
-                        {
-                            ChatRequestType = ChatRequestType.CONVERSATION,
-                            Data = userChat
-                        }
-                    };
-
-                    //Send the conversation to both users if they are online
-                    var currentSocket = _webSocketNetwork.GetSocketByUserId(userId);
-
-                    if (currentSocket != null)
-                    {
-                        await currentSocket.SendAsync(JsonSerializer.Serialize(messageToSend));
-                    }
-
-                    var destinationSocket = _webSocketNetwork.GetSocketByUserId(destinationUserId);
-
-                    if (destinationSocket != null)
-                    {
-                        await destinationSocket.SendAsync(JsonSerializer.Serialize(messageToSend));
-                    }
-                }
-
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
-
-                break;
-            case ChatRequestType.SEND:
+            case ChatRequestType.SEND_MESSAGE:
                 MessageReceived sendMessageRequest = JsonSerializer.Deserialize<SocketMessage<SocketChatMessage<MessageReceived>>>(message).Data.Data;
 
 
@@ -156,7 +100,7 @@ public class ChatService
                         Type = SocketCommunicationType.CHAT,
                         Data = new SocketChatMessage<ChatMessage>()
                         {
-                            ChatRequestType = ChatRequestType.SEND,
+                            ChatRequestType = ChatRequestType.SEND_MESSAGE,
                             Data = newMessage
                         }
                     };
@@ -185,7 +129,7 @@ public class ChatService
 
 
                 break;
-            case ChatRequestType.MODIFY:
+            case ChatRequestType.MODIFY_MESSAGE:
 
                 try
                 {
@@ -212,7 +156,7 @@ public class ChatService
                         Type = SocketCommunicationType.CHAT,
                         Data = new SocketChatMessage<ChatMessage>()
                         {
-                            ChatRequestType = ChatRequestType.MODIFY,
+                            ChatRequestType = ChatRequestType.MODIFY_MESSAGE,
                             Data = chatMessage
                         }
                     };
@@ -241,7 +185,7 @@ public class ChatService
                 }
 
                 break;
-            case ChatRequestType.DELETE:
+            case ChatRequestType.DELETE_MESSAGE:
                 int messageId = JsonSerializer.Deserialize<SocketMessage<SocketChatMessage<int>>>(message).Data.Data;
 
                 try
@@ -259,7 +203,7 @@ public class ChatService
                         Type = SocketCommunicationType.CHAT,
                         Data = new SocketChatMessage<int>()
                         {
-                            ChatRequestType = ChatRequestType.DELETE,
+                            ChatRequestType = ChatRequestType.DELETE_MESSAGE,
                             Data = messageId
                         }
                     };

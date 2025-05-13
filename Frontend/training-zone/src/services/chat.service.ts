@@ -7,7 +7,6 @@ import { SocketMessageGeneric } from "../models/websocket/socket-message";
 import websocketService from "./websocket.service";
 import { SocketCommunicationType } from "../models/enums/socket-communication-type";
 import { ChatRequestType } from "../models/enums/chat-request-type";
-import { User } from "../models/user";
 import { Chat } from "../models/chat";
 import { SendMessageRequest } from "../models/send-message-request";
 import userService from "./user.service";
@@ -15,9 +14,9 @@ import { ChatMessage } from "../models/chat_message";
 import { ModifyChatMessage } from "../models/modify-chat-message";
 
 class ChatService {
-  private _usersWithConversations = new BehaviorSubject<User[] | null>(null);
+  private _allChats = new BehaviorSubject<Chat[] | null>(null);
   //observable that can be used outside of the service
-  public usersWithConversations$ = this._usersWithConversations.asObservable();
+  public allChats$ = this._allChats.asObservable();
 
   private _actualConversation = new BehaviorSubject<Chat | null>(null);
   public actualConversation$ = this._actualConversation.asObservable();
@@ -28,6 +27,10 @@ class ChatService {
     this.messageReceived$ = websocketService.messageReceived.subscribe(
       async (message) => await this.readMessage(message)
     );
+  }
+
+  setActualConversation(chat: Chat | null): void {
+    this._actualConversation.next(chat);
   }
 
   private async readMessage(message: string): Promise<void> {
@@ -51,15 +54,12 @@ class ChatService {
         console.log("Mensaje de chat recibido:", message.Data);
 
         switch (message.Data.ChatRequestType) {
-          case ChatRequestType.ALL_USERS_WITH_CONVERSATION:
-            this._usersWithConversations.next(message.Data.Data);
+          case ChatRequestType.ALL_CHATS:
+            console.log("Todos los chats guardados : ", message.Data.Data);
+            this._allChats.next(message.Data.Data);
 
             break;
-          case ChatRequestType.CONVERSATION:
-            this._actualConversation.next(message.Data.Data);
-
-            break;
-          case ChatRequestType.SEND:
+          case ChatRequestType.SEND_MESSAGE:
             try {
               const newMessage: ChatMessage = message.Data.Data;
               console.log("mensaje recibido : ", newMessage);
@@ -79,13 +79,15 @@ class ChatService {
                 };
 
                 this._actualConversation.next(updatedConversation);
+
+                this.sendGetAllChatsRequest();
               }
             } catch (e) {
               console.error(e);
             }
             break;
 
-          case ChatRequestType.MODIFY:
+          case ChatRequestType.MODIFY_MESSAGE:
             try {
               const messageModified: ChatMessage = message.Data.Data;
               console.log("mensaje modificado : ", messageModified);
@@ -107,12 +109,14 @@ class ChatService {
                 };
 
                 this._actualConversation.next(updatedConversation);
+
+                this.sendGetAllChatsRequest();
               }
             } catch (e) {
               console.error(e);
             }
             break;
-          case ChatRequestType.DELETE:
+          case ChatRequestType.DELETE_MESSAGE:
             const messageId: number = message.Data.Data;
 
             const currentConversation = this._actualConversation.value;
@@ -126,6 +130,8 @@ class ChatService {
 
             this._actualConversation.next(updatedConversation);
 
+            this.sendGetAllChatsRequest();
+
             break;
           default:
             console.error("Tipo de solicitud no reconocido");
@@ -134,27 +140,12 @@ class ChatService {
     }
   }
 
-  async sendGetAllUsersWithChatRequest(): Promise<void> {
+  async sendGetAllChatsRequest(): Promise<void> {
     const request: ChatRequestBase = {
-      ChatRequestType: ChatRequestType.ALL_USERS_WITH_CONVERSATION,
+      ChatRequestType: ChatRequestType.ALL_CHATS,
     };
 
     const socketMessage = new SocketMessageGeneric<ChatRequestBase>();
-    socketMessage.Type = SocketCommunicationType.CHAT;
-    socketMessage.Data = request;
-
-    websocketService.send(JSON.stringify(socketMessage));
-  }
-
-  async sendGetChatRequest(userId: number): Promise<void> {
-    const request: ChatRequestGeneric<number> = {
-      ChatRequestType: ChatRequestType.CONVERSATION,
-      Data: userId,
-    };
-
-    const socketMessage = new SocketMessageGeneric<
-      ChatRequestGeneric<number>
-    >();
     socketMessage.Type = SocketCommunicationType.CHAT;
     socketMessage.Data = request;
 
@@ -165,7 +156,7 @@ class ChatService {
     const currentUser = userService.getCurrentUser();
 
     const request: ChatRequestGeneric<SendMessageRequest> = {
-      ChatRequestType: ChatRequestType.SEND,
+      ChatRequestType: ChatRequestType.SEND_MESSAGE,
       Data: {
         UserId:
           this._actualConversation.getValue()?.UserOriginId === currentUser.Id
@@ -189,7 +180,7 @@ class ChatService {
 
   async markMessageAsViewed(messageId: number): Promise<void> {
     const request: ChatRequestGeneric<ModifyChatMessage> = {
-      ChatRequestType: ChatRequestType.MODIFY,
+      ChatRequestType: ChatRequestType.MODIFY_MESSAGE,
       Data: {
         Id: messageId,
         IsViewed: true,
@@ -209,7 +200,7 @@ class ChatService {
 
   async sendEditMessageRequest(messageId: number, text: string): Promise<void> {
     const request: ChatRequestGeneric<ModifyChatMessage> = {
-      ChatRequestType: ChatRequestType.MODIFY,
+      ChatRequestType: ChatRequestType.MODIFY_MESSAGE,
       Data: {
         Id: messageId,
         Message: text,
@@ -229,7 +220,7 @@ class ChatService {
 
   async sendDeleteMessageRequest(messageId: number): Promise<void> {
     const request: ChatRequestGeneric<number> = {
-      ChatRequestType: ChatRequestType.DELETE,
+      ChatRequestType: ChatRequestType.DELETE_MESSAGE,
       Data: messageId,
     };
 

@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from "react";
+import { useEffect } from "react";
 import "./Chat.css";
 import NavBar from "../../components/NavBar/NavBar";
 import websocketService from "../../services/websocket.service";
@@ -21,7 +21,7 @@ function Chat() {
   //Sends the request to get all users who have had conversations with the current user
   useEffect(() => {
     async function sendGetAllUsersWithChatRequest() {
-      await chatService.sendGetAllUsersWithChatRequest();
+      await chatService.sendGetAllChatsRequest();
     }
 
     sendGetAllUsersWithChatRequest();
