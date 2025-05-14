@@ -7,7 +7,11 @@ import { User } from "../../models/user";
 import SendIcon from "../../assets/chat/send_icon.png";
 import NotViewedIcon from "../../assets/chat/not-viewed-icon.png";
 import ViewedIcon from "../../assets/chat/viewed-icon.png";
+import DeleteIcon from "../../assets/chat/delete-icon.png";
+import EditIcon from "../../assets/chat/edit-icon.png";
+
 import { ChatMessage } from "../../models/chat_message";
+import Swal from "sweetalert2";
 
 function Conversation() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -100,11 +104,26 @@ function Conversation() {
   };
 
   const handleDeleteMessage = (messageId: number) => {
-    async function sendDeleteMessageRequest() {
-      await chatService.sendDeleteMessageRequest(messageId);
-    }
+    Swal.fire({
+      title: "¿Estás seguro de que quieres eliminar el mensaje?",
+      text: "Esta acción no se puede deshacer.",
+      icon: "warning",
+      background: "var(--color-background-secondary)",
+      color: "var(--color-text)",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, eliminarlo",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        async function sendDeleteMessageRequest() {
+          await chatService.sendDeleteMessageRequest(messageId);
+        }
 
-    sendDeleteMessageRequest();
+        sendDeleteMessageRequest();
+      }
+    });
   };
 
   //If click outside the message to edit, the edit modal closes.
@@ -214,17 +233,22 @@ function Conversation() {
                   >
                     {messageToEdit && messageToEdit === message ? (
                       <div ref={editAreaRef}>
-                        <button
+                        <img
+                          title="Editar mensaje"
+                          src={EditIcon}
+                          alt="Delete Icon"
                           onClick={() => {
                             setShowEditMessage(true);
                             setMessageToEditContent(message.Message);
                           }}
-                        >
-                          Editar
-                        </button>
-                        <button onClick={() => handleDeleteMessage(message.Id)}>
-                          Eliminar
-                        </button>
+                        />
+
+                        <img
+                          title="Eliminar mensaje"
+                          src={DeleteIcon}
+                          alt="Delete Icon"
+                          onClick={() => handleDeleteMessage(message.Id)}
+                        />
 
                         {/*If the user is going to modify the message, a text area appears */}
                         {showEditMessage ? (
