@@ -1,8 +1,16 @@
 .trainer-container {
   width: 100%;
-  max-width: 1200px;
+  min-height: 100vh;
+  padding: 120px 1rem 40px;
+}
+
+.trainer-panel {
+  width: 100%;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 0 20px;
+  transform: scale(0.9);
+  transform-origin: top center;
 }
 
 .trainer-details {

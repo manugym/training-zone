@@ -7,16 +7,17 @@ import { SocketMessageGeneric } from "../models/websocket/socket-message";
 import websocketService from "./websocket.service";
 import { SocketCommunicationType } from "../models/enums/socket-communication-type";
 import { ChatRequestType } from "../models/enums/chat-request-type";
-import { User } from "../models/user";
 import { Chat } from "../models/chat";
 import { SendMessageRequest } from "../models/send-message-request";
 import userService from "./user.service";
 import { ChatMessage } from "../models/chat_message";
+import { ModifyChatMessage } from "../models/modify-chat-message";
+import { User } from "../models/user";
 
 class ChatService {
-  private _usersWithConversations = new BehaviorSubject<User[] | null>(null);
+  private _allChats = new BehaviorSubject<Chat[] | null>(null);
   //observable that can be used outside of the service
-  public usersWithConversations$ = this._usersWithConversations.asObservable();
+  public allChats$ = this._allChats.asObservable();
 
   private _actualConversation = new BehaviorSubject<Chat | null>(null);
   public actualConversation$ = this._actualConversation.asObservable();
@@ -27,6 +28,35 @@ class ChatService {
     this.messageReceived$ = websocketService.messageReceived.subscribe(
       async (message) => await this.readMessage(message)
     );
+
+    this.sendGetAllChatsRequest();
+  }
+
+  setActualConversation(chat: Chat | null): void {
+    this._actualConversation.next(chat);
+  }
+
+  newConversation(user: User): void {
+    const conversation = this._allChats.value.find(
+      (chat) =>
+        chat.UserOriginId === user.Id || chat.UserDestinationId === user.Id
+    );
+
+    if (conversation != null) {
+      this._actualConversation.next(conversation);
+      return;
+    }
+
+    const currentUser = userService.getCurrentUser();
+
+    const newConversation: Chat = {
+      UserDestination: user,
+      UserOrigin: currentUser,
+      UserDestinationId: user.Id,
+      UserOriginId: currentUser.Id,
+    };
+
+    this._actualConversation.next(newConversation);
   }
 
   private async readMessage(message: string): Promise<void> {
@@ -50,38 +80,84 @@ class ChatService {
         console.log("Mensaje de chat recibido:", message.Data);
 
         switch (message.Data.ChatRequestType) {
-          case ChatRequestType.ALL_USERS_WITH_CONVERSATION:
-            this._usersWithConversations.next(message.Data.Data);
+          case ChatRequestType.ALL_CHATS:
+            console.log("Todos los chats guardados : ", message.Data.Data);
+            this._allChats.next(message.Data.Data);
 
             break;
-          case ChatRequestType.CONVERSATION:
-            this._actualConversation.next(message.Data.Data);
+          case ChatRequestType.SEND_MESSAGE:
+            try {
+              const newMessage: ChatMessage = message.Data.Data;
+              console.log("mensaje recibido : ", newMessage);
 
-            break;
-          case ChatRequestType.SEND:
-            const newMessage: ChatMessage = message.Data.Data;
-            console.log("mensaje recibido : ", newMessage);
+              const currentConversation = this._actualConversation.getValue();
 
-            const currentConversation = this._actualConversation.getValue();
+              if (
+                currentConversation?.UserDestinationId === newMessage.UserId ||
+                currentConversation?.UserOriginId === newMessage.UserId
+              ) {
+                const updatedConversation = {
+                  ...currentConversation,
+                  ChatMessages: [
+                    ...(currentConversation.ChatMessages || []),
+                    newMessage,
+                  ],
+                };
 
-            if (
-              currentConversation?.UserDestinationId === newMessage.UserId ||
-              currentConversation?.UserOriginId === newMessage.UserId
-            ) {
-              const updatedConversation = {
-                ...currentConversation,
-                ChatMessages: [
-                  ...(currentConversation.ChatMessages || []),
-                  newMessage,
-                ],
-              };
+                this._actualConversation.next(updatedConversation);
 
-              this._actualConversation.next(updatedConversation);
+                this.sendGetAllChatsRequest();
+              }
+            } catch (e) {
+              console.error(e);
             }
             break;
-          case ChatRequestType.MODIFY:
+
+          case ChatRequestType.MODIFY_MESSAGE:
+            try {
+              const messageModified: ChatMessage = message.Data.Data;
+              console.log("mensaje modificado : ", messageModified);
+
+              const currentConversation = this._actualConversation.getValue();
+
+              const messagePosition =
+                currentConversation.ChatMessages.findIndex(
+                  (m) => m.Id === messageModified.Id
+                );
+
+              if (messagePosition !== -1) {
+                const updatedMessages = [...currentConversation.ChatMessages];
+                updatedMessages[messagePosition] = messageModified;
+
+                const updatedConversation = {
+                  ...currentConversation,
+                  ChatMessages: updatedMessages,
+                };
+
+                this._actualConversation.next(updatedConversation);
+
+                this.sendGetAllChatsRequest();
+              }
+            } catch (e) {
+              console.error(e);
+            }
             break;
-          case ChatRequestType.DELETE:
+          case ChatRequestType.DELETE_MESSAGE:
+            const messageId: number = message.Data.Data;
+
+            const currentConversation = this._actualConversation.value;
+
+            const updatedConversation = {
+              ...currentConversation,
+              ChatMessages: currentConversation.ChatMessages.filter(
+                (message) => message.Id !== messageId
+              ),
+            };
+
+            this._actualConversation.next(updatedConversation);
+
+            this.sendGetAllChatsRequest();
+
             break;
           default:
             console.error("Tipo de solicitud no reconocido");
@@ -90,27 +166,12 @@ class ChatService {
     }
   }
 
-  async sendGetAllUsersWithChatRequest(): Promise<void> {
+  async sendGetAllChatsRequest(): Promise<void> {
     const request: ChatRequestBase = {
-      ChatRequestType: ChatRequestType.ALL_USERS_WITH_CONVERSATION,
+      ChatRequestType: ChatRequestType.ALL_CHATS,
     };
 
     const socketMessage = new SocketMessageGeneric<ChatRequestBase>();
-    socketMessage.Type = SocketCommunicationType.CHAT;
-    socketMessage.Data = request;
-
-    websocketService.send(JSON.stringify(socketMessage));
-  }
-
-  async sendGetChatRequest(userId: number): Promise<void> {
-    const request: ChatRequestGeneric<number> = {
-      ChatRequestType: ChatRequestType.CONVERSATION,
-      Data: userId,
-    };
-
-    const socketMessage = new SocketMessageGeneric<
-      ChatRequestGeneric<number>
-    >();
     socketMessage.Type = SocketCommunicationType.CHAT;
     socketMessage.Data = request;
 
@@ -121,7 +182,7 @@ class ChatService {
     const currentUser = userService.getCurrentUser();
 
     const request: ChatRequestGeneric<SendMessageRequest> = {
-      ChatRequestType: ChatRequestType.SEND,
+      ChatRequestType: ChatRequestType.SEND_MESSAGE,
       Data: {
         UserId:
           this._actualConversation.getValue()?.UserOriginId === currentUser.Id
@@ -139,6 +200,63 @@ class ChatService {
     socketMessage.Data = request;
 
     console.log("Envinado Mensaje ...", socketMessage);
+
+    websocketService.send(JSON.stringify(socketMessage));
+  }
+
+  async markMessageAsViewed(messageId: number): Promise<void> {
+    const request: ChatRequestGeneric<ModifyChatMessage> = {
+      ChatRequestType: ChatRequestType.MODIFY_MESSAGE,
+      Data: {
+        Id: messageId,
+        IsViewed: true,
+      },
+    };
+
+    const socketMessage = new SocketMessageGeneric<
+      ChatRequestGeneric<ModifyChatMessage>
+    >();
+    socketMessage.Type = SocketCommunicationType.CHAT;
+    socketMessage.Data = request;
+
+    console.log(`Marcando mensaje ${messageId} como leído...`, socketMessage);
+
+    websocketService.send(JSON.stringify(socketMessage));
+  }
+
+  async sendEditMessageRequest(messageId: number, text: string): Promise<void> {
+    const request: ChatRequestGeneric<ModifyChatMessage> = {
+      ChatRequestType: ChatRequestType.MODIFY_MESSAGE,
+      Data: {
+        Id: messageId,
+        Message: text,
+      },
+    };
+
+    const socketMessage = new SocketMessageGeneric<
+      ChatRequestGeneric<ModifyChatMessage>
+    >();
+    socketMessage.Type = SocketCommunicationType.CHAT;
+    socketMessage.Data = request;
+
+    console.log(`Editando el mensaje ${messageId}`, socketMessage);
+
+    websocketService.send(JSON.stringify(socketMessage));
+  }
+
+  async sendDeleteMessageRequest(messageId: number): Promise<void> {
+    const request: ChatRequestGeneric<number> = {
+      ChatRequestType: ChatRequestType.DELETE_MESSAGE,
+      Data: messageId,
+    };
+
+    const socketMessage = new SocketMessageGeneric<
+      ChatRequestGeneric<number>
+    >();
+    socketMessage.Type = SocketCommunicationType.CHAT;
+    socketMessage.Data = request;
+
+    console.log(`Eliminando el mensaje ${messageId}`, socketMessage);
 
     websocketService.send(JSON.stringify(socketMessage));
   }
