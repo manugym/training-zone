@@ -157,83 +157,122 @@ function Conversation() {
     }
   };
 
+  // get the date in string
+  const getDateLabel = (date: Date) => {
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+
+    if (date.toDateString() === today.toDateString()) {
+      return "Hoy";
+    } else if (date.toDateString() === yesterday.toDateString()) {
+      return "Ayer";
+    } else {
+      return date.toLocaleDateString(undefined, {
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+      });
+    }
+  };
+
   return (
     <section className="conversation-panel">
       <div className="conversation-container">
         {conversation && conversation?.ChatMessages?.length > 0 ? (
           <>
-            {conversation.ChatMessages.map((message) => {
-              const isMine = message.UserId === currentUser?.Id;
+            {conversation.ChatMessages.map((message, index) => {
+              const isMine = message.UserId === currentUser.Id;
+
+              const messageDate = new Date(message.MessageDateTime);
+
+              // check that the date changes
+              const showDateHeader =
+                index === 0 ||
+                new Date(
+                  conversation.ChatMessages[index - 1].MessageDateTime
+                ).toDateString() !== messageDate.toDateString();
+
               return (
-                <div
-                  key={message.Id}
-                  className={`message-box ${isMine ? "mine" : "other"}`}
-                  onMouseDown={() => {
-                    timerRef.current = setTimeout(() => {
-                      if (message.UserId === currentUser.Id)
-                        setMessageToEdit(message);
-                    }, 1000);
-                  }}
-                  onMouseUp={() => {
-                    clearTimeout(timerRef.current);
-                  }}
-                >
-                  {messageToEdit && messageToEdit === message ? (
-                    <div ref={editAreaRef}>
-                      <button
-                        onClick={() => {
-                          setShowEditMessage(true);
-                          setMessageToEditContent(message.Message);
-                        }}
-                      >
-                        Editar
-                      </button>
-                      <button onClick={() => handleDeleteMessage(message.Id)}>
-                        Eliminar
-                      </button>
-
-                      {/*If the user is going to modify the message, a text area appears */}
-                      {showEditMessage ? (
-                        <form
-                          onSubmit={handleEditMessageSubmit}
-                          className="message-form"
-                        >
-                          <textarea
-                            placeholder="Escribe un mensaje"
-                            value={messageToEditContent}
-                            onChange={(e) => {
-                              setMessageToEditContent(e.target.value);
-                            }}
-                            onKeyDown={handleKeyDown}
-                            required
-                          />
-
-                          <button type="submit">
-                            <img src={SendIcon} alt="Enviar" />
-                          </button>
-                        </form>
-                      ) : (
-                        <p className="message-text">{message.Message}</p>
-                      )}
-                    </div>
-                  ) : (
-                    <p className="message-text">{message.Message}</p>
+                <div className="conversation-wrapper">
+                  {showDateHeader && (
+                    <p className="date">{getDateLabel(messageDate)}</p>
                   )}
 
-                  {/*time and check mark icon */}
-                  <span className="message-info">
-                    {new Date(message.MessageDateTime).toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
+                  <div
+                    key={message.Id}
+                    className={`message-box ${isMine ? "mine" : "other"}`}
+                    onMouseDown={() => {
+                      timerRef.current = setTimeout(() => {
+                        if (message.UserId === currentUser.Id)
+                          setMessageToEdit(message);
+                      }, 1000);
+                    }}
+                    onMouseUp={() => {
+                      clearTimeout(timerRef.current);
+                    }}
+                  >
+                    {messageToEdit && messageToEdit === message ? (
+                      <div ref={editAreaRef}>
+                        <button
+                          onClick={() => {
+                            setShowEditMessage(true);
+                            setMessageToEditContent(message.Message);
+                          }}
+                        >
+                          Editar
+                        </button>
+                        <button onClick={() => handleDeleteMessage(message.Id)}>
+                          Eliminar
+                        </button>
 
-                    {message.UserId == currentUser.Id && (
-                      <img
-                        src={message.IsViewed ? ViewedIcon : NotViewedIcon}
-                        alt="Viewed Icon"
-                      />
+                        {/*If the user is going to modify the message, a text area appears */}
+                        {showEditMessage ? (
+                          <form
+                            onSubmit={handleEditMessageSubmit}
+                            className="message-form"
+                          >
+                            <textarea
+                              className="edit-textarea"
+                              placeholder="Escribe un mensaje"
+                              value={messageToEditContent}
+                              onChange={(e) => {
+                                setMessageToEditContent(e.target.value);
+                              }}
+                              onKeyDown={handleKeyDown}
+                              required
+                            />
+
+                            <button type="submit">
+                              <img src={SendIcon} alt="Enviar" />
+                            </button>
+                          </form>
+                        ) : (
+                          <p className="message-text">{message.Message}</p>
+                        )}
+                      </div>
+                    ) : (
+                      <p className="message-text">{message.Message}</p>
                     )}
-                  </span>
+
+                    {/*time and check mark icon */}
+                    <span className="message-info">
+                      {new Date(message.MessageDateTime).toLocaleTimeString(
+                        [],
+                        {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        }
+                      )}
+
+                      {message.UserId == currentUser.Id && (
+                        <img
+                          src={message.IsViewed ? ViewedIcon : NotViewedIcon}
+                          alt="Viewed Icon"
+                        />
+                      )}
+                    </span>
+                  </div>
                 </div>
               );
             })}
