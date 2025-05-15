@@ -10,7 +10,7 @@ import ViewedIcon from "../../assets/chat/viewed-icon.png";
 import DeleteIcon from "../../assets/chat/delete-icon.png";
 import EditIcon from "../../assets/chat/edit-icon.png";
 
-import { ChatMessage } from "../../models/chat_message";
+import { ChatMessage } from "../../models/chat-message";
 import Swal from "sweetalert2";
 
 function Conversation() {

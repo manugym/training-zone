@@ -10,7 +10,7 @@ import { ChatRequestType } from "../models/enums/chat-request-type";
 import { Chat } from "../models/chat";
 import { SendMessageRequest } from "../models/send-message-request";
 import userService from "./user.service";
-import { ChatMessage } from "../models/chat_message";
+import { ChatMessage } from "../models/chat-message";
 import { ModifyChatMessage } from "../models/modify-chat-message";
 import { User } from "../models/user";
 
