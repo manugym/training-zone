@@ -8,13 +8,12 @@ class ApiService {
 
   public jwt: string | null = null;
 
-  constructor() {
-    this.initializeJwt();
-  }
+  constructor() {}
 
-  private async initializeJwt() {
+  public async initializeJwt() {
     try {
       const token = await AsyncStorage.getItem(this.TOKEN_KEY);
+      console.log("Token desde AsyncStorage:", token);
       this.jwt = token || null;
     } catch (error) {
       console.error("Error al obtener el token desde AsyncStorage:", error);
