@@ -1,20 +1,35 @@
-import { StyleSheet } from "react-native";
-import { ThemedView } from "@/components/ThemedView";
+import {
+  Pressable,
+  StyleSheet,
+  Image,
+  View,
+  useColorScheme,
+} from "react-native";
+import { ThemedText } from "../components/ThemedText";
+import { Chat } from "@/models/chat";
+import { User } from "@/models/user";
+import { ServerUrl } from "@/constants/ServerUrl";
+import { Colors } from "@/constants/Colors";
+import {
+  GestureHandlerRootView,
+  ScrollView,
+} from "react-native-gesture-handler";
 import { useEffect, useState } from "react";
 import chatService from "@/services/chat.service";
-import { User } from "@/models/user";
-import { Chat } from "@/models/chat";
-import Conversation from "@/components/Chat/Conversation";
-import AllConversations from "@/components/Chat/AllConversations";
-import userService from "@/services/user.service";
 import websocketService from "@/services/websocket.service";
 import apiService from "@/services/api.service";
+import userService from "@/services/user.service";
+import { useRouter } from "expo-router";
 
-export default function ChatView() {
+export default function AllConversations() {
+  const SERVER_IMAGE_URL = `${ServerUrl}/UserProfilePicture`;
+  const router = useRouter();
+
+  const colorScheme = useColorScheme() || "light";
+  const theme = Colors[colorScheme];
+
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-
   const [allChats, setAllChats] = useState<Chat[] | null>(null);
-  const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
 
   //subscription to get the current user
   useEffect(() => {
@@ -48,17 +63,6 @@ export default function ChatView() {
     };
   }, []);
 
-  //subscription to get the current conversation
-  useEffect(() => {
-    const subscription = chatService.actualConversation$.subscribe((chat) => {
-      setSelectedChat(chat);
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, []);
-
   //get all users chats request
   useEffect(() => {
     async function sendGetChatRequest() {
@@ -70,31 +74,123 @@ export default function ChatView() {
     sendGetChatRequest();
   }, []);
 
-  //get all users chats request
-  useEffect(() => {
-    console.log("All Chats : ", allChats);
-    console.log("Selected Chat : ", selectedChat);
-    console.log("Current User : ", currentUser);
-  }, [allChats, selectedChat, currentUser]);
-
   return (
-    <ThemedView style={styles.container}>
-      {selectedChat ? (
-        <Conversation selectedChat={selectedChat} />
-      ) : (
-        <AllConversations
-          allChats={allChats}
-          currentUser={currentUser}
-          onSelectChat={setSelectedChat}
-        />
-      )}
-    </ThemedView>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <ScrollView style={{ backgroundColor: theme.background, flex: 1 }}>
+        {allChats && allChats.length > 0 ? (
+          allChats.map((chat) => {
+            return (
+              <Pressable
+                key={chat.Id}
+                onPress={() => {
+                  chatService.setActualConversation(chat);
+                  router.push("/Conversation");
+                }}
+                style={[
+                  styles.chatItem,
+                  { borderBottomColor: theme.details, borderBottomWidth: 2 },
+                ]}
+              >
+                {" "}
+                <Image
+                  source={{
+                    uri: `${SERVER_IMAGE_URL}/${
+                      chat.UserOriginId === currentUser?.Id
+                        ? chat.UserDestination?.AvatarImageUrl || "default.png"
+                        : chat.UserOrigin?.AvatarImageUrl || "default.png"
+                    }`,
+                  }}
+                  style={[
+                    { borderColor: theme.details, borderWidth: 2 },
+                    styles.avatar,
+                  ]}
+                />
+                <View style={styles.chatInfo}>
+                  <ThemedText
+                    type="subtitle"
+                    style={[styles.chatName, { color: theme.text }]}
+                    numberOfLines={1}
+                  >
+                    {chat.UserOriginId === currentUser?.Id
+                      ? chat.UserDestination?.Name
+                      : chat.UserOrigin?.Name}
+                  </ThemedText>
+
+                  <ThemedText
+                    type="default"
+                    style={[styles.lastMessage, { color: theme.text }]}
+                    numberOfLines={1}
+                  >
+                    {chat.ChatMessages && chat.ChatMessages.length > 0
+                      ? chat.ChatMessages[chat.ChatMessages.length - 1].Message
+                          .length > 30
+                        ? chat.ChatMessages[
+                            chat.ChatMessages.length - 1
+                          ].Message.slice(0, 30) + "..."
+                        : chat.ChatMessages[chat.ChatMessages.length - 1]
+                            .Message
+                      : "No hay mensajes"}
+                  </ThemedText>
+                </View>
+                <ThemedText
+                  type="default"
+                  style={[styles.messageTime, { color: theme.text }]}
+                >
+                  {chat.ChatMessages && chat.ChatMessages.length > 0
+                    ? new Date(
+                        chat.ChatMessages[
+                          chat.ChatMessages.length - 1
+                        ].MessageDateTime
+                      ).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: false,
+                      })
+                    : ""}
+                </ThemedText>
+              </Pressable>
+            );
+          })
+        ) : (
+          <ThemedText type="default" style={{ color: theme.text }}>
+            Sin chats
+          </ThemedText>
+        )}
+      </ScrollView>
+    </GestureHandlerRootView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  chatItem: {
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 20,
+    borderRadius: 8,
+    marginBottom: 12,
+  },
+  avatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 12,
+  },
+  chatInfo: {
     flex: 1,
-    padding: 16,
+    justifyContent: "center",
+  },
+  chatName: {
+    fontWeight: "bold",
+    fontSize: 18,
+  },
+  lastMessage: {
+    marginTop: 2,
+    opacity: 0.8,
+  },
+  messageTime: {
+    fontSize: 12,
+    marginLeft: 8,
+    opacity: 0.8,
   },
 });
