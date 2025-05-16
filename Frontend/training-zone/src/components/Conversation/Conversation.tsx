@@ -55,7 +55,20 @@ function Conversation() {
     };
   }, []);
 
-  //If a message arrives and the user is in the conversation, it is marked as read.
+  //Mark actual conversation as Viewed
+  useEffect(() => {
+    async function markConversationAsViewed() {
+      await chatService.getConversationRequest(
+        conversation.UserOriginId === currentUser.Id
+          ? conversation.UserDestinationId
+          : conversation.UserOriginId
+      );
+    }
+
+    markConversationAsViewed();
+  }, []);
+
+  //If a message arrives and the user is in the conversation, it is marked as Viewed.
   useEffect(() => {
     async function markMessageAsViewed() {
       if (
@@ -213,7 +226,7 @@ function Conversation() {
                 ).toDateString() !== messageDate.toDateString();
 
               return (
-                <div className="conversation-wrapper">
+                <div key={index} className="conversation-wrapper">
                   {showDateHeader && (
                     <p className="date">{getDateLabel(messageDate)}</p>
                   )}

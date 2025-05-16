@@ -60,6 +60,62 @@ public class ChatService
 
                 break;
 
+            case ChatRequestType.CONVERSATION:
+
+                try
+                {
+                    int destinationUserId = JsonSerializer.Deserialize<SocketMessage<SocketChatMessage<int>>>(message).Data.Data;
+
+
+                    Chat chat = await _unitOfWork.ChatRepository.GetChatByUserIdAndUserDestinationIdAsync(userId, destinationUserId);
+
+                    if (chat == null)
+                        return;
+
+
+                    List<ChatMessage> notViewedMessages = chat.ChatMessages
+                        .Where(m => !m.IsViewed && m.UserId != userId)
+                        .ToList();
+
+                    foreach (var chatMessage in notViewedMessages)
+                    {
+                        chatMessage.IsViewed = true;
+                        _unitOfWork.ChatMessageRepository.Update(chatMessage);
+                    }
+
+                    await _unitOfWork.SaveAsync();
+
+                    var messageToSend = new SocketMessage<SocketChatMessage<ChatDto>>()
+                    {
+                        Type = SocketCommunicationType.CHAT,
+                        Data = new SocketChatMessage<ChatDto>()
+                        {
+                            ChatRequestType = ChatRequestType.CONVERSATION,
+                            Data = _chatMapper.ToDto(chat)
+                        }
+                    };
+
+                    var currentSocket = _webSocketNetwork.GetSocketByUserId(userId);
+
+                    if (currentSocket != null)
+                    {
+                        await currentSocket.SendAsync(JsonSerializer.Serialize(messageToSend));
+                    }
+
+                    var destinationSocket = _webSocketNetwork.GetSocketByUserId(destinationUserId);
+
+                    if (destinationSocket != null)
+                    {
+                        await destinationSocket.SendAsync(JsonSerializer.Serialize(messageToSend));
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+
+                break;
+
             case ChatRequestType.SEND_MESSAGE:
                 MessageReceived sendMessageRequest = JsonSerializer.Deserialize<SocketMessage<SocketChatMessage<MessageReceived>>>(message).Data.Data;
 

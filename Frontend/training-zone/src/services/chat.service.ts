@@ -85,6 +85,11 @@ class ChatService {
             this._allChats.next(message.Data.Data);
 
             break;
+          case ChatRequestType.CONVERSATION:
+            console.log("Conversación actual : ", message.Data.Data);
+            this._actualConversation.next(message.Data.Data);
+
+            break;
           case ChatRequestType.SEND_MESSAGE:
             try {
               const newMessage: ChatMessage = message.Data.Data;
@@ -257,6 +262,23 @@ class ChatService {
     socketMessage.Data = request;
 
     console.log(`Eliminando el mensaje ${messageId}`, socketMessage);
+
+    websocketService.send(JSON.stringify(socketMessage));
+  }
+
+  async getConversationRequest(userId: number): Promise<void> {
+    const request: ChatRequestGeneric<number> = {
+      ChatRequestType: ChatRequestType.CONVERSATION,
+      Data: userId,
+    };
+
+    const socketMessage = new SocketMessageGeneric<
+      ChatRequestGeneric<number>
+    >();
+    socketMessage.Type = SocketCommunicationType.CHAT;
+    socketMessage.Data = request;
+
+    console.log(`Obteniendo Conversación`, socketMessage);
 
     websocketService.send(JSON.stringify(socketMessage));
   }
