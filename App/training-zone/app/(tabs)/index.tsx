@@ -1,4 +1,4 @@
-import { StyleSheet, Platform, Button, Alert } from "react-native";
+import { StyleSheet, Button, Alert } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useRouter } from "expo-router";
@@ -13,16 +13,12 @@ export default function HomeScreen() {
 
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
-  const goToAuth = () => {
-    router.push("/Auth");
-  };
-
   useEffect(() => {
     async function isUserLogin() {
       await apiService.initializeJwt();
       if (!apiService.jwt) {
         Alert.alert("!Bienvenido!", "Inicia sesión para continuar");
-        goToAuth();
+        router.push("/Auth");
       }
     }
 
@@ -45,13 +41,18 @@ export default function HomeScreen() {
       <ThemedText type="title" style={styles.title}>
         Welcome! {currentUser?.Name}
       </ThemedText>
-
-      <Button title="Go to Auth" onPress={goToAuth} />
+      <Button title="Go to Auth" onPress={() => router.push("/Auth")} />;
       <Button
         title="Logout"
         onPress={async () => {
           await authService.logout();
-          goToAuth();
+          router.push("/Auth");
+        }}
+      />
+      <Button
+        title="Chat"
+        onPress={() => {
+          router.push("/Chat");
         }}
       />
     </ThemedView>
