@@ -52,7 +52,7 @@ export default function HomeScreen() {
       <Button
         title="Chat"
         onPress={() => {
-          router.push("/Chat");
+          router.push("/AllConversations");
         }}
       />
     </ThemedView>
