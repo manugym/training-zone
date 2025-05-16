@@ -99,6 +99,7 @@ public class Program
 
         // Mappers
         builder.Services.AddTransient<UserMapper>();
+        builder.Services.AddTransient<ChatMapper>();
 
 
 

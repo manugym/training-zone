@@ -13,13 +13,13 @@ public class ChatService
 {
     private readonly UnitOfWork _unitOfWork;
     private readonly WebSocketNetwork _webSocketNetwork;
-    private readonly UserMapper _userMapper;
+    private readonly ChatMapper _chatMapper;
 
-    public ChatService(UnitOfWork unitOfWork, WebSocketNetwork webSocketNetwork, UserMapper userMapper)
+    public ChatService(UnitOfWork unitOfWork, WebSocketNetwork webSocketNetwork, ChatMapper chatMapper)
     {
         _unitOfWork = unitOfWork;
         _webSocketNetwork = webSocketNetwork;
-        _userMapper = userMapper;
+        _chatMapper = chatMapper;
     }
 
     internal async Task<Chat> GetChatAsync(int userId, int userDestinationId)
@@ -41,13 +41,13 @@ public class ChatService
 
                     List<Chat> allChats = await _unitOfWork.ChatRepository.GetAllChatsByUserIdAsync(userId);
 
-                    var messageToSend = new SocketMessage<SocketChatMessage<List<Chat>>>()
+                    var messageToSend = new SocketMessage<SocketChatMessage<List<ChatDto>>>()
                     {
                         Type = SocketCommunicationType.CHAT,
-                        Data = new SocketChatMessage<List<Chat>>()
+                        Data = new SocketChatMessage<List<ChatDto>>()
                         {
                             ChatRequestType = ChatRequestType.ALL_CHATS,
-                            Data = allChats
+                            Data = _chatMapper.ToDto(allChats)
                         }
                     };
 

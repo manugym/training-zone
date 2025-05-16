@@ -4,9 +4,24 @@ import { ThemedView } from "../components/ThemedView";
 import { Chat } from "@/models/chat";
 import { useEffect, useState } from "react";
 import chatService from "@/services/chat.service";
+import { Stack } from "expo-router";
+import { User } from "@/models/user";
+import userService from "@/services/user.service";
 
 export default function Conversation() {
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
+
+  //subscription to get the current user
+  useEffect(() => {
+    const subscription = userService.currentUser$.subscribe((user) => {
+      setCurrentUser(user);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   //subscription to get the current conversation
   useEffect(() => {
@@ -22,11 +37,22 @@ export default function Conversation() {
   console.log("Selected Chat : ", selectedChat);
 
   return (
-    <ThemedView style={styles.container}>
-      <ThemedText type="title" style={styles.title}>
-        {selectedChat?.UserDestination.Name}
-      </ThemedText>
-    </ThemedView>
+    <>
+      <Stack.Screen
+        options={{
+          title:
+            selectedChat?.UserOriginId === currentUser?.Id
+              ? selectedChat?.UserDestination?.Name ?? "Conversation"
+              : selectedChat?.UserOrigin?.Name ?? "Conversation",
+        }}
+      />
+
+      <ThemedView style={styles.container}>
+        <ThemedText type="title" style={styles.title}>
+          {selectedChat?.UserDestination.Name}
+        </ThemedText>
+      </ThemedView>
+    </>
   );
 }
 
