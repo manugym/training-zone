@@ -80,12 +80,11 @@ export default function ChatView() {
   return (
     <ThemedView style={styles.container}>
       {selectedChat ? (
-        <Conversation />
+        <Conversation selectedChat={selectedChat} />
       ) : (
         <AllConversations
           allChats={allChats}
           currentUser={currentUser}
-          selectedChat={selectedChat}
           onSelectChat={setSelectedChat}
         />
       )}
@@ -96,14 +95,6 @@ export default function ChatView() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: "100%",
-    height: "100%",
-    alignItems: "center",
-    justifyContent: "center",
     padding: 16,
-  },
-  title: {
-    marginBottom: 16,
-    textAlign: "center",
   },
 });

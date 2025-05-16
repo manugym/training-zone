@@ -7,8 +7,8 @@ import userService from "./user.service";
 
 class AuthService {
   private readonly TOKEN_KEY = "token";
-  private readonly LOGIN_URL = "Auth/login";
-  private readonly REGISTER_URL = "Auth/register";
+  private readonly LOGIN_URL = "/Auth/login";
+  private readonly REGISTER_URL = "/Auth/register";
 
   constructor() {}
 

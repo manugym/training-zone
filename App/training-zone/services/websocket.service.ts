@@ -2,9 +2,10 @@ import { Subject } from "rxjs";
 import { webSocket, WebSocketSubject } from "rxjs/webSocket";
 import apiService from "./api.service";
 import { Alert } from "react-native";
+import { ServerUrl } from "@/constants/ServerUrl";
 
 class WebSocketService {
-  private readonly SOCKET_URL = "http://192.168.18.100:7089/socket";
+  private readonly SOCKET_URL = `${ServerUrl}/socket`;
 
   connected = new Subject<void>();
   messageReceived = new Subject<any>();

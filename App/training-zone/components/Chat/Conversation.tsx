@@ -1,12 +1,17 @@
 import { StyleSheet } from "react-native";
 import { ThemedText } from "../ThemedText";
 import { ThemedView } from "../ThemedView";
+import { Chat } from "@/models/chat";
 
-export default function Conversation() {
+interface Props {
+  selectedChat: Chat;
+}
+
+export default function Conversation({ selectedChat }: Props) {
   return (
     <ThemedView style={styles.container}>
       <ThemedText type="title" style={styles.title}>
-        CONVERSATION
+        {selectedChat.UserDestination.Name}
       </ThemedText>
     </ThemedView>
   );
