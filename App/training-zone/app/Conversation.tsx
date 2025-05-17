@@ -7,6 +7,8 @@ import {
   View,
   KeyboardAvoidingView,
   useColorScheme,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import { Chat } from "@/models/chat";
 import React, { useEffect, useRef, useState } from "react";
@@ -15,7 +17,8 @@ import { Stack } from "expo-router";
 import { User } from "@/models/user";
 import userService from "@/services/user.service";
 import { Colors } from "@/constants/Colors";
-import { Ionicons } from "@expo/vector-icons";
+import { Entypo, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { ChatMessage } from "@/models/chat-message";
 
 export default function Conversation() {
   const colorScheme = useColorScheme() || "light";
@@ -25,6 +28,10 @@ export default function Conversation() {
   const [conversation, setConversation] = useState<Chat | null>(null);
 
   const [messageToSend, setMessageToSend] = useState("");
+
+  const [messageToEdit, setMessageToEdit] = useState<ChatMessage | null>(null);
+  const [messageToEditContent, setMessageToEditContent] = useState("");
+  const [showEditMessage, setShowEditMessage] = useState(false);
 
   const scrollRef = useRef<ScrollView>(null);
 
@@ -102,66 +109,110 @@ export default function Conversation() {
               : conversation?.UserOrigin?.Name ?? "Conversation",
         }}
       />
-
-      <KeyboardAvoidingView
-        style={[{ backgroundColor: theme.background }, styles.container]}
-        keyboardVerticalOffset={80}
+      {/*Clicking outside the message closes the edition and the keyboard*/}
+      <TouchableWithoutFeedback
+        onPress={() => {
+          setMessageToEdit(null);
+          setShowEditMessage(false);
+          Keyboard.dismiss();
+        }}
       >
-        {/*All messages with scroll */}
-        <ScrollView style={styles.messagesContainer} ref={scrollRef}>
-          {conversation?.ChatMessages?.map((message) => {
-            const isMine = message.UserId === currentUser?.Id;
-            return (
-              <View
-                key={message.Id}
-                style={[
-                  { backgroundColor: isMine ? theme.primary : theme.secondary },
-                  isMine ? styles.mine : styles.other,
-                  styles.messageBox,
-                ]}
-              >
-                <Text style={styles.messageText}>{message.Message}</Text>
-                <View style={styles.messageInfo}>
-                  <Text style={styles.messageTime}>
-                    {new Date(message.MessageDateTime).toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      hour12: false,
-                    })}
-                  </Text>
-                  {isMine && (
-                    <Ionicons
-                      name="checkmark-done"
-                      size={20}
-                      color={message.IsViewed ? theme.details : theme.text}
-                    />
-                  )}
-                </View>
-              </View>
-            );
-          })}
-        </ScrollView>
-
-        {/*Input */}
-        <View
-          style={[{ borderTopColor: theme.details }, styles.inputContainer]}
+        <KeyboardAvoidingView
+          style={[{ backgroundColor: theme.background }, styles.container]}
+          keyboardVerticalOffset={80}
         >
-          <TextInput
-            value={messageToSend}
-            onChangeText={setMessageToSend}
-            placeholder="Escribe un mensaje"
-            placeholderTextColor="#aaa"
-            style={[{ borderColor: theme.details }, styles.input]}
-            multiline
-          />
-          <TouchableOpacity
-            onPress={handleSendMessage}
-            style={[styles.sendButton]}
+          {/*All messages with scroll */}
+          <ScrollView
+            style={styles.messagesContainer}
+            ref={scrollRef}
+            keyboardShouldPersistTaps="handled"
           >
-            <Ionicons name="send" size={30} color={theme.text} />
-          </TouchableOpacity>
-        </View>
-      </KeyboardAvoidingView>
+            {conversation?.ChatMessages?.map((message) => {
+              const isMine = message.UserId === currentUser?.Id;
+              {
+                /*The message can be edited by long pressing it*/
+              }
+              return (
+                <TouchableOpacity
+                  key={message.Id}
+                  onLongPress={() => {
+                    if (isMine) {
+                      setMessageToEdit(message);
+                    }
+                  }}
+                  activeOpacity={0.8}
+                  style={[
+                    {
+                      backgroundColor: isMine ? theme.primary : theme.secondary,
+                    },
+                    isMine ? styles.mine : styles.other,
+                    styles.messageBox,
+                  ]}
+                >
+                  {/*Edit and delete Icons */}
+                  {messageToEdit && messageToEdit === message && (
+                    <View>
+                      <Entypo
+                        name="edit"
+                        size={20}
+                        color="white"
+                        onPress={() => setShowEditMessage(true)}
+                      />
+                      <MaterialCommunityIcons
+                        name="delete-forever"
+                        size={26}
+                        color="red"
+                      />
+                    </View>
+                  )}
+
+                  {/*Message */}
+                  <Text style={styles.messageText}>{message.Message}</Text>
+                  <View style={styles.messageInfo}>
+                    <Text style={styles.messageTime}>
+                      {new Date(message.MessageDateTime).toLocaleTimeString(
+                        [],
+                        {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          hour12: false,
+                        }
+                      )}
+                    </Text>
+                    {isMine && (
+                      <Ionicons
+                        name="checkmark-done"
+                        size={20}
+                        color={message.IsViewed ? theme.details : theme.text}
+                      />
+                    )}
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </ScrollView>
+
+          {/*Input */}
+          <View
+            style={[{ borderTopColor: theme.details }, styles.inputContainer]}
+          >
+            <TextInput
+              value={messageToSend}
+              onChangeText={setMessageToSend}
+              placeholder="Escribe un mensaje"
+              placeholderTextColor="#aaa"
+              style={[{ borderColor: theme.details }, styles.input]}
+              multiline
+            />
+            <TouchableOpacity
+              onPress={handleSendMessage}
+              style={[styles.sendButton]}
+            >
+              <Ionicons name="send" size={30} color={theme.text} />
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      </TouchableWithoutFeedback>
     </>
   );
 }
