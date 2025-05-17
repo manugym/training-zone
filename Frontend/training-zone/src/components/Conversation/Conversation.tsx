@@ -4,14 +4,11 @@ import chatService from "../../services/chat.service";
 import userService from "../../services/user.service";
 import "./Conversation.css";
 import { User } from "../../models/user";
-import SendIcon from "../../assets/chat/send_icon.png";
-import NotViewedIcon from "../../assets/chat/not-viewed-icon.png";
-import ViewedIcon from "../../assets/chat/viewed-icon.png";
-import DeleteIcon from "../../assets/chat/delete-icon.png";
-import EditIcon from "../../assets/chat/edit-icon.png";
 
 import { ChatMessage } from "../../models/chat-message";
 import Swal from "sweetalert2";
+import { IoCheckmarkDoneSharp, IoSend } from "react-icons/io5";
+import { MdDeleteForever, MdEditSquare } from "react-icons/md";
 
 function Conversation() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -246,20 +243,20 @@ function Conversation() {
                   >
                     {messageToEdit && messageToEdit === message ? (
                       <div ref={editAreaRef}>
-                        <img
+                        <MdEditSquare
                           title="Editar mensaje"
-                          src={EditIcon}
-                          alt="Delete Icon"
+                          color="white"
+                          size={22}
                           onClick={() => {
                             setShowEditMessage(true);
                             setMessageToEditContent(message.Message);
                           }}
                         />
 
-                        <img
+                        <MdDeleteForever
+                          color="red"
+                          size={24}
                           title="Eliminar mensaje"
-                          src={DeleteIcon}
-                          alt="Delete Icon"
                           onClick={() => handleDeleteMessage(message.Id)}
                         />
 
@@ -281,7 +278,7 @@ function Conversation() {
                             />
 
                             <button type="submit">
-                              <img src={SendIcon} alt="Enviar" />
+                              <IoSend size={20} color="white" />
                             </button>
                           </form>
                         ) : (
@@ -303,10 +300,7 @@ function Conversation() {
                       )}
 
                       {message.UserId == currentUser.Id && (
-                        <img
-                          src={message.IsViewed ? ViewedIcon : NotViewedIcon}
-                          alt="Viewed Icon"
-                        />
+                        <IoCheckmarkDoneSharp />
                       )}
                     </span>
                   </div>
@@ -341,7 +335,7 @@ function Conversation() {
           required
         />
         <button type="submit">
-          <img src={SendIcon} alt="Enviar" />
+          <IoSend size={24} color="white" />
         </button>
       </form>
     </section>
