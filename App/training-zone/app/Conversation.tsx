@@ -6,24 +6,16 @@ import {
   TouchableOpacity,
   View,
   KeyboardAvoidingView,
-  Image,
   useColorScheme,
 } from "react-native";
-import { ThemedText } from "../components/ThemedText";
-import { ThemedView } from "../components/ThemedView";
 import { Chat } from "@/models/chat";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import chatService from "@/services/chat.service";
 import { Stack } from "expo-router";
 import { User } from "@/models/user";
 import userService from "@/services/user.service";
-import SendIcon from "@/assets/chat/send_icon.png";
-import NotViewedIcon from "@/assets/chat/not-viewed-icon.png";
-import ViewedIcon from "@/assets/chat/viewed-icon.png";
-import EditIcon from "@/assets/chat/edit-icon.png";
-import DeleteIcon from "@/assets/chat/delete-icon.png";
 import { Colors } from "@/constants/Colors";
-import { ChatMessage } from "@/models/chat-message";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function Conversation() {
   const colorScheme = useColorScheme() || "light";
@@ -138,9 +130,10 @@ export default function Conversation() {
                     })}
                   </Text>
                   {isMine && (
-                    <Image
-                      source={message.IsViewed ? ViewedIcon : NotViewedIcon}
-                      style={styles.statusIcon}
+                    <Ionicons
+                      name="checkmark-done"
+                      size={20}
+                      color={message.IsViewed ? theme.details : theme.text}
                     />
                   )}
                 </View>
@@ -165,7 +158,7 @@ export default function Conversation() {
             onPress={handleSendMessage}
             style={[styles.sendButton]}
           >
-            <Image source={SendIcon} style={styles.sendIcon} />
+            <Ionicons name="send" size={30} color={theme.text} />
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
