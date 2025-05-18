@@ -147,8 +147,28 @@ export default function Conversation() {
     );
   };
 
+  // get the date in string
+  const getDateLabel = (date: Date) => {
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+
+    if (date.toDateString() === today.toDateString()) {
+      return "Hoy";
+    } else if (date.toDateString() === yesterday.toDateString()) {
+      return "Ayer";
+    } else {
+      return date.toLocaleDateString(undefined, {
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+      });
+    }
+  };
+
   return (
     <>
+      {/*destination user name at the top */}
       <Stack.Screen
         options={{
           title:
@@ -173,74 +193,97 @@ export default function Conversation() {
             ref={scrollRef}
             keyboardShouldPersistTaps="handled"
           >
-            {conversation?.ChatMessages?.map((message) => {
+            {conversation?.ChatMessages?.map((message, index) => {
               const isMine = message.UserId === currentUser?.Id;
+              const messageDate = new Date(message.MessageDateTime);
+
+              // check that the date changes
+              const showDateHeader =
+                index === 0 ||
+                new Date(
+                  conversation.ChatMessages[index - 1].MessageDateTime
+                ).toDateString() !== messageDate.toDateString();
+
               {
                 /*The message can be edited by long pressing it*/
               }
               return (
-                <TouchableOpacity
-                  key={message.Id}
-                  onLongPress={() => {
-                    if (isMine) {
-                      setMessageToEdit(message);
-                      setMessageToEditContent("");
-                    }
-                  }}
-                  activeOpacity={0.8}
-                  style={[
-                    {
-                      backgroundColor:
-                        messageToEdit === message
-                          ? theme.details
-                          : isMine
-                          ? theme.primary
-                          : theme.secondary,
-                    },
-                    isMine ? styles.mine : styles.other,
-                    styles.messageBox,
-                  ]}
-                >
-                  {/*Edit and delete Icons */}
-                  {messageToEdit && messageToEdit === message && (
-                    <View style={styles.editButtons}>
-                      <Entypo
-                        name="edit"
-                        size={20}
-                        color="white"
-                        onPress={() => handlePressEditButton(message)}
-                      />
-                      <MaterialCommunityIcons
-                        name="delete-forever"
-                        size={26}
-                        color="red"
-                        onPress={() => handleDeleteMessage(message.Id)}
-                      />
+                <React.Fragment key={message.Id}>
+                  {showDateHeader && (
+                    <View
+                      style={[
+                        { backgroundColor: theme.details },
+                        styles.dateContainer,
+                      ]}
+                    >
+                      <Text style={styles.dateText}>
+                        {getDateLabel(messageDate)}
+                      </Text>
                     </View>
                   )}
 
-                  {/*Message */}
-                  <Text style={styles.messageText}>{message.Message}</Text>
-                  <View style={styles.messageInfo}>
-                    <Text style={styles.messageTime}>
-                      {new Date(message.MessageDateTime).toLocaleTimeString(
-                        [],
-                        {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          hour12: false,
-                        }
-                      )}
-                    </Text>
-                    {isMine && (
-                      <Ionicons
-                        name="checkmark-done"
-                        size={20}
-                        color={message.IsViewed ? theme.details : theme.text}
-                      />
+                  <TouchableOpacity
+                    onLongPress={() => {
+                      if (isMine) {
+                        setMessageToEdit(message);
+                        setMessageToEditContent("");
+                      }
+                    }}
+                    activeOpacity={0.8}
+                    style={[
+                      {
+                        backgroundColor:
+                          messageToEdit === message
+                            ? theme.details
+                            : isMine
+                            ? theme.primary
+                            : theme.secondary,
+                      },
+                      isMine ? styles.mine : styles.other,
+                      styles.messageBox,
+                    ]}
+                  >
+                    {/*Edit and delete Icons */}
+                    {messageToEdit && messageToEdit === message && (
+                      <View style={styles.editButtons}>
+                        <Entypo
+                          name="edit"
+                          size={20}
+                          color="white"
+                          onPress={() => handlePressEditButton(message)}
+                        />
+                        <MaterialCommunityIcons
+                          name="delete-forever"
+                          size={26}
+                          color="red"
+                          onPress={() => handleDeleteMessage(message.Id)}
+                        />
+                      </View>
                     )}
-                  </View>
-                </TouchableOpacity>
+
+                    {/*Message */}
+                    <Text style={styles.messageText}>{message.Message}</Text>
+                    <View style={styles.messageInfo}>
+                      <Text style={styles.messageTime}>
+                        {new Date(message.MessageDateTime).toLocaleTimeString(
+                          [],
+                          {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: false,
+                          }
+                        )}
+                      </Text>
+                      {isMine && (
+                        <Ionicons
+                          name="checkmark-done"
+                          size={20}
+                          color={message.IsViewed ? theme.details : "#ddd"}
+                        />
+                      )}
+                    </View>
+                  </TouchableOpacity>
+                </React.Fragment>
               );
             })}
           </ScrollView>
@@ -263,7 +306,10 @@ export default function Conversation() {
               }
               placeholder="Escribe un mensaje"
               placeholderTextColor="#aaa"
-              style={[{ borderColor: theme.details }, styles.input]}
+              style={[
+                { borderColor: theme.details, color: theme.text },
+                styles.input,
+              ]}
               multiline
             />
             <TouchableOpacity
@@ -338,7 +384,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingHorizontal: 14,
     paddingVertical: 10,
-    color: "#fff",
   },
   sendButton: {
     marginLeft: 10,
@@ -352,5 +397,25 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     gap: 8,
+  },
+
+  dateContainer: {
+    alignSelf: "center",
+    marginVertical: 20,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+  },
+
+  dateText: {
+    color: "black",
+    textAlign: "center",
+    fontSize: 14,
+    fontWeight: "500",
   },
 });
