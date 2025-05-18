@@ -9,6 +9,7 @@ import {
   useColorScheme,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
 } from "react-native";
 import { Chat } from "@/models/chat";
 import React, { useEffect, useRef, useState } from "react";
@@ -34,6 +35,7 @@ export default function Conversation() {
   const [showEditMessage, setShowEditMessage] = useState(false);
 
   const scrollRef = useRef<ScrollView>(null);
+  const inputRef = useRef<TextInput>(null);
 
   //subscription to get the current user
   useEffect(() => {
@@ -93,10 +95,56 @@ export default function Conversation() {
     markMessageAsViewed();
   }, [conversation]);
 
+  const handlePressOutsideTheMessage = () => {
+    setMessageToEdit(null);
+    setShowEditMessage(false);
+    setMessageToEditContent("");
+    Keyboard.dismiss();
+  };
+
+  const handlePressEditButton = (message: ChatMessage) => {
+    setShowEditMessage(true);
+    setMessageToEditContent(message.Message);
+    inputRef.current?.focus();
+  };
+
   const handleSendMessage = async () => {
     if (!messageToSend.trim()) return;
     await chatService.sendMessage(messageToSend.trim());
     setMessageToSend("");
+  };
+
+  const handleEditMessageSubmit = async () => {
+    await chatService.sendEditMessageRequest(
+      messageToEdit.Id,
+      messageToEditContent
+    );
+
+    setMessageToEdit(null);
+    setMessageToEditContent("");
+  };
+
+  const handleDeleteMessage = (messageId: number) => {
+    Alert.alert(
+      "¿Estás seguro de que quieres eliminar el mensaje?",
+      "Esta acción no se puede deshacer.",
+      [
+        {
+          text: "Cancelar",
+          style: "cancel",
+        },
+        {
+          text: "Sí, eliminarlo",
+          onPress: async () => {
+            await chatService.sendDeleteMessageRequest(messageId);
+          },
+          style: "destructive",
+        },
+      ],
+      {
+        cancelable: true,
+      }
+    );
   };
 
   return (
@@ -112,9 +160,7 @@ export default function Conversation() {
       {/*Clicking outside the message closes the edition and the keyboard*/}
       <TouchableWithoutFeedback
         onPress={() => {
-          setMessageToEdit(null);
-          setShowEditMessage(false);
-          Keyboard.dismiss();
+          handlePressOutsideTheMessage();
         }}
       >
         <KeyboardAvoidingView
@@ -138,12 +184,18 @@ export default function Conversation() {
                   onLongPress={() => {
                     if (isMine) {
                       setMessageToEdit(message);
+                      setMessageToEditContent("");
                     }
                   }}
                   activeOpacity={0.8}
                   style={[
                     {
-                      backgroundColor: isMine ? theme.primary : theme.secondary,
+                      backgroundColor:
+                        messageToEdit === message
+                          ? theme.details
+                          : isMine
+                          ? theme.primary
+                          : theme.secondary,
                     },
                     isMine ? styles.mine : styles.other,
                     styles.messageBox,
@@ -151,17 +203,18 @@ export default function Conversation() {
                 >
                   {/*Edit and delete Icons */}
                   {messageToEdit && messageToEdit === message && (
-                    <View>
+                    <View style={styles.editButtons}>
                       <Entypo
                         name="edit"
                         size={20}
                         color="white"
-                        onPress={() => setShowEditMessage(true)}
+                        onPress={() => handlePressEditButton(message)}
                       />
                       <MaterialCommunityIcons
                         name="delete-forever"
                         size={26}
                         color="red"
+                        onPress={() => handleDeleteMessage(message.Id)}
                       />
                     </View>
                   )}
@@ -197,15 +250,28 @@ export default function Conversation() {
             style={[{ borderTopColor: theme.details }, styles.inputContainer]}
           >
             <TextInput
-              value={messageToSend}
-              onChangeText={setMessageToSend}
+              ref={inputRef}
+              value={
+                messageToEdit && showEditMessage
+                  ? messageToEditContent
+                  : messageToSend
+              }
+              onChangeText={
+                messageToEdit && showEditMessage
+                  ? setMessageToEditContent
+                  : setMessageToSend
+              }
               placeholder="Escribe un mensaje"
               placeholderTextColor="#aaa"
               style={[{ borderColor: theme.details }, styles.input]}
               multiline
             />
             <TouchableOpacity
-              onPress={handleSendMessage}
+              onPress={
+                messageToEdit && showEditMessage
+                  ? handleEditMessageSubmit
+                  : handleSendMessage
+              }
               style={[styles.sendButton]}
             >
               <Ionicons name="send" size={30} color={theme.text} />
@@ -281,5 +347,10 @@ const styles = StyleSheet.create({
   sendIcon: {
     width: 24,
     height: 24,
+  },
+  editButtons: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 8,
   },
 });
