@@ -1,5 +1,5 @@
 /*Css for login and register form*/
-form {
+.form {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -9,13 +9,13 @@ form {
   padding: 1rem 0;
 }
 
-label {
+.form-label {
   color: var(--color-text);
   font-size: 14px;
   margin-bottom: 4px;
 }
 
-input {
+.form input {
   background-color: var(--color-background);
   border: 2px solid transparent;
   border-radius: 8px;
@@ -25,7 +25,7 @@ input {
   transition: border 0.3s ease;
 }
 
-input:focus {
+.form input:focus {
   outline: none;
   border-color: var(--color-primary);
 }
@@ -35,7 +35,7 @@ input:focus {
   opacity: 0.5;
 }
 
-button {
+.form button {
   margin-top: 10px;
   background-color: var(--color-primary);
   border: none;
@@ -48,12 +48,11 @@ button {
   transition: background-color 0.3s;
 }
 
-button:hover {
+.form button:hover {
   background-color: var(--color-secondary);
 }
 
-.error,
-form p {
+.error {
   color: #ff4d4f;
   font-size: 14px;
   margin: -10px 0 5px 0;

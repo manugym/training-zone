@@ -22,7 +22,6 @@ function Login() {
 
   const [credentials, setCredentials] = useState("");
   const [password, setPassword] = useState<string>("");
-  const [rememberMe, setRememberMe] = useState<boolean>(false);
 
   const [error, setError] = useState("");
 
@@ -46,13 +45,10 @@ function Login() {
     if (error) return;
 
     try {
-      await authService.login(
-        {
-          credential: credentials,
-          password: password,
-        },
-        rememberMe
-      );
+      await authService.login({
+        credential: credentials,
+        password: password,
+      });
 
       Alert.alert("Inicio de sesión exitoso", "Bienvenido de nuevo!");
       router.push("/");
@@ -88,20 +84,6 @@ function Login() {
         </ThemedText>
       ) : null}
 
-      <View style={styles.rememberContainer}>
-        <Checkbox
-          value={rememberMe}
-          onValueChange={() => setRememberMe(!rememberMe)}
-          color={theme.primary}
-        />
-        <ThemedText
-          type="default"
-          style={[styles.rememberText, { color: theme.text }]}
-        >
-          Remember
-        </ThemedText>
-      </View>
-
       <TouchableOpacity
         style={[styles.loginButton, { backgroundColor: theme.primary }]}
         onPress={handleSubmit}
@@ -131,15 +113,6 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 8,
     marginBottom: 15,
-  },
-  rememberContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    alignSelf: "flex-start",
-    marginBottom: 20,
-  },
-  rememberText: {
-    marginLeft: 8,
   },
   loginButton: {
     paddingVertical: 14,

@@ -25,7 +25,6 @@ export default function Register() {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
   const [image, setImage] = useState<string>(null);
 
   const [error, setError] = useState("");
@@ -63,16 +62,13 @@ export default function Register() {
     }
 
     try {
-      await authService.register(
-        {
-          name,
-          phone,
-          email,
-          password,
-          image,
-        },
-        rememberMe
-      );
+      await authService.register({
+        name,
+        phone,
+        email,
+        password,
+        image,
+      });
 
       Alert.alert("Registro exitoso", "¡Te has registrado correctamente!");
     } catch (err) {
@@ -140,20 +136,6 @@ export default function Register() {
         </ThemedText>
       ) : null}
 
-      <View style={styles.rememberContainer}>
-        <Checkbox
-          value={rememberMe}
-          onValueChange={() => setRememberMe(!rememberMe)}
-          color={theme.primary}
-        />
-        <ThemedText
-          type="default"
-          style={[styles.rememberText, { color: theme.text }]}
-        >
-          Remember
-        </ThemedText>
-      </View>
-
       <TouchableOpacity
         style={[styles.registerButton, { backgroundColor: theme.primary }]}
         onPress={handleSubmit}
@@ -200,15 +182,6 @@ const styles = StyleSheet.create({
     height: 24,
     textAlign: "center",
     lineHeight: 24,
-  },
-  rememberContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    alignSelf: "flex-start",
-    marginBottom: 20,
-  },
-  rememberText: {
-    marginLeft: 8,
   },
   error: {
     color: "#f87171",
