@@ -95,7 +95,7 @@ function All_Users_With_Conversation() {
               <p className="last-message">
                 {chat.ChatMessages && chat.ChatMessages.length > 0
                   ? chat.ChatMessages[chat.ChatMessages.length - 1].Message
-                      .length > 10
+                      .length > 20
                     ? chat.ChatMessages[
                         chat.ChatMessages.length - 1
                       ].Message.slice(0, 20) + "..."

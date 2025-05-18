@@ -1,8 +1,9 @@
 export interface User {
-  name: string;
-  phone: string;
-  email: string;
-  password: string;
-  role: string;
-  imagePath?: string;
+  Id: number;
+  Name: string;
+  Phone: string;
+  Email: string;
+  Password: string;
+  Role: string;
+  AvatarImageUrl?: string;
 }

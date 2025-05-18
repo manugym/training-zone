@@ -11,7 +11,7 @@ function Chat() {
   //Connect to the WebSocket server
   useEffect(() => {
     async function connectSocket() {
-      console.log("JWT:", apiService.jwt);
+      console.log("Conectando el socket, JWT :", apiService.jwt);
       await websocketService.connect();
     }
 
