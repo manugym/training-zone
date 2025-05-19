@@ -49,11 +49,20 @@ class AuthService {
     this.setSession(response.data.accessToken, remember);
   }
 
+  async logout(): Promise<void> {
+    console.log("Logging out");
+    sessionStorage.removeItem(this.TOKEN_KEY);
+    localStorage.removeItem(this.TOKEN_KEY);
+    ApiService.jwt = null;
+  }
+
   private async setSession(token: string, remember: boolean): Promise<void> {
     console.log("Setting session with token:", token, remember);
     if (remember) {
+      sessionStorage.removeItem(this.TOKEN_KEY);
       localStorage.setItem(this.TOKEN_KEY, token);
     } else {
+      sessionStorage.setItem(this.TOKEN_KEY, token);
       localStorage.removeItem(this.TOKEN_KEY);
     }
 

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { use, useEffect } from "react";
 import "./Chat.css";
 import NavBar from "../../components/NavBar/NavBar";
 import websocketService from "../../services/websocket.service";
@@ -6,8 +6,26 @@ import apiService from "../../services/api.service";
 import chatService from "../../services/chat.service";
 import All_Users_With_Conversation from "../../components/All_Users_With_Conversation/All_Users_With_Conversation";
 import Conversation from "../../components/Conversation/Conversation";
+import userService from "../../services/user.service";
+import { useNavigate } from "react-router-dom";
 
 function Chat() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    async function loadCurrentUser() {
+      await userService.loadCurrentUser();
+      const currentUser = userService.getCurrentUser();
+
+      if (!currentUser) {
+        console.log("No hay usuario autenticado");
+        navigate("/auth");
+      }
+    }
+
+    loadCurrentUser();
+  }, []);
+
   //Connect to the WebSocket server
   useEffect(() => {
     async function connectSocket() {
@@ -16,6 +34,10 @@ function Chat() {
     }
 
     connectSocket();
+
+    return () => {
+      websocketService.disconnect();
+    };
   }, []);
 
   //Sends the request to get all users chats

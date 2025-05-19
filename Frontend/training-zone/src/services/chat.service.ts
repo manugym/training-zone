@@ -172,6 +172,8 @@ class ChatService {
   }
 
   async sendGetAllChatsRequest(): Promise<void> {
+    if (!websocketService.isConnected()) return;
+
     const request: ChatRequestBase = {
       ChatRequestType: ChatRequestType.ALL_CHATS,
     };
@@ -210,6 +212,8 @@ class ChatService {
   }
 
   async markMessageAsViewed(messageId: number): Promise<void> {
+    if (!websocketService.isConnected()) return;
+
     const request: ChatRequestGeneric<ModifyChatMessage> = {
       ChatRequestType: ChatRequestType.MODIFY_MESSAGE,
       Data: {
@@ -230,6 +234,8 @@ class ChatService {
   }
 
   async sendEditMessageRequest(messageId: number, text: string): Promise<void> {
+    if (!websocketService.isConnected()) return;
+
     const request: ChatRequestGeneric<ModifyChatMessage> = {
       ChatRequestType: ChatRequestType.MODIFY_MESSAGE,
       Data: {
@@ -250,6 +256,8 @@ class ChatService {
   }
 
   async sendDeleteMessageRequest(messageId: number): Promise<void> {
+    if (!websocketService.isConnected()) return;
+
     const request: ChatRequestGeneric<number> = {
       ChatRequestType: ChatRequestType.DELETE_MESSAGE,
       Data: messageId,
@@ -267,6 +275,8 @@ class ChatService {
   }
 
   async getConversationRequest(userId: number): Promise<void> {
+    if (!websocketService.isConnected()) return;
+
     const request: ChatRequestGeneric<number> = {
       ChatRequestType: ChatRequestType.CONVERSATION,
       Data: userId,

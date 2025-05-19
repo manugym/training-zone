@@ -56,9 +56,9 @@ function Conversation() {
   useEffect(() => {
     async function markConversationAsViewed() {
       await chatService.getConversationRequest(
-        conversation.UserOriginId === currentUser.Id
-          ? conversation.UserDestinationId
-          : conversation.UserOriginId
+        conversation?.UserOriginId === currentUser?.Id
+          ? conversation?.UserDestinationId
+          : conversation?.UserOriginId || null
       );
     }
 

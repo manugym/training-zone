@@ -6,12 +6,12 @@ class UserService {
   private _currentUser = new BehaviorSubject<User | null>(null);
   public currentUser$ = this._currentUser.asObservable();
 
-  constructor() {
-    this.loadCurrentUser();
-  }
+  constructor() {}
 
-  private async loadCurrentUser(): Promise<void> {
+  public async loadCurrentUser(): Promise<void> {
     try {
+      console.log("Cargando usuario, JWT :", apiService.jwt);
+
       const user = await this.getAuthenticatedUser();
       this._currentUser.next(user);
     } catch (error) {
@@ -21,6 +21,10 @@ class UserService {
   }
 
   public async getAuthenticatedUser(): Promise<User> {
+    if (!apiService.jwt) {
+      return null;
+    }
+
     const response = await apiService.get<User>("User");
 
     if (!response.success) {
