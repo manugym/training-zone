@@ -2,10 +2,14 @@ import React, { useState } from "react";
 import "../Form.css";
 import AuthService from "../../../services/auth.service";
 import Alert from "../../Alert";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from || "/";
+
   const alertTimer = 3000;
 
   const [showAlert, setShowAlert] = useState<boolean>(false);
@@ -32,7 +36,7 @@ function Login() {
 
       setTimeout(() => {
         setShowAlert(false);
-        navigate("/");
+        navigate(from);
       }, alertTimer);
     } catch (err: any) {
       setError(err.message || "Login failed");

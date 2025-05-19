@@ -3,11 +3,15 @@ import "./Register.css";
 import "../Form.css";
 import defaultAvatar from "../../../assets/default-avatar-.jpg";
 import AuthService from "../../../services/auth.service";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Alert from "../../Alert";
 
 function Register() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from || "/";
+
   const alertTimer = 3000;
 
   const [showAlert, setShowAlert] = useState<boolean>(false);
@@ -91,7 +95,7 @@ function Register() {
 
       setTimeout(() => {
         setShowAlert(false);
-        navigate("/");
+        navigate(from);
       }, alertTimer);
     } catch (err: any) {
       setError(err.message || "Error desconocido al registrar.");

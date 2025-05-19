@@ -19,7 +19,7 @@ function Chat() {
 
       if (!currentUser) {
         console.log("No hay usuario autenticado");
-        navigate("/auth");
+        navigate("/auth", { state: { from: location.pathname } });
       }
     }
 
