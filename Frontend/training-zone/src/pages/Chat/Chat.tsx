@@ -1,4 +1,4 @@
-import { use, useEffect } from "react";
+import { use, useEffect, useState } from "react";
 import "./Chat.css";
 import NavBar from "../../components/NavBar/NavBar";
 import websocketService from "../../services/websocket.service";
@@ -8,6 +8,7 @@ import All_Users_With_Conversation from "../../components/All_Users_With_Convers
 import Conversation from "../../components/Conversation/Conversation";
 import userService from "../../services/user.service";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 function Chat() {
   const navigate = useNavigate();
@@ -18,7 +19,16 @@ function Chat() {
       const currentUser = userService.getCurrentUser();
 
       if (!currentUser) {
-        console.log("No hay usuario autenticado");
+        Swal.fire({
+          toast: true,
+          position: "top-end",
+          icon: "warning",
+          title: "Necesitas iniciar sesión",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+        });
+
         navigate("/auth", { state: { from: location.pathname } });
       }
     }

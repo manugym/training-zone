@@ -12,6 +12,10 @@ class UserService {
     try {
       console.log("Cargando usuario, JWT :", apiService.jwt);
 
+      if (this._currentUser.value !== null) {
+        return;
+      }
+
       const user = await this.getAuthenticatedUser();
       this._currentUser.next(user);
     } catch (error) {

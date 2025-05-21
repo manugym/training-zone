@@ -1,18 +1,14 @@
 import React, { useState } from "react";
 import "../Form.css";
 import AuthService from "../../../services/auth.service";
-import Alert from "../../Alert";
 import { useLocation, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 function Login() {
   const navigate = useNavigate();
   const location = useLocation();
 
   const from = location.state?.from || "/";
-
-  const alertTimer = 3000;
-
-  const [showAlert, setShowAlert] = useState<boolean>(false);
 
   const [credentials, setCredentials] = useState("");
   const [password, setPassword] = useState<string>("");
@@ -32,12 +28,17 @@ function Login() {
         rememberMe
       );
 
-      setShowAlert(true);
-
-      setTimeout(() => {
-        setShowAlert(false);
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "success",
+        title: "Inicio de sesión exitoso",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      }).then(() => {
         navigate(from);
-      }, alertTimer);
+      });
     } catch (err: any) {
       setError(err.message || "Login failed");
     }
@@ -82,16 +83,6 @@ function Login() {
       {error && <span className="error">{error}</span>}
 
       <button>Login</button>
-
-      {showAlert && (
-        <Alert
-          icon="success"
-          text="Sesión iniciada"
-          position="top-right"
-          timer={alertTimer}
-          navigatePath="/"
-        />
-      )}
     </form>
   );
 }
