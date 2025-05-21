@@ -8,6 +8,7 @@ class UserService {
 
   USER_URL = "User";
   ALL_USER_URL = "User/all";
+  CHANGE_USER_ROLE_URL = "User/changeRole";
 
   constructor() {}
 
@@ -66,6 +67,27 @@ class UserService {
     console.log("Usuarios excluyendo al autenticado", filteredUsers);
 
     return filteredUsers;
+  }
+
+  roleMap: Record<string, number> = {
+    user: 0,
+    trainer: 1,
+    admin: 2,
+  };
+
+  public async changeUserRole(userId: number, role: string): Promise<User> {
+    const roleNumber = this.roleMap[role.toLowerCase()];
+
+    const response = await apiService.put<User>(this.CHANGE_USER_ROLE_URL, {
+      UserId: userId,
+      Role: roleNumber,
+    });
+
+    if (!response.success) {
+      throw new Error("Error al cambiar el rol del usuario");
+    }
+
+    return response.data;
   }
 }
 

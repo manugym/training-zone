@@ -42,14 +42,60 @@ export default function UsersAdmin() {
     getAllUsers();
   }, []);
 
+  async function handleRoleChange(id: number, role: string): Promise<void> {
+    const user = allUsers?.find((user) => user.Id === id);
+
+    if (!user && user.Role === role) return;
+
+    const updatedUser = { ...user, Role: role };
+    const updatedUsers = allUsers?.map((user) =>
+      user.Id === id ? updatedUser : user
+    );
+    setAllUsers(updatedUsers || null);
+
+    await userService.changeUserRole(id, role);
+  }
+
   return (
     <>
       <NavBar />
 
       <main className="view-container">
-        <h1>Users Admin Page</h1>
+        <div className=".content-container">
+          <h1>Users Admin Page</h1>
 
-        <div className=".content-container"></div>
+          {allUsers && allUsers.length > 0 ? (
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Email</th>
+                  <th>Role</th>
+                </tr>
+              </thead>
+              <tbody>
+                {allUsers.map((user) => (
+                  <tr key={user.Id}>
+                    <td>{user.Email}</td>
+                    <td>
+                      <select
+                        value={user.Role}
+                        onChange={async (e) =>
+                          await handleRoleChange(user.Id, e.target.value)
+                        }
+                      >
+                        <option value="user">user</option>
+                        <option value="trainer">trainer</option>
+                        <option value="admin">admin</option>
+                      </select>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p>No hay usuarios</p>
+          )}
+        </div>
 
         {loading && <Spinner />}
       </main>
