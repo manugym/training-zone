@@ -6,6 +6,9 @@ class UserService {
   private _currentUser = new BehaviorSubject<User | null>(null);
   public currentUser$ = this._currentUser.asObservable();
 
+  USER_URL = "User";
+  ALL_USER_URL = "User/all";
+
   constructor() {}
 
   public async loadCurrentUser(): Promise<void> {
@@ -29,7 +32,7 @@ class UserService {
       return null;
     }
 
-    const response = await apiService.get<User>("User");
+    const response = await apiService.get<User>(this.USER_URL);
 
     if (!response.success) {
       throw new Error("Error con la autenticación del usuario");
@@ -41,6 +44,28 @@ class UserService {
 
   public getCurrentUser(): User {
     return this._currentUser.value;
+  }
+
+  public async getAllUsers(): Promise<User[]> {
+    const response = await apiService.get<User[]>(this.ALL_USER_URL);
+
+    if (!response.success) {
+      throw new Error("Error al obtener todos los usuarios");
+    }
+
+    const currentUser = this._currentUser.value;
+
+    if (!currentUser) {
+      return response.data;
+    }
+
+    const filteredUsers = response.data.filter(
+      (user) => user.Id !== currentUser.Id
+    );
+
+    console.log("Usuarios excluyendo al autenticado", filteredUsers);
+
+    return filteredUsers;
   }
 }
 

@@ -6,8 +6,6 @@ import trainerService from "../../services/trainer.service";
 import { Trainer } from "../../models/trainer";
 import Spinner from "../../components/Spinner/Spinner";
 import chatService from "../../services/chat.service";
-import websocketService from "../../services/websocket.service";
-import apiService from "../../services/api.service";
 import { User } from "../../models/user";
 
 function TrainerPage() {
@@ -93,11 +91,7 @@ function TrainerPage() {
             </div>
           )}
 
-          {loading && (
-            <div className="loading-container">
-              <Spinner />
-            </div>
-          )}
+          {loading && <Spinner />}
         </div>
       </main>
     </>

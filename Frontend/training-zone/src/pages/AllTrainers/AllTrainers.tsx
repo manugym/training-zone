@@ -218,11 +218,7 @@ function AllTrainersView() {
           </div>
         )}
 
-        {loading && (
-          <div className="loading-container">
-            <Spinner />
-          </div>
-        )}
+        {loading && <Spinner />}
       </main>
     </>
   );
