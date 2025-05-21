@@ -61,9 +61,9 @@ export default function UsersAdmin() {
       <NavBar />
 
       <main className="view-container">
-        <div className=".content-container">
-          <h1>Users Admin Page</h1>
+        <h1>Users Admin Page</h1>
 
+        <div className="table-container">
           {allUsers && allUsers.length > 0 ? (
             <table className="table">
               <thead>
@@ -78,6 +78,7 @@ export default function UsersAdmin() {
                     <td>{user.Email}</td>
                     <td>
                       <select
+                        className="select"
                         value={user.Role}
                         onChange={async (e) =>
                           await handleRoleChange(user.Id, e.target.value)
