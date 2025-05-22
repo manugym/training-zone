@@ -6,6 +6,7 @@ import Trainer from "../pages/Trainer/Trainer";
 import Chat from "../pages/Chat/Chat";
 import UsersAdmin from "../pages/UsersAdmin/UsersAdmin";
 import ForbiddenPage from "../pages/ForbiddenPage/ForbiddenPage";
+import PageNotFound from "../pages/PageNotFound/PageNotFound";
 
 function AppRoutes() {
   return (
@@ -17,7 +18,7 @@ function AppRoutes() {
       <Route path="/chat" element={<Chat />} />
       <Route path="/users-admin" element={<UsersAdmin />} />
       <Route path="/forbidden" element={<ForbiddenPage />} />
-      + <Route path="*" element={<h1>Página no encontrada</h1>} />
+      + <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
 }
