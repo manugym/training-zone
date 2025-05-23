@@ -5,8 +5,8 @@ import AllTrainers from "../pages/AllTrainers/AllTrainers";
 import Trainer from "../pages/Trainer/Trainer";
 import Chat from "../pages/Chat/Chat";
 import UsersAdmin from "../pages/UsersAdmin/UsersAdmin";
-import ForbiddenPage from "../pages/ForbiddenPage/ForbiddenPage";
-import PageNotFound from "../pages/PageNotFound/PageNotFound";
+import ForbiddenPage from "../pages/Errors/ForbiddenPage";
+import PageNotFound from "../pages/Errors/PageNotFound";
 
 function AppRoutes() {
   return (

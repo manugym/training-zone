@@ -1,17 +1,18 @@
-import "./PageNotFound.css";
 import { useNavigate } from "react-router-dom";
-import errorImage from "../../assets/page-not-found/error-404-image.png";
+import errorImage from "../../assets/error-pages/forbidden-image.png";
+import "./Errors.css";
 
-export default function PageNotFound() {
+export default function ForbiddenPage() {
   const navigate = useNavigate();
 
   return (
     <main className="page-not-found">
       <div className="content">
-        <h1>404</h1>
-        <h3>Page not found</h3>
+        <h1>401</h1>
+        <h3>Access Denied</h3>
         <p className="description">
-          The page you're looking for doesn't exist or has been moved.
+          You don’t have permission to view this page. It might have been moved
+          or restricted.
         </p>
         <img src={errorImage} alt="Error 404" className="error-image" />
         <button onClick={() => navigate("/")} className="button">
