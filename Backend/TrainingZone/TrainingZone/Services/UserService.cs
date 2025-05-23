@@ -1,6 +1,7 @@
 ﻿using TrainingZone.Mappers;
 using TrainingZone.Models.DataBase;
 using TrainingZone.Models.Dtos.User;
+using TrainingZone.Models.Enums;
 
 namespace TrainingZone.Services;
 
@@ -94,6 +95,20 @@ public class UserService
 
     }
 
+    internal async Task<UserDto> ChangeUserRole(int userId, Role role)
+    {
+        User user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
+
+        if (user == null)
+            return null;
+
+        user.Role = role.ToString().ToLower();
 
 
+        _unitOfWork.UserRepository.Update(user);
+        await _unitOfWork.SaveAsync();
+
+        return _userMapper.ToDto(user);
+
+    }
 }

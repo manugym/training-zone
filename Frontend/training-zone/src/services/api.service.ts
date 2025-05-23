@@ -8,7 +8,10 @@ class ApiService {
   public jwt: string | null = null;
 
   constructor() {
-    this.jwt = localStorage.getItem(this.TOKEN_KEY) || null;
+    this.jwt =
+      localStorage.getItem(this.TOKEN_KEY) ||
+      sessionStorage.getItem(this.TOKEN_KEY) ||
+      null;
   }
 
   private getHeaders(
