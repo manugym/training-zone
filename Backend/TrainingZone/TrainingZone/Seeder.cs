@@ -25,6 +25,9 @@ public class Seeder
 
         await seedClassesAsync();
         await _trainingZoneContext.SaveChangesAsync();
+
+        await seedSchedulesAsync();
+        await _trainingZoneContext.SaveChangesAsync();
     }
 
     private async Task SeedUsersAsync()
@@ -257,17 +260,64 @@ public class Seeder
         [
         new Class
         {
-            Name = "Spinning",
-            Description = "Clase de ciclo indoor",
-            UserId = 5
+            Type = ClassType.Spinning,
+            Description = "Clase de ciclo indoor"
         },
         new Class
         {
-
+            Type = ClassType.CrossFit,
+            Description = "Entrenamiento funcional en grupo"
+        },
+        new Class{
+            Type = ClassType.Boxing,
+            Description = "Entrenamiento de boxeo en grupo"
         }
 
         ];
         await _trainingZoneContext.Classes.AddRangeAsync(Classes);
     }
+
+    private async Task seedSchedulesAsync()
+    {
+        var users = _trainingZoneContext.Users.ToList();
+        var activities = _trainingZoneContext.Classes.ToList();
+
+        var spinning = activities.FirstOrDefault(c => c.Type == ClassType.Spinning);
+        var crossfit = activities.FirstOrDefault(c => c.Type == ClassType.CrossFit);
+
+        var trainer1 = users.FirstOrDefault(u => u.Name == "Ana López");
+        var trainer2 = users.FirstOrDefault(u => u.Name == "Carlos Pérez");
+
+        Schedule[] Schedules =
+        [
+            new Schedule
+            {
+                ClassId = 1,
+                Class = spinning,
+                UserId = trainer1.Id,
+                User = trainer1,
+                MaxCapacity = 20,
+                Price = 15.99m,
+                StartDateTime = new DateTime(2025, 6, 22, 10, 30, 0),
+                EndDateTime = new DateTime(2025, 6, 22, 11, 30, 0)
+            },
+            new Schedule
+            {
+                ClassId = 2,
+                Class = crossfit,
+                UserId = trainer2.Id,
+                User = trainer2,
+                MaxCapacity = 16,
+                Price = 20.00m,
+                StartDateTime = new DateTime(2025, 6, 23, 11, 30, 0),
+                EndDateTime = new DateTime(2025, 6, 23, 12, 30, 0)
+
+            }
+        ];
+
+        await _trainingZoneContext.Schedules.AddRangeAsync(Schedules);
+    }
+
+
 }
 
