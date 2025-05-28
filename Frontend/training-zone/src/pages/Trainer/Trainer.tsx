@@ -87,13 +87,12 @@ function TrainerPage() {
               {/* Schedule and trainer classes container*/}
               <div className="classes-container">
                 <div className="schedule-container">
-                  <h1>Calendario</h1>
                   <Calendar onChange={setSelectedDay} value={selectedDay} />
                 </div>
 
                 <div className="class-container">
                   {selectedDay ? (
-                    <h2>Clases del dia {selectedDay.toString()}</h2>
+                    <h2>Clases del dia {selectedDay.toLocaleString()}</h2>
                   ) : (
                     <p>Selecciona un dia </p>
                   )}
