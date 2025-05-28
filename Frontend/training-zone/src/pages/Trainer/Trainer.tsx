@@ -7,6 +7,7 @@ import { Trainer } from "../../models/trainer";
 import Spinner from "../../components/Spinner/Spinner";
 import chatService from "../../services/chat.service";
 import { User } from "../../models/user";
+import Calendar from "react-calendar";
 
 function TrainerPage() {
   const SERVER_IMAGE_URL = `${
@@ -22,11 +23,15 @@ function TrainerPage() {
   }
 
   const [trainer, setTrainer] = useState<Trainer | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  type ValuePiece = Date | null;
+  type Value = ValuePiece | [ValuePiece, ValuePiece];
+
+  const [selectedDay, setSelectedDay] = useState<Value | null>(null);
 
   useEffect(() => {
     const fetchTrainer = async () => {
-      setLoading(true);
       try {
         const response = await trainerService.getTrainerById(Number(id));
         console.log("Trainer response:", response);
@@ -57,6 +62,7 @@ function TrainerPage() {
         <div className="trainer-panel">
           {!loading && trainer && (
             <div className="trainer-details">
+              {/*Trainer container */}
               <div className="trainer-info">
                 <h1>{trainer.User.Name}</h1>
                 <img
@@ -78,9 +84,20 @@ function TrainerPage() {
                 </div>
               </div>
 
-              <div className="schedule-container">
-                <h1>Horarios</h1>
-                <p>Implementar con las clases</p>
+              {/* Schedule and trainer classes container*/}
+              <div className="classes-container">
+                <div className="schedule-container">
+                  <h1>Calendario</h1>
+                  <Calendar onChange={setSelectedDay} value={selectedDay} />
+                </div>
+
+                <div className="class-container">
+                  {selectedDay ? (
+                    <h2>Clases del dia {selectedDay.toString()}</h2>
+                  ) : (
+                    <p>Selecciona un dia </p>
+                  )}
+                </div>
               </div>
             </div>
           )}
