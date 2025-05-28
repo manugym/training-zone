@@ -1,5 +1,4 @@
 import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
 import Spinner from "@/components/ui/Spinner";
 import { Colors } from "@/constants/Colors";
 import { ServerUrl } from "@/constants/ServerUrl";
@@ -12,10 +11,11 @@ import { useEffect, useState } from "react";
 import {
   ScrollView,
   StyleSheet,
-  Text,
+  TextInput,
   View,
   useColorScheme,
 } from "react-native";
+import { Dropdown } from "react-native-element-dropdown";
 
 export default function AllTrainersPage() {
   const colorScheme = useColorScheme() || "light";
@@ -93,6 +93,40 @@ export default function AllTrainersPage() {
         style={{ backgroundColor: theme.background }}
         keyboardShouldPersistTaps="handled"
       >
+        <View style={styles.container}>
+          <TextInput
+            style={[
+              styles.input,
+              { color: theme.text, borderColor: theme.text },
+            ]}
+            value={name}
+            onChangeText={setName}
+            placeholder="Buscar entrenador..."
+            placeholderTextColor={theme.text + "99"}
+          />
+
+          <Dropdown
+            style={[styles.input, { borderColor: theme.text }]}
+            data={[
+              { label: "Todas las clases", value: null },
+              ...Object.keys(ClassType)
+                .filter((key) => isNaN(Number(key)))
+                .map((key) => ({
+                  label: key,
+                  value: ClassType[key as keyof typeof ClassType],
+                })),
+            ]}
+            labelField="label"
+            valueField="value"
+            placeholder="Selecciona clase"
+            value={classType}
+            onChange={(item) => setClassType(item.value)}
+            placeholderStyle={{ color: theme.text + "99" }}
+            selectedTextStyle={{ color: theme.text }}
+            maxHeight={200}
+          />
+        </View>
+
         {!loading &&
           allTrainers &&
           allTrainers.Trainers.length > 0 &&
@@ -112,4 +146,18 @@ export default function AllTrainersPage() {
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: "column",
+    paddingHorizontal: 10,
+    marginVertical: 16,
+  },
+  input: {
+    height: 40,
+    borderWidth: 1,
+    borderRadius: 6,
+    paddingHorizontal: 10,
+    marginBottom: 12,
+    width: "100%",
+  },
+});
