@@ -41,7 +41,7 @@ export default function HomeScreen() {
       <ThemedText type="title" style={styles.title}>
         Welcome! {currentUser?.Name}
       </ThemedText>
-      <Button title="Go to Auth" onPress={() => router.push("/Auth")} />;
+      <Button title="Go to Auth" onPress={() => router.push("/Auth")} />
       <Button
         title="Logout"
         onPress={async () => {
@@ -53,6 +53,12 @@ export default function HomeScreen() {
         title="Chat"
         onPress={() => {
           router.push("/AllConversations");
+        }}
+      />
+      <Button
+        title="All Trainers"
+        onPress={() => {
+          router.push("/AllTrainers");
         }}
       />
     </ThemedView>

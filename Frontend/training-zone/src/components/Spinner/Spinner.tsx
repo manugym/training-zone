@@ -1,4 +1,3 @@
-import { FaDove } from "react-icons/fa";
 import "./Spinner.css";
 
 function Spinner() {
