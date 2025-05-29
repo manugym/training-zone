@@ -1,13 +1,15 @@
-import React from "react";
 import { View, Text } from "react-native";
+import { useLocalSearchParams } from "expo-router";
+import { ThemedView } from "@/components/ThemedView";
+import { ThemedText } from "@/components/ThemedText";
 
 function Trainer() {
+  const { id } = useLocalSearchParams();
+
   return (
-    <>
-      <View>
-        <Text>Trainer</Text>
-      </View>
-    </>
+    <ThemedView>
+      <ThemedText type="title">Trainer ID: {id}</ThemedText>
+    </ThemedView>
   );
 }
 
