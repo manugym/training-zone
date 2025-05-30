@@ -37,14 +37,18 @@ class ChatService {
   }
 
   newConversation(user: User): void {
-    const conversation = this._allChats.value.find(
-      (chat) =>
-        chat.UserOriginId === user.Id || chat.UserDestinationId === user.Id
-    );
+    const allChats = this._allChats.value;
 
-    if (conversation != null) {
-      this._actualConversation.next(conversation);
-      return;
+    if (allChats) {
+      const conversation = allChats.find(
+        (chat) =>
+          chat.UserOriginId === user.Id || chat.UserDestinationId === user.Id
+      );
+
+      if (conversation != null) {
+        this._actualConversation.next(conversation);
+        return;
+      }
     }
 
     const currentUser = userService.getCurrentUser();
@@ -172,6 +176,11 @@ class ChatService {
   }
 
   async sendGetAllChatsRequest(): Promise<void> {
+    if (!websocketService.isConnected()) {
+      console.warn("WebSocket no está conectado.");
+      return;
+    }
+
     const request: ChatRequestBase = {
       ChatRequestType: ChatRequestType.ALL_CHATS,
     };
@@ -184,6 +193,11 @@ class ChatService {
   }
 
   async sendMessage(message: string): Promise<void> {
+    if (!websocketService.isConnected()) {
+      console.warn("WebSocket no está conectado.");
+      return;
+    }
+
     const currentUser = userService.getCurrentUser();
 
     const request: ChatRequestGeneric<SendMessageRequest> = {
@@ -210,6 +224,11 @@ class ChatService {
   }
 
   async markMessageAsViewed(messageId: number): Promise<void> {
+    if (!websocketService.isConnected()) {
+      console.warn("WebSocket no está conectado.");
+      return;
+    }
+
     const request: ChatRequestGeneric<ModifyChatMessage> = {
       ChatRequestType: ChatRequestType.MODIFY_MESSAGE,
       Data: {
@@ -230,6 +249,11 @@ class ChatService {
   }
 
   async sendEditMessageRequest(messageId: number, text: string): Promise<void> {
+    if (!websocketService.isConnected()) {
+      console.warn("WebSocket no está conectado.");
+      return;
+    }
+
     const request: ChatRequestGeneric<ModifyChatMessage> = {
       ChatRequestType: ChatRequestType.MODIFY_MESSAGE,
       Data: {
@@ -250,6 +274,11 @@ class ChatService {
   }
 
   async sendDeleteMessageRequest(messageId: number): Promise<void> {
+    if (!websocketService.isConnected()) {
+      console.warn("WebSocket no está conectado.");
+      return;
+    }
+
     const request: ChatRequestGeneric<number> = {
       ChatRequestType: ChatRequestType.DELETE_MESSAGE,
       Data: messageId,
@@ -267,6 +296,11 @@ class ChatService {
   }
 
   async getConversationRequest(userId: number): Promise<void> {
+    if (!websocketService.isConnected()) {
+      console.warn("WebSocket no está conectado.");
+      return;
+    }
+
     const request: ChatRequestGeneric<number> = {
       ChatRequestType: ChatRequestType.CONVERSATION,
       Data: userId,
