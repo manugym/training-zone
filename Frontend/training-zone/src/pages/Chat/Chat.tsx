@@ -39,18 +39,13 @@ function Chat() {
   //Connect to the WebSocket server
   useEffect(() => {
     async function connectSocket() {
-      console.log("Conectando el socket, JWT :", apiService.jwt);
       await websocketService.connect();
     }
 
     connectSocket();
-
-    return () => {
-      websocketService.disconnect();
-    };
   }, []);
 
-  //Sends the request to get all users chats
+  //Sends the request to get all user chats
   useEffect(() => {
     async function sendGetAllUsersWithChatRequest() {
       await chatService.sendGetAllChatsRequest();

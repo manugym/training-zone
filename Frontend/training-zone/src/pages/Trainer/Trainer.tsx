@@ -8,6 +8,9 @@ import Spinner from "../../components/Spinner/Spinner";
 import chatService from "../../services/chat.service";
 import { User } from "../../models/user";
 import Calendar from "react-calendar";
+import apiService from "../../services/api.service";
+import Swal from "sweetalert2";
+import websocketService from "../../services/websocket.service";
 
 function TrainerPage() {
   const SERVER_IMAGE_URL = `${
@@ -50,9 +53,34 @@ function TrainerPage() {
     fetchTrainer();
   }, [id]);
 
-  const handleClick = (user: User) => {
-    chatService.newConversation(user);
-    navigate("/chat");
+  const handleClick = async (user: User) => {
+    if (!apiService.jwt) {
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "warning",
+        title: "Necesitas iniciar sesión",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+      });
+
+      navigate("/auth", { state: { from: location.pathname } });
+    }
+
+    if (!websocketService.isConnected()) {
+      await websocketService.connect();
+      await chatService.sendGetAllChatsRequest();
+    }
+
+    // Wait for the chat service to load all chats before creating a new conversation
+    const subscription = chatService.allChats$.subscribe((chats) => {
+      if (chats) {
+        chatService.newConversation(user);
+        navigate("/chat");
+        subscription.unsubscribe();
+      }
+    });
   };
 
   return (
@@ -78,7 +106,7 @@ function TrainerPage() {
                 <div className="question-container">
                   <h2>¿Tienes alguna duda?</h2>
 
-                  <button onClick={() => handleClick(trainer.User)}>
+                  <button onClick={async () => await handleClick(trainer.User)}>
                     Enviar Mensaje
                   </button>
                 </div>
