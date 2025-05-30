@@ -1,11 +1,11 @@
-.view-container {
+.all-trainers-view-container {
   width: 100%;
-  height: auto;
   min-height: 100vh;
-  margin-top: 40px;
+  background-color: var(--color-background);
+  padding: 100px 1rem 20px 1rem;
 }
 
-.view-container h1 {
+.all-trainers-view-container h1 {
   font-size: 2.5rem;
   color: var(--color-text);
   margin: 20px 0;
@@ -15,9 +15,20 @@
 .content-container {
   width: 100%;
   max-width: 1200px;
-
   margin: 0 auto;
   padding: 0 20px;
+}
+
+.top-section {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 20px;
+  gap: 20px;
+  text-align: center;
 }
 
 /* SEARCH BAR */
@@ -148,7 +159,7 @@
   justify-content: center;
   align-items: center;
   gap: 20px;
-  margin-top: 30px;
+  margin-top: 50px;
 }
 
 .pagination {

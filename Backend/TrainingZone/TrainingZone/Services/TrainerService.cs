@@ -21,19 +21,29 @@ public class TrainerService
 
     public async Task<AllTrainersDto> GetAllTrainersByFilter(TrainerFilterDto filter)
     {
-        //Todos los entrenadores filtrados por nombre y tipo de clase (implementar cuando tengamos las clases)
-        List<TrainerDto> trainers = await _trainerSmartSearchService.Search(filter.Name, null);
+        //All trainers filtered by name and class type (implementar cuando tengamos las clases)
+        List<TrainerDto> filteredTrainers = await _trainerSmartSearchService.Search(filter.Name, null);
 
-        int totalPages = (int)Math.Ceiling((double)trainers.Count / filter.EntitiesPerPage);
+        //Send all trainers for movile
+        if(filter.EntitiesPerPage == null || filter.ActualPage == null)
+        {
+            return new AllTrainersDto
+            {
+                TotalPages = 1,
+                Trainers = filteredTrainers
+            };
+        }
 
-        // Obtiene solo los entrenadores de la página actual
-        int skip = (filter.ActualPage - 1) * filter.EntitiesPerPage;
-        List<TrainerDto> pagedTrainers = trainers
+        int entitiesPerPage = filter.EntitiesPerPage.Value;
+        int actualPage = filter.ActualPage.Value;
+
+        int totalPages = (int)Math.Ceiling((double)filteredTrainers.Count / entitiesPerPage);
+        int skip = (actualPage - 1) * entitiesPerPage;
+
+        List<TrainerDto> pagedTrainers = filteredTrainers
             .Skip(skip)
-            .Take(filter.EntitiesPerPage)
+            .Take(entitiesPerPage)
             .ToList();
-
-        
 
         AllTrainersDto alltrainersDto = new AllTrainersDto
         {

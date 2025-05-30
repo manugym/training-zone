@@ -7,6 +7,10 @@ import { Trainer } from "../../models/trainer";
 import Spinner from "../../components/Spinner/Spinner";
 import chatService from "../../services/chat.service";
 import { User } from "../../models/user";
+import Calendar from "react-calendar";
+import apiService from "../../services/api.service";
+import Swal from "sweetalert2";
+import websocketService from "../../services/websocket.service";
 
 function TrainerPage() {
   const SERVER_IMAGE_URL = `${
@@ -22,11 +26,15 @@ function TrainerPage() {
   }
 
   const [trainer, setTrainer] = useState<Trainer | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  type ValuePiece = Date | null;
+  type Value = ValuePiece | [ValuePiece, ValuePiece];
+
+  const [selectedDay, setSelectedDay] = useState<Value | null>(null);
 
   useEffect(() => {
     const fetchTrainer = async () => {
-      setLoading(true);
       try {
         const response = await trainerService.getTrainerById(Number(id));
         console.log("Trainer response:", response);
@@ -45,9 +53,34 @@ function TrainerPage() {
     fetchTrainer();
   }, [id]);
 
-  const handleClick = (user: User) => {
-    chatService.newConversation(user);
-    navigate("/chat");
+  const handleClick = async (user: User) => {
+    if (!apiService.jwt) {
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "warning",
+        title: "Necesitas iniciar sesión",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+      });
+
+      navigate("/auth", { state: { from: location.pathname } });
+    }
+
+    if (!websocketService.isConnected()) {
+      await websocketService.connect();
+      await chatService.sendGetAllChatsRequest();
+    }
+
+    // Wait for the chat service to load all chats before creating a new conversation
+    const subscription = chatService.allChats$.subscribe((chats) => {
+      if (chats) {
+        chatService.newConversation(user);
+        navigate("/chat");
+        subscription.unsubscribe();
+      }
+    });
   };
 
   return (
@@ -57,6 +90,7 @@ function TrainerPage() {
         <div className="trainer-panel">
           {!loading && trainer && (
             <div className="trainer-details">
+              {/*Trainer container */}
               <div className="trainer-info">
                 <h1>{trainer.User.Name}</h1>
                 <img
@@ -72,15 +106,25 @@ function TrainerPage() {
                 <div className="question-container">
                   <h2>¿Tienes alguna duda?</h2>
 
-                  <button onClick={() => handleClick(trainer.User)}>
+                  <button onClick={async () => await handleClick(trainer.User)}>
                     Enviar Mensaje
                   </button>
                 </div>
               </div>
 
-              <div className="schedule-container">
-                <h1>Horarios</h1>
-                <p>Implementar con las clases</p>
+              {/* Schedule and trainer classes container*/}
+              <div className="classes-container">
+                <div className="schedule-container">
+                  <Calendar onChange={setSelectedDay} value={selectedDay} />
+                </div>
+
+                <div className="class-container">
+                  {selectedDay ? (
+                    <h2>Clases del dia {selectedDay.toLocaleString()}</h2>
+                  ) : (
+                    <p>Selecciona un dia </p>
+                  )}
+                </div>
               </div>
             </div>
           )}
