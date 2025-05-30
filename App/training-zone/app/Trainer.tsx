@@ -20,6 +20,7 @@ import { Trainer } from "@/models/trainer";
 import Spinner from "@/components/ui/Spinner";
 import websocketService from "@/services/websocket.service";
 import apiService from "@/services/api.service";
+import { Calendar } from "react-native-calendars";
 
 export default function TrainerView() {
   const SERVER_IMAGE_URL = `${ServerUrl}/UserProfilePicture`;
@@ -41,10 +42,7 @@ export default function TrainerView() {
   const [trainer, setTrainer] = useState<Trainer | null>(null);
   const [loading, setLoading] = useState(true);
 
-  type ValuePiece = Date | null;
-  type Value = ValuePiece | [ValuePiece, ValuePiece];
-
-  const [selectedDay, setSelectedDay] = useState<Value | null>(null);
+  const [selectedDay, setSelectedDay] = useState("");
 
   useEffect(() => {
     const fetchTrainer = async () => {
@@ -104,7 +102,10 @@ export default function TrainerView() {
           {/*Trainer Information */}
           <View style={styles.trainerInfoContainer}>
             <View>
-              <ThemedText type="title" style={styles.text}>
+              <ThemedText
+                type="title"
+                style={{ marginBottom: 30, textAlign: "center" }}
+              >
                 {trainer.User.Name}
               </ThemedText>
 
@@ -145,7 +146,47 @@ export default function TrainerView() {
           </View>
 
           {/*Schedule and clases*/}
-          <View></View>
+          <View style={styles.classesContainer}>
+            <Calendar
+              onDayPress={(day) => setSelectedDay(day.dateString)}
+              markedDates={{
+                [selectedDay || ""]: {
+                  selected: true,
+                  selectedColor: theme.primary,
+                },
+              }}
+              style={[{ borderColor: theme.details }, styles.calendar]}
+              theme={{
+                backgroundColor: theme.background,
+                calendarBackground: theme.background,
+                textSectionTitleColor: theme.text,
+                selectedDayBackgroundColor: theme.primary,
+                selectedDayTextColor: theme.text,
+                todayTextColor: theme.details,
+                todayButtonFontWeight: "bold",
+                dayTextColor: theme.text,
+                arrowColor: theme.details,
+                monthTextColor: theme.text,
+                textDayHeaderFontSize: 16,
+                textDayHeaderFontWeight: "bold",
+              }}
+            />
+
+            {selectedDay ? (
+              <ThemedText
+                style={[{ marginTop: 20, fontSize: 18 }, styles.text]}
+              >
+                {" "}
+                Clases del día: {selectedDay}
+              </ThemedText>
+            ) : (
+              <ThemedText
+                style={[{ marginTop: 20, fontSize: 18 }, styles.text]}
+              >
+                Selecciona un día
+              </ThemedText>
+            )}
+          </View>
         </ScrollView>
       )}
 
@@ -195,5 +236,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     borderRadius: 6,
     alignSelf: "center",
+  },
+
+  classesContainer: {
+    flex: 1,
+    padding: 20,
+  },
+  calendar: {
+    borderWidth: 1,
+    borderRadius: 12,
+    padding: 20,
+    height: 350,
   },
 });
