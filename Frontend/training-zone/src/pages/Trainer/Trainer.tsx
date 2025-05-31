@@ -11,6 +11,8 @@ import Calendar from "react-calendar";
 import apiService from "../../services/api.service";
 import Swal from "sweetalert2";
 import websocketService from "../../services/websocket.service";
+import { Class } from "../../models/class";
+import { ClassType } from "../../models/enums/class-type";
 
 function TrainerPage() {
   const SERVER_IMAGE_URL = `${
@@ -32,6 +34,9 @@ function TrainerPage() {
   type Value = ValuePiece | [ValuePiece, ValuePiece];
 
   const [selectedDay, setSelectedDay] = useState<Value | null>(null);
+  const [classesOfSelectedDay, setClassesOfSelectedDay] = useState<
+    Class[] | null
+  >(null);
 
   useEffect(() => {
     const fetchTrainer = async () => {
@@ -52,6 +57,25 @@ function TrainerPage() {
 
     fetchTrainer();
   }, [id]);
+
+  useEffect(() => {
+    if (!trainer || !selectedDay) return;
+
+    const selectedDate = selectedDay as Date;
+
+    const matchingClasses = trainer.TrainerClasses.filter((classItem) =>
+      classItem.Schedules.some((schedule) => {
+        const scheduleDate = new Date(schedule.StartDateTime);
+        return (
+          scheduleDate.getFullYear() === selectedDate.getFullYear() &&
+          scheduleDate.getMonth() === selectedDate.getMonth() &&
+          scheduleDate.getDate() === selectedDate.getDate()
+        );
+      })
+    );
+
+    setClassesOfSelectedDay(matchingClasses);
+  }, [selectedDay, trainer]);
 
   const handleClick = async (user: User) => {
     if (!apiService.jwt) {
@@ -115,14 +139,65 @@ function TrainerPage() {
               {/* Schedule and trainer classes container*/}
               <div className="classes-container">
                 <div className="schedule-container">
-                  <Calendar onChange={setSelectedDay} value={selectedDay} />
+                  <Calendar
+                    onChange={setSelectedDay}
+                    value={selectedDay}
+                    tileClassName={({ date, view }) => {
+                      const trainerClasses = trainer?.TrainerClasses || [];
+
+                      /*If the day have a trainer class, is marked with a new class */
+                      if (view === "month") {
+                        const dayHasClass = trainerClasses.some((c) =>
+                          c.Schedules.some((s) => {
+                            const classDate = new Date(s.StartDateTime);
+                            return (
+                              classDate.getFullYear() === date.getFullYear() &&
+                              classDate.getMonth() === date.getMonth() &&
+                              classDate.getDate() === date.getDate()
+                            );
+                          })
+                        );
+
+                        return dayHasClass ? "class-day" : null;
+                      }
+
+                      return null;
+                    }}
+                  />
                 </div>
 
                 <div className="class-container">
                   {selectedDay ? (
-                    <h2>Clases del dia {selectedDay.toLocaleString()}</h2>
+                    classesOfSelectedDay && classesOfSelectedDay.length > 0 ? (
+                      <table className="class-table">
+                        <thead>
+                          <tr>
+                            <th>Tipo</th>
+                            <th>Descripción</th>
+                            <th>Acciones</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {classesOfSelectedDay.map((c) => (
+                            <tr key={c.Id}>
+                              <td>{ClassType[c.Type]}</td>
+                              <td>{c.Description}</td>
+                              <td>
+                                <button
+                                  onClick={() => navigate(`/class/${c.Id}`)}
+                                >
+                                  Ver Precios y Horarios
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    ) : (
+                      <p>No hay clases disponibles este día</p>
+                    )
                   ) : (
-                    <p>Selecciona un dia </p>
+                    <p>Selecciona un día</p>
                   )}
                 </div>
               </div>

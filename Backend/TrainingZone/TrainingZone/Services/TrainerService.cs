@@ -19,7 +19,7 @@ public class TrainerService
         _trainerSmartSearchService = smartSearchService;
     }
 
-    public async Task<AllTrainersDto> GetAllTrainersByFilter(TrainerFilterDto filter)
+    public async Task<AllTrainersDto> GetAllTrainersByFilterAsync(TrainerFilterDto filter)
     {
         //All trainers filtered by name and class type (implementar cuando tengamos las clases)
         List<TrainerDto> filteredTrainers = await _trainerSmartSearchService.Search(filter.Name, null);
@@ -62,8 +62,11 @@ public class TrainerService
         if (user == null)
             return null;
 
-        TrainerDto trainer = new TrainerDto{
-            User = _userMapper.ToDto(user)
+        TrainerDto trainer = new TrainerDto
+        {
+            User = _userMapper.ToDto(user),
+            TrainerClasses = await _unitOfWork.ClassRepository.GetClassesByTrainerIdAsync(user.Id)
+
         };
 
 
