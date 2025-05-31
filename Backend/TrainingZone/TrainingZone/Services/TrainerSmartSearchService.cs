@@ -38,7 +38,8 @@ public class TrainerSmartSearchService
         {
             trainers.Add(new TrainerDto
             {
-                User = _userMapper.ToDto(user)
+                User = _userMapper.ToDto(user),
+                TrainerClasses = await _unitOfWork.ClassRepository.GetClassesByTrainerIdAsync(user.Id)
             });
 
         }
