@@ -13,5 +13,13 @@ namespace TrainingZone.Repositories
             return await GetQueryable().FirstOrDefaultAsync(c => c.Id == classId);
         }
 
+        public async Task<List<Class>> GetClassesByTrainerIdAsync(int trainerId)
+        {
+            return await GetQueryable()
+                .Where(c => c.Schedules.Any(s => s.UserId == trainerId))
+                .ToListAsync();
+        }
+
+
     }
 }

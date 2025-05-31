@@ -1,5 +1,6 @@
 ﻿using TrainingZone.Models.DataBase;
 using TrainingZone.Models.Dtos.Schedule;
+using TrainingZone.Models.Dtos.User;
 
 namespace TrainingZone.Mappers
 {
@@ -26,6 +27,11 @@ namespace TrainingZone.Mappers
                 StartDateTime = schedule.StartDateTime,
                 EndDateTime = schedule.EndDateTime
             };
+        }
+
+        public List<ScheduleDto> ToDto(List<Schedule> users)
+        {
+            return users?.Select(ToDto).ToList() ?? new List<ScheduleDto>();
         }
     }
 }

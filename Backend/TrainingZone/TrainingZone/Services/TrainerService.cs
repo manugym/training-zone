@@ -51,10 +51,6 @@ public class TrainerService
             Trainers = pagedTrainers
         };
 
-        //Añadir las clases que imparte
-
-
-
         return alltrainersDto;
     }
 
