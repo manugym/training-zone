@@ -10,4 +10,5 @@ public enum ClassType
     Kickboxing,
     Boxing,
     MMA,
+    PersonalTraining
 }

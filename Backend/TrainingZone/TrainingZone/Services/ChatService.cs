@@ -6,7 +6,6 @@ using TrainingZone.Models.Dtos.User;
 using TrainingZone.Models.WebSocket;
 using TrainingZone.Repositories;
 using TrainingZone.WebSocketAdministration;
-
 namespace TrainingZone.Services;
 
 public class ChatService
@@ -20,6 +19,7 @@ public class ChatService
         _unitOfWork = unitOfWork;
         _webSocketNetwork = webSocketNetwork;
         _chatMapper = chatMapper;
+
     }
 
     internal async Task<Chat> GetChatAsync(int userId, int userDestinationId)

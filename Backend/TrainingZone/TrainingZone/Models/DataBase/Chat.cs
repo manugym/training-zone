@@ -10,6 +10,4 @@ public class Chat
     public List<ChatMessage> ChatMessages { get; set; }
     public User UserOrigin { get; set; }
     public User UserDestination { get; set; }
-
-
 }

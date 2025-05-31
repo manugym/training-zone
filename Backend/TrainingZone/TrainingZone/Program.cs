@@ -23,20 +23,20 @@ public class Program
         // Configuramos cultura invariante para que al pasar los decimales a texto no tengan comas
         CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
 
-        // Configuramos para que el directorio de trabajo sea donde est· el ejecutable
+        // Configuramos para que el directorio de trabajo sea donde est√° el ejecutable
         Directory.SetCurrentDirectory(AppContext.BaseDirectory);
 
 
         var builder = WebApplication.CreateBuilder(args);
 
 
-        // *** AÒadimos servicios al contenedor del inyector de dependencias ***
+        // *** A√±adimos servicios al contenedor del inyector de dependencias ***
 
-        // AÒadimos la configuraciÛn guardada en el appsetting.json
+        // A√±adimos la configuraci√≥n guardada en el appsetting.json
         builder.Services.Configure<Settings>(builder.Configuration.GetSection(Settings.SECTION_NAME));
 
 
-        // AÒadimos controladores.
+        // A√±adimos controladores.
         builder.Services.AddControllers().AddJsonOptions(options =>
         {
             options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
@@ -44,7 +44,7 @@ public class Program
 
         });
 
-        // ConfiguraciÛn para poder usar JWT en las peticiones de Swagger
+        // Configuraci√≥n para poder usar JWT en las peticiones de Swagger
         builder.Services.AddSwaggerGen(options =>
         {
             options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
@@ -86,6 +86,8 @@ public class Program
         builder.Services.AddScoped<AuthService>();
         builder.Services.AddScoped<UserService>();
         builder.Services.AddScoped<TrainerService>();
+        builder.Services.AddScoped<ClassService>();
+        builder.Services.AddScoped<ScheduleService>();
         builder.Services.AddScoped<TrainerSmartSearchService>();
         builder.Services.AddScoped<ChatService>();
 
@@ -146,7 +148,7 @@ public class Program
         }
 
         app.UseCors();
-        // Indicamos que active el servicio para archivos est·ticos (wwwroot)
+        // Indicamos que active el servicio para archivos est√°ticos (wwwroot)
         app.UseStaticFiles();
 
 
@@ -162,9 +164,9 @@ public class Program
         app.UseRouting();
 
 
-        // Habilita la autenticaciÛn
+        // Habilita la autenticaci√≥n
         app.UseAuthentication();
-        // Habilita la autorizaciÛn
+        // Habilita la autorizaci√≥n
         app.UseAuthorization();
 
         app.MapControllers();
