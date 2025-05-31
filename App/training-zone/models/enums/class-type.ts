@@ -7,4 +7,5 @@ export enum ClassType {
   Kickboxing,
   Boxing,
   MMA,
+  PersonalTraining,
 }

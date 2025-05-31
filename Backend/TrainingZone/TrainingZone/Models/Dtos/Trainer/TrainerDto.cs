@@ -6,5 +6,5 @@ namespace TrainingZone.Models.Dtos.Trainer;
 public class TrainerDto
 {
     public UserDto User { get; set; }
-    public List<Class> TrainerSchedules { get; set; } = new List<Class>();
+    public List<Class> TrainerClasses { get; set; } = new List<Class>();
 }
