@@ -113,95 +113,112 @@ function TrainerPage() {
       <main className="trainer-container">
         <div className="trainer-panel">
           {!loading && trainer && (
-            <div className="trainer-details">
-              {/*Trainer container */}
-              <div className="trainer-info">
-                <h1>{trainer.User.Name}</h1>
-                <img
-                  src={`${SERVER_IMAGE_URL}/${
-                    trainer.User.AvatarImageUrl || "default.png"
-                  }`}
-                  alt="Trainer"
-                  className="trainer-image"
-                />
-
-                <p>Especialidades</p>
-
-                <div className="question-container">
-                  <h2>¿Tienes alguna duda?</h2>
-
-                  <button onClick={async () => await handleClick(trainer.User)}>
-                    Enviar Mensaje
-                  </button>
-                </div>
-              </div>
-
-              {/* Schedule and trainer classes container*/}
-              <div className="classes-container">
-                <div className="schedule-container">
-                  <Calendar
-                    onChange={setSelectedDay}
-                    value={selectedDay}
-                    tileClassName={({ date, view }) => {
-                      const trainerClasses = trainer?.TrainerClasses || [];
-
-                      /*If the day have a trainer class, is marked with a new class */
-                      if (view === "month") {
-                        const dayHasClass = trainerClasses.some((c) =>
-                          c.Schedules.some((s) => {
-                            const classDate = new Date(s.StartDateTime);
-                            return (
-                              classDate.getFullYear() === date.getFullYear() &&
-                              classDate.getMonth() === date.getMonth() &&
-                              classDate.getDate() === date.getDate()
-                            );
-                          })
-                        );
-
-                        return dayHasClass ? "class-day" : null;
-                      }
-
-                      return null;
-                    }}
+            <>
+              <div className="trainer-details">
+                {/*Trainer container */}
+                <div className="trainer-info">
+                  <h1>{trainer.User.Name}</h1>
+                  <img
+                    src={`${SERVER_IMAGE_URL}/${
+                      trainer.User.AvatarImageUrl || "default.png"
+                    }`}
+                    alt="Trainer"
+                    className="trainer-image"
                   />
+
+                  <div className="trainer-specialties">
+                    <h3>Especialidades</h3>
+                    {trainer.TrainerClasses.map((c, i) => (
+                      <p
+                        className={
+                          i % 2 == 0
+                            ? "trainer-specialty-pair"
+                            : "trainer-specialty-odd"
+                        }
+                      >
+                        {ClassType[c.Type]}
+                      </p>
+                    ))}
+                  </div>
                 </div>
 
-                <div className="class-container">
-                  {selectedDay ? (
-                    classesOfSelectedDay && classesOfSelectedDay.length > 0 ? (
-                      <table className="class-table">
-                        <thead>
-                          <tr>
-                            <th>Tipo</th>
-                            <th>Descripción</th>
-                            <th>Acciones</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {classesOfSelectedDay.map((c) => (
-                            <tr key={c.Id}>
-                              <td>{ClassType[c.Type]}</td>
-                              <td>{c.Description}</td>
-                              <td>
-                                <button
-                                  onClick={() => navigate(`/class/${c.Id}`)}
-                                >
-                                  Ver Precios y Horarios
-                                </button>
-                              </td>
+                {/* Schedule and trainer classes container*/}
+                <div className="classes-container">
+                  <div className="schedule-container">
+                    <Calendar
+                      onChange={setSelectedDay}
+                      value={selectedDay}
+                      tileClassName={({ date, view }) => {
+                        const trainerClasses = trainer?.TrainerClasses || [];
+
+                        /*If the day have a trainer class, is marked with a new class */
+                        if (view === "month") {
+                          const dayHasClass = trainerClasses.some((c) =>
+                            c.Schedules.some((s) => {
+                              const classDate = new Date(s.StartDateTime);
+                              return (
+                                classDate.getFullYear() ===
+                                  date.getFullYear() &&
+                                classDate.getMonth() === date.getMonth() &&
+                                classDate.getDate() === date.getDate()
+                              );
+                            })
+                          );
+
+                          return dayHasClass ? "class-day" : null;
+                        }
+
+                        return null;
+                      }}
+                    />
+                  </div>
+
+                  <div className="class-container">
+                    {selectedDay ? (
+                      classesOfSelectedDay &&
+                      classesOfSelectedDay.length > 0 ? (
+                        <table className="class-table">
+                          <thead>
+                            <tr>
+                              <th>Tipo</th>
+                              <th>Descripción</th>
+                              <th>Acciones</th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                          </thead>
+                          <tbody>
+                            {classesOfSelectedDay.map((c) => (
+                              <tr key={c.Id}>
+                                <td>{ClassType[c.Type]}</td>
+                                <td>{c.Description}</td>
+                                <td>
+                                  <button
+                                    onClick={() => navigate(`/class/${c.Id}`)}
+                                  >
+                                    Ver Precios y Horarios
+                                  </button>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      ) : (
+                        <p>No hay clases disponibles este día</p>
+                      )
                     ) : (
-                      <p>No hay clases disponibles este día</p>
-                    )
-                  ) : (
-                    <p>Selecciona un día</p>
-                  )}
+                      <p>Selecciona un día</p>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
+
+              <div className="question-container">
+                <h2>¿Tienes alguna duda?</h2>
+
+                <button onClick={async () => await handleClick(trainer.User)}>
+                  Enviar Mensaje
+                </button>
+              </div>
+            </>
           )}
 
           {!loading && !trainer && (
