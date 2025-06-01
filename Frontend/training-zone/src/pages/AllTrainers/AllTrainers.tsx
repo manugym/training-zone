@@ -133,7 +133,18 @@ function AllTrainersView() {
                       <div className="trainer-information-container">
                         <div className="trainer-info-top">
                           <h2>{trainer.User.Name}</h2>
-                          <span>Especialidades</span>
+
+                          {trainer.TrainerClasses.map((c, i) => (
+                            <p
+                              className={
+                                i % 2 == 0
+                                  ? "trainer-specialty-pair"
+                                  : "trainer-specialty-odd"
+                              }
+                            >
+                              {ClassType[c.Type]}
+                            </p>
+                          ))}
                         </div>
                         <button
                           onClick={() =>
