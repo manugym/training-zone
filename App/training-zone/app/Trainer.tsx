@@ -13,7 +13,7 @@ import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
 import { ServerUrl } from "@/constants/ServerUrl";
 import { Colors } from "@/constants/Colors";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import trainerService from "@/services/trainer.service";
 import chatService from "@/services/chat.service";
 import { User } from "@/models/user";
@@ -114,6 +114,27 @@ export default function TrainerView() {
     });
   };
 
+  //useMemo for mark all days of the trainer have classes and not make unnecessary renderings
+  const markedDates = useMemo(() => {
+    const marked: Record<string, any> = {};
+
+    if (!trainer?.TrainerClasses) return marked;
+
+    trainer.TrainerClasses.forEach((c) => {
+      c.Schedules.forEach((s) => {
+        const classDate = new Date(s.StartDateTime);
+        const dateString = classDate.toISOString().split("T")[0];
+
+        marked[dateString] = {
+          selected: true,
+          selectedColor: theme.secondary,
+        };
+      });
+    });
+
+    return marked;
+  }, [trainer]);
+
   return (
     <ThemedView style={styles.viewContainer}>
       <Stack.Screen
@@ -187,10 +208,14 @@ export default function TrainerView() {
             <Calendar
               onDayPress={(day) => setSelectedDay(day.dateString)}
               markedDates={{
-                [selectedDay || ""]: {
-                  selected: true,
-                  selectedColor: theme.primary,
-                },
+                ...markedDates,
+                ...(selectedDay && {
+                  [selectedDay]: {
+                    ...(markedDates[selectedDay] || {}),
+                    selected: true,
+                    selectedColor: theme.primary,
+                  },
+                }),
               }}
               style={[{ borderColor: theme.details }, styles.calendar]}
               theme={{
