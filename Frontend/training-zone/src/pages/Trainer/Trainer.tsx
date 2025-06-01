@@ -126,19 +126,14 @@ function TrainerPage() {
                     className="trainer-image"
                   />
 
-                  <div className="trainer-specialties">
-                    <h3>Especialidades</h3>
-                    {trainer.TrainerClasses.map((c, i) => (
-                      <p
-                        className={
-                          i % 2 == 0
-                            ? "trainer-specialty-pair"
-                            : "trainer-specialty-odd"
-                        }
-                      >
-                        {ClassType[c.Type]}
-                      </p>
-                    ))}
+                  <div className="question-container">
+                    <h2>¿Tienes alguna duda?</h2>
+
+                    <button
+                      onClick={async () => await handleClick(trainer.User)}
+                    >
+                      Enviar Mensaje
+                    </button>
                   </div>
                 </div>
 
@@ -205,18 +200,13 @@ function TrainerPage() {
                         <p>No hay clases disponibles este día</p>
                       )
                     ) : (
-                      <p>Selecciona un día</p>
+                      <p>
+                        Selecciona un día resaltado en azul para ver las clases
+                        disponibles.
+                      </p>
                     )}
                   </div>
                 </div>
-              </div>
-
-              <div className="question-container">
-                <h2>¿Tienes alguna duda?</h2>
-
-                <button onClick={async () => await handleClick(trainer.User)}>
-                  Enviar Mensaje
-                </button>
               </div>
             </>
           )}

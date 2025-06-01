@@ -151,6 +151,20 @@
   background-color: var(--color-secondary);
 }
 
+.trainer-specialties p {
+  margin: 4px 0;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.trainer-specialty-pair {
+  color: var(--color-secondary);
+}
+
+.trainer-specialty-odd {
+  color: var(--color-details);
+}
+
 /* PAGINATION */
 
 .pagination-container {
@@ -215,13 +229,12 @@
 }
 
 @media (max-width: 768px) {
-  h1 {
+  .all-trainers-view-container h1 {
     font-size: 2rem;
   }
 
   .search-container {
     display: block;
-    max-width: 100%;
     width: 100%;
     padding: 0 10px;
   }
@@ -236,11 +249,17 @@
   }
 
   .all-trainers-container {
-    padding: 0;
+    grid-template-columns: 1fr;
+    padding: 0 20px;
   }
 
   .trainer-card {
     max-width: 100%;
     width: 100%;
+    margin: 0 auto;
+  }
+
+  .trainer-card h2 {
+    font-size: 1.3rem;
   }
 }

@@ -58,20 +58,6 @@
   padding-bottom: 4px;
 }
 
-.trainer-specialties p {
-  margin: 4px 0;
-  font-weight: bold;
-  font-size: 1.2rem;
-}
-
-.trainer-specialty-pair {
-  color: var(--color-secondary);
-}
-
-.trainer-specialty-odd {
-  color: var(--color-details);
-}
-
 .question-container {
   width: 100%;
   display: flex;
@@ -102,6 +88,12 @@
   background-color: var(--color-secondary);
 }
 
+.class-container p {
+  margin-top: 50px;
+  font-size: large;
+  text-align: center;
+}
+
 .trainer-not-found {
   display: flex;
   align-items: center;
@@ -110,6 +102,15 @@
 }
 
 /* Calendar */
+
+.classes-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .react-calendar {
   margin-top: 2rem;
   background: var(--color-background-secondary);
@@ -205,23 +206,14 @@
 }
 
 @media (max-width: 768px) {
-  .trainer-image {
-    width: 80%;
-    height: auto;
-  }
-
-  .trainer-info h1 {
-    font-size: 1.5rem;
+  .trainer-panel {
+    padding: 0;
   }
 }
 
 @media (max-width: 480px) {
-  .trainer-info h1 {
-    font-size: 1.2rem;
-  }
-
   .trainer-info p,
   .question-container h2 {
-    font-size: 0.9rem;
+    font-size: 1.2rem;
   }
 }
