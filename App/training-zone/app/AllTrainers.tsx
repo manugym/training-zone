@@ -148,9 +148,16 @@ export default function AllTrainersPage() {
                   <View style={styles.trainerInfoTop}>
                     <ThemedText type="subtitle">{trainer.User.Name}</ThemedText>
 
-                    <ThemedText style={{ color: theme.secondary }}>
-                      Especialidades
-                    </ThemedText>
+                    {trainer.TrainerClasses.map((c, i) => (
+                      <ThemedText
+                        key={c.Id}
+                        style={{
+                          color: i % 2 === 0 ? theme.secondary : theme.details,
+                        }}
+                      >
+                        {ClassType[c.Type]}
+                      </ThemedText>
+                    ))}
                   </View>
                   <TouchableOpacity
                     style={[

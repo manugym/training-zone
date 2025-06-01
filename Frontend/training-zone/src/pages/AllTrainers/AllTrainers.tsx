@@ -136,6 +136,7 @@ function AllTrainersView() {
 
                           {trainer.TrainerClasses.map((c, i) => (
                             <p
+                              key={c.Id}
                               className={
                                 i % 2 == 0
                                   ? "trainer-specialty-pair"
