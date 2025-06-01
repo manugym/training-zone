@@ -22,7 +22,7 @@ public class TrainerService
     public async Task<AllTrainersDto> GetAllTrainersByFilterAsync(TrainerFilterDto filter)
     {
         //All trainers filtered by name and class type (implementar cuando tengamos las clases)
-        List<TrainerDto> filteredTrainers = await _trainerSmartSearchService.Search(filter.Name, null);
+        List<TrainerDto> filteredTrainers = await _trainerSmartSearchService.Search(filter.Name, filter.ClassType);
 
         //Send all trainers for movile
         if(filter.EntitiesPerPage == null || filter.ActualPage == null)
