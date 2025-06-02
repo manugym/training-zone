@@ -1,20 +1,20 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { Result } from "../models/result";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ServerUrl } from "@/constants/ServerUrl";
 
 class ApiService {
   private readonly TOKEN_KEY = "token";
-  private readonly BASE_URL = "http://192.168.18.100:7089/api/";
+  private readonly BASE_URL = `${ServerUrl}/api`;
 
   public jwt: string | null = null;
 
-  constructor() {
-    this.initializeJwt();
-  }
+  constructor() {}
 
-  private async initializeJwt() {
+  public async initializeJwt() {
     try {
       const token = await AsyncStorage.getItem(this.TOKEN_KEY);
+      console.log("Token desde AsyncStorage:", token);
       this.jwt = token || null;
     } catch (error) {
       console.error("Error al obtener el token desde AsyncStorage:", error);

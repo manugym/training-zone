@@ -6,20 +6,20 @@ using TrainingZone.Models.Dtos.User;
 using TrainingZone.Models.WebSocket;
 using TrainingZone.Repositories;
 using TrainingZone.WebSocketAdministration;
-
 namespace TrainingZone.Services;
 
 public class ChatService
 {
     private readonly UnitOfWork _unitOfWork;
     private readonly WebSocketNetwork _webSocketNetwork;
-    private readonly UserMapper _userMapper;
+    private readonly ChatMapper _chatMapper;
 
-    public ChatService(UnitOfWork unitOfWork, WebSocketNetwork webSocketNetwork, UserMapper userMapper)
+    public ChatService(UnitOfWork unitOfWork, WebSocketNetwork webSocketNetwork, ChatMapper chatMapper)
     {
         _unitOfWork = unitOfWork;
         _webSocketNetwork = webSocketNetwork;
-        _userMapper = userMapper;
+        _chatMapper = chatMapper;
+
     }
 
     internal async Task<Chat> GetChatAsync(int userId, int userDestinationId)
@@ -33,21 +33,21 @@ public class ChatService
 
         switch (recived.Data.ChatRequestType)
         {
-            case ChatRequestType.ALL_USERS_WITH_CONVERSATION:
+            case ChatRequestType.ALL_CHATS:
 
                 try
                 {
                     WebSocketHandler handler = _webSocketNetwork.GetSocketByUserId(userId);
 
-                    List<User> users = await _unitOfWork.ChatRepository.GetAllUsersWithChatAsync(userId);
+                    List<Chat> allChats = await _unitOfWork.ChatRepository.GetAllChatsByUserIdAsync(userId);
 
-                    var messageToSend = new SocketMessage<SocketChatMessage<List<UserDto>>>()
+                    var messageToSend = new SocketMessage<SocketChatMessage<List<ChatDto>>>()
                     {
                         Type = SocketCommunicationType.CHAT,
-                        Data = new SocketChatMessage<List<UserDto>>()
+                        Data = new SocketChatMessage<List<ChatDto>>()
                         {
-                            ChatRequestType = ChatRequestType.ALL_USERS_WITH_CONVERSATION,
-                            Data = _userMapper.ToDto(users)
+                            ChatRequestType = ChatRequestType.ALL_CHATS,
+                            Data = _chatMapper.ToDto(allChats)
                         }
                     };
 
@@ -62,35 +62,61 @@ public class ChatService
 
             case ChatRequestType.CONVERSATION:
 
-
                 try
                 {
-                    WebSocketHandler handler = _webSocketNetwork.GetSocketByUserId(userId);
+                    int destinationUserId = JsonSerializer.Deserialize<SocketMessage<SocketChatMessage<int>>>(message).Data.Data;
 
-                    SocketChatMessage<int> getChatRequest = JsonSerializer.Deserialize<SocketMessage<SocketChatMessage<int>>>(message).Data;
 
-                    Chat userChat = await _unitOfWork.ChatRepository.GetChatByUserIdAndUserDestinationIdAsync(userId, getChatRequest.Data);
+                    Chat chat = await _unitOfWork.ChatRepository.GetChatByUserIdAndUserDestinationIdAsync(userId, destinationUserId);
 
-                    var messageToSend = new SocketMessage<SocketChatMessage<Chat>>()
+                    if (chat == null)
+                        return;
+
+
+                    List<ChatMessage> notViewedMessages = chat.ChatMessages
+                        .Where(m => !m.IsViewed && m.UserId != userId)
+                        .ToList();
+
+                    foreach (var chatMessage in notViewedMessages)
+                    {
+                        chatMessage.IsViewed = true;
+                        _unitOfWork.ChatMessageRepository.Update(chatMessage);
+                    }
+
+                    await _unitOfWork.SaveAsync();
+
+                    var messageToSend = new SocketMessage<SocketChatMessage<ChatDto>>()
                     {
                         Type = SocketCommunicationType.CHAT,
-                        Data = new SocketChatMessage<Chat>()
+                        Data = new SocketChatMessage<ChatDto>()
                         {
                             ChatRequestType = ChatRequestType.CONVERSATION,
-                            Data = userChat
+                            Data = _chatMapper.ToDto(chat)
                         }
                     };
 
-                    await handler.SendAsync(JsonSerializer.Serialize(messageToSend));
-                }
+                    var currentSocket = _webSocketNetwork.GetSocketByUserId(userId);
 
+                    if (currentSocket != null)
+                    {
+                        await currentSocket.SendAsync(JsonSerializer.Serialize(messageToSend));
+                    }
+
+                    var destinationSocket = _webSocketNetwork.GetSocketByUserId(destinationUserId);
+
+                    if (destinationSocket != null)
+                    {
+                        await destinationSocket.SendAsync(JsonSerializer.Serialize(messageToSend));
+                    }
+                }
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
                 }
 
                 break;
-            case ChatRequestType.SEND:
+
+            case ChatRequestType.SEND_MESSAGE:
                 MessageReceived sendMessageRequest = JsonSerializer.Deserialize<SocketMessage<SocketChatMessage<MessageReceived>>>(message).Data.Data;
 
 
@@ -130,14 +156,25 @@ public class ChatService
                         Type = SocketCommunicationType.CHAT,
                         Data = new SocketChatMessage<ChatMessage>()
                         {
-                            ChatRequestType = ChatRequestType.SEND,
+                            ChatRequestType = ChatRequestType.SEND_MESSAGE,
                             Data = newMessage
                         }
                     };
 
-                   
-                    await _webSocketNetwork.GetSocketByUserId(userId)?.SendAsync(JsonSerializer.Serialize(messageToSend));
-                    await _webSocketNetwork.GetSocketByUserId(sendMessageRequest.UserId)?.SendAsync(JsonSerializer.Serialize(messageToSend));
+
+                    var currentSocket = _webSocketNetwork.GetSocketByUserId(userId);
+
+                    if (currentSocket != null)
+                    {
+                        await currentSocket.SendAsync(JsonSerializer.Serialize(messageToSend));
+                    }
+
+                    var destinationSocket = _webSocketNetwork.GetSocketByUserId(sendMessageRequest.UserId);
+
+                    if (destinationSocket != null)
+                    {
+                        await destinationSocket.SendAsync(JsonSerializer.Serialize(messageToSend));
+                    }
                 }
 
                 catch (Exception e)
@@ -148,16 +185,106 @@ public class ChatService
 
 
                 break;
-            case ChatRequestType.MODIFY:
-                SocketMessage<SocketChatMessage> ModifyMessageRequest = JsonSerializer.Deserialize<SocketMessage<SocketChatMessage>>(message);
+            case ChatRequestType.MODIFY_MESSAGE:
+
+                try
+                {
+                    ModifyChatMessage modifyMessageRequest = JsonSerializer.Deserialize<SocketMessage<SocketChatMessage<ModifyChatMessage>>>(message).Data.Data;
+
+                    ChatMessage chatMessage = await _unitOfWork.ChatMessageRepository.GetByIdAsync(modifyMessageRequest.Id);
+
+                    //If the data is correct, update the message
+                    if (chatMessage == null)
+                        return;
+
+                    if (modifyMessageRequest.IsViewed != null)
+                        chatMessage.IsViewed = modifyMessageRequest.IsViewed.Value;
+
+                    if (modifyMessageRequest.Message != null)
+                        chatMessage.Message = modifyMessageRequest.Message;
+
+                    _unitOfWork.ChatMessageRepository.Update(chatMessage);
+                    await _unitOfWork.SaveAsync();
+
+                    //Send changes to users
+                    var messageToSend = new SocketMessage<SocketChatMessage<ChatMessage>>()
+                    {
+                        Type = SocketCommunicationType.CHAT,
+                        Data = new SocketChatMessage<ChatMessage>()
+                        {
+                            ChatRequestType = ChatRequestType.MODIFY_MESSAGE,
+                            Data = chatMessage
+                        }
+                    };
+
+                    Chat currentChat = await _unitOfWork.ChatRepository.GetByIdAsync(chatMessage.ChatId);
+
+                    var currentSocket = _webSocketNetwork.GetSocketByUserId(userId);
+
+                    if (currentSocket != null)
+                    {
+                        await currentSocket.SendAsync(JsonSerializer.Serialize(messageToSend));
+                    }
+
+                    var destinationSocket = _webSocketNetwork.GetSocketByUserId(currentChat.UserOriginId == userId ? currentChat.UserDestinationId : currentChat.UserOriginId);
+
+                    if (destinationSocket != null)
+                    {
+                        await destinationSocket.SendAsync(JsonSerializer.Serialize(messageToSend));
+                    }
 
 
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
 
                 break;
-            case ChatRequestType.DELETE:
-                SocketMessage<SocketChatMessage> deleteMessageRequest = JsonSerializer.Deserialize<SocketMessage<SocketChatMessage>>(message);
+            case ChatRequestType.DELETE_MESSAGE:
+                int messageId = JsonSerializer.Deserialize<SocketMessage<SocketChatMessage<int>>>(message).Data.Data;
 
+                try
+                {
+                    ChatMessage messageToDelete = await _unitOfWork.ChatMessageRepository.GetByIdAsync(messageId);
 
+                    if(messageToDelete == null)
+                        return;
+
+                    _unitOfWork.ChatMessageRepository.Delete(messageToDelete);
+                    await _unitOfWork.SaveAsync();
+
+                    var messageToSend = new SocketMessage<SocketChatMessage<int>>()
+                    {
+                        Type = SocketCommunicationType.CHAT,
+                        Data = new SocketChatMessage<int>()
+                        {
+                            ChatRequestType = ChatRequestType.DELETE_MESSAGE,
+                            Data = messageId
+                        }
+                    };
+
+                    var currentSocket = _webSocketNetwork.GetSocketByUserId(userId);
+
+                    if (currentSocket != null)
+                    {
+                        await currentSocket.SendAsync(JsonSerializer.Serialize(messageToSend));
+                    }
+
+                    Chat currentChat = await _unitOfWork.ChatRepository.GetByIdAsync(messageToDelete.ChatId);
+
+                    var destinationSocket = _webSocketNetwork.GetSocketByUserId(currentChat.UserOriginId == userId ? currentChat.UserDestinationId : currentChat.UserOriginId);
+
+                    if (destinationSocket != null)
+                    {
+                        await destinationSocket.SendAsync(JsonSerializer.Serialize(messageToSend));
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
 
                 break;
         }

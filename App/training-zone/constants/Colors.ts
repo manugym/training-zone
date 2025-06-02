@@ -10,8 +10,8 @@ const lightTheme = {
 const darkTheme = {
   background: "#0a192f",
   text: "#f1f5f9",
-  primary: "#3b82f6",
-  secondary: "#1e40af",
+  primary: "#1e40af",
+  secondary: "#3b82f6",
   details: "#60a5fa",
 };
 

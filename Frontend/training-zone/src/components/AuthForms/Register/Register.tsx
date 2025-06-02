@@ -3,14 +3,14 @@ import "./Register.css";
 import "../Form.css";
 import defaultAvatar from "../../../assets/default-avatar-.jpg";
 import AuthService from "../../../services/auth.service";
-import { useNavigate } from "react-router-dom";
-import Alert from "../../Alert";
+import { useLocation, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 function Register() {
   const navigate = useNavigate();
-  const alertTimer = 3000;
+  const location = useLocation();
 
-  const [showAlert, setShowAlert] = useState<boolean>(false);
+  const from = location.state?.from || "/";
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -87,12 +87,17 @@ function Register() {
         rememberMe
       );
 
-      setShowAlert(true);
-
-      setTimeout(() => {
-        setShowAlert(false);
-        navigate("/");
-      }, alertTimer);
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "success",
+        title: "Inicio de sesión exitoso",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      }).then(() => {
+        navigate(from);
+      });
     } catch (err: any) {
       setError(err.message || "Error desconocido al registrar.");
     }
@@ -118,7 +123,7 @@ function Register() {
         />
       </div>
 
-      <form className="register-form" onSubmit={handleSubmit}>
+      <form className="form register-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <input
             type="text"
@@ -188,16 +193,6 @@ function Register() {
 
         <button type="submit">Registrar</button>
       </form>
-
-      {showAlert && (
-        <Alert
-          icon="success"
-          text="Registro exitoso!"
-          position="top-right"
-          timer={alertTimer}
-          navigatePath="/"
-        />
-      )}
     </div>
   );
 }

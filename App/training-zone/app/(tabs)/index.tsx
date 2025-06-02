@@ -1,23 +1,66 @@
-import { StyleSheet, Platform, Button } from "react-native";
+import { StyleSheet, Button, Alert } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useRouter } from "expo-router";
 import apiService from "@/services/api.service";
+import userService from "@/services/user.service";
+import { useEffect, useState } from "react";
+import { User } from "@/models/user";
+import authService from "@/services/auth.service";
 
 export default function HomeScreen() {
   const router = useRouter();
 
-  const goToAuth = () => {
-    router.push("/Auth");
-  };
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    async function isUserLogin() {
+      await apiService.initializeJwt();
+      if (!apiService.jwt) {
+        Alert.alert("!Bienvenido!", "Inicia sesión para continuar");
+        router.push("/Auth");
+      }
+    }
+
+    isUserLogin();
+  }, [currentUser]);
+
+  //subscription to get the current user
+  useEffect(() => {
+    const subscription = userService.currentUser$.subscribe((user) => {
+      setCurrentUser(user);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   return (
     <ThemedView style={styles.container}>
       <ThemedText type="title" style={styles.title}>
-        Welcome!
+        Welcome! {currentUser?.Name}
       </ThemedText>
-
-      <Button title="Go to Auth" onPress={goToAuth} />
+      <Button title="Go to Auth" onPress={() => router.push("/Auth")} />
+      <Button
+        title="Logout"
+        onPress={async () => {
+          await authService.logout();
+          router.push("/Auth");
+        }}
+      />
+      <Button
+        title="Chat"
+        onPress={() => {
+          router.push("/AllConversations");
+        }}
+      />
+      <Button
+        title="All Trainers"
+        onPress={() => {
+          router.push("/AllTrainers");
+        }}
+      />
     </ThemedView>
   );
 }

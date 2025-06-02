@@ -2,10 +2,10 @@
 
 public enum ChatRequestType
 {
-    ALL_USERS_WITH_CONVERSATION,
+    ALL_CHATS,
     CONVERSATION,
-    SEND,
-    MODIFY,
-    DELETE,
+    SEND_MESSAGE,
+    MODIFY_MESSAGE,
+    DELETE_MESSAGE,
 
 }
