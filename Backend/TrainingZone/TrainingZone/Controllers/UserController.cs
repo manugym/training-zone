@@ -5,6 +5,7 @@ using System.Security.Claims;
 using TrainingZone.Mappers;
 using TrainingZone.Models.DataBase;
 using TrainingZone.Models.Dtos.User;
+using TrainingZone.Models.Enums;
 using TrainingZone.Services;
 
 namespace TrainingZone.Controllers;
@@ -86,13 +87,26 @@ public class UserController : ControllerBase
 
 
     [Authorize(Roles = "admin")]
-    [HttpGet("/all")]
+    [HttpGet("all")]
     public async Task<List<UserDto>> GetAllUsers()
     {
         return await _userService.GetAllUsers();
 
     }
 
+    [Authorize(Roles = "admin")]
+    [HttpPut("changeRole")]
+    public async Task<UserDto> ChangeRole([FromBody] ChangeUserRoleRequest request)
+    {
+        UserDto user = await _userService.ChangeUserRole(request.UserId, request.Role);
+        if (user == null)
+        {
+            HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+            return null;
+        }
+
+        return user;
+    }
 
     [Authorize(Roles = "admin")]
     [HttpDelete("{id}")]

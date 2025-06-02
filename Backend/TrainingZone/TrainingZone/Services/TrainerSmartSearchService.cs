@@ -25,43 +25,46 @@ public class TrainerSmartSearchService
 
     public async Task<List<TrainerDto>> Search(string query, ClassType? classType = null)
     {
-        //Filtra por clase (implementación cuando tengamos el servicio de las clases )
-        if (classType != null)
-            throw new NotImplementedException();
+        List<User> trainerUsers = await _unitOfWork.UserRepository.GetAllTrainersAsync();
 
-        //Obtiene todos los entrenadores 
-        List<User> users = await _unitOfWork.UserRepository.GetAllTrainersAsync();
+        //Filter by name
+        List<User> nameFilteredTrainers = trainerUsers;
 
+        if (!string.IsNullOrWhiteSpace(query))
+             nameFilteredTrainers = FindMatchingTrainers(query, trainerUsers);
+
+        //Add trainer classes
         List<TrainerDto> trainers = new List<TrainerDto>();
-
-        foreach(var user in users)
+        foreach (var user in nameFilteredTrainers)
         {
             trainers.Add(new TrainerDto
             {
-                User = _userMapper.ToDto(user)
+                User = _userMapper.ToDto(user),
+                TrainerClasses = await _unitOfWork.ClassRepository.GetClassesByTrainerIdAsync(user.Id)
             });
 
         }
 
-        if (query == null || query.Equals(""))
-        {
+        if (classType == null)
             return trainers;
-        }
 
-        //Filtra por el nombre
-        List<TrainerDto> matchingTrainers = FindMatchingTrainers(query, trainers);
+        //Filter by class type
+        List<TrainerDto> fullyFilteredTrainers = trainers
+            .Where(trainer => trainer.TrainerClasses.Any(c => c.Type == classType))
+            .ToList();
 
-        return matchingTrainers;
+        return fullyFilteredTrainers;
     }
 
-    public List<TrainerDto> FindMatchingTrainers(string query, List<TrainerDto> trainers)
+
+    public List<User> FindMatchingTrainers(string query, List<User> trainers)
     {
         string[] queryKeys = GetKeys(ClearText(query));
-        List<TrainerDto> matchingTrainers = new List<TrainerDto>();
+        List<User> matchingTrainers = new List<User>();
 
         foreach (var trainer in trainers)
         {
-            string[] productKeys = GetKeys(ClearText(trainer.User.Name));
+            string[] productKeys = GetKeys(ClearText(trainer.Name));
 
             if (IsMatch(queryKeys, productKeys))
             {

@@ -100,6 +100,8 @@ class WebSocketService {
   }
 
   disconnect() {
+    if (!this.isConnected()) return;
+
     this.rxjsSocket.complete();
     this.rxjsSocket = null;
     console.log("Desconectado");

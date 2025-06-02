@@ -77,138 +77,150 @@ function AllTrainersView() {
   return (
     <>
       <NavBar />
-      <main className="view-container">
+      <main className="all-trainers-view-container">
         {!loading && (
-          <div>
-            <div className="content-container">
-              {allTrainers && allTrainers.Trainers.length > 0 && (
-                <div>
-                  <h1>Nuestros Entrenadores</h1>
+          <div className="content-container">
+            <div className="top-section">
+              <h1>Nuestros Entrenadores</h1>
 
-                  <div className="search-container">
-                    <input
-                      type="text"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      placeholder="Buscar entrenador..."
-                    />
+              <div className="search-container">
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Buscar entrenador..."
+                />
 
-                    <select
-                      value={classType !== null ? classType : ""}
-                      onChange={(e) =>
-                        setClassType(
-                          e.target.value === ""
-                            ? null
-                            : (Number(e.target.value) as ClassType)
-                        )
-                      }
+                <select
+                  value={classType !== null ? classType : ""}
+                  onChange={(e) =>
+                    setClassType(
+                      e.target.value === ""
+                        ? null
+                        : (Number(e.target.value) as ClassType)
+                    )
+                  }
+                >
+                  <option value="">Todas las clases</option>
+                  {Object.keys(ClassType)
+                    .filter((key) => isNaN(Number(key)))
+                    .map((key) => (
+                      <option
+                        key={key}
+                        value={ClassType[key as keyof typeof ClassType]}
+                      >
+                        {key}
+                      </option>
+                    ))}
+                </select>
+              </div>
+            </div>
+
+            {allTrainers && allTrainers.Trainers.length > 0 && (
+              <>
+                <div className="all-trainers-container">
+                  {allTrainers.Trainers.map((trainer) => (
+                    <div key={trainer.User.Id} className="trainer-card">
+                      <div className="trainer-image-container">
+                        <img
+                          src={`${SERVER_IMAGE_URL}/${
+                            trainer.User.AvatarImageUrl || "default.png"
+                          }`}
+                          alt="Trainer"
+                          className="trainer-image"
+                        />
+                      </div>
+                      <div className="trainer-information-container">
+                        <div className="trainer-info-top">
+                          <h2>{trainer.User.Name}</h2>
+
+                          {trainer.TrainerClasses.map((c, i) => (
+                            <p
+                              key={c.Id}
+                              className={
+                                i % 2 == 0
+                                  ? "trainer-specialty-pair"
+                                  : "trainer-specialty-odd"
+                              }
+                            >
+                              {ClassType[c.Type]}
+                            </p>
+                          ))}
+                        </div>
+                        <button
+                          onClick={() =>
+                            navigate(`/trainer/${trainer.User.Id}`)
+                          }
+                        >
+                          Ver Perfil
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="pagination-container">
+                  <div className="pagination">
+                    <span
+                      className={actualPage === 1 ? "disabled" : "enabled"}
+                      onClick={() => setActualPage(1)}
                     >
-                      <option value="">Todas las clases</option>
-                      {Object.keys(ClassType)
-                        .filter((key) => isNaN(Number(key)))
-                        .map((key) => (
-                          <option
-                            key={key}
-                            value={ClassType[key as keyof typeof ClassType]}
-                          >
-                            {key}
-                          </option>
-                        ))}
+                      &laquo;
+                    </span>
+                    <span
+                      className={actualPage === 1 ? "disabled" : "enabled"}
+                      onClick={() => {
+                        if (actualPage > 1) {
+                          setActualPage(actualPage - 1);
+                        }
+                      }}
+                    >
+                      &lt;
+                    </span>
+                    <span>{actualPage}</span>
+                    <span
+                      className={
+                        actualPage === allTrainers.TotalPages
+                          ? "disabled"
+                          : "enabled"
+                      }
+                      onClick={() => {
+                        if (actualPage < allTrainers.TotalPages) {
+                          setActualPage(actualPage + 1);
+                        }
+                      }}
+                    >
+                      &gt;
+                    </span>
+                    <span
+                      className={
+                        actualPage === allTrainers.TotalPages
+                          ? "disabled"
+                          : "enabled"
+                      }
+                      onClick={() => setActualPage(allTrainers.TotalPages)}
+                    >
+                      &raquo;
+                    </span>
+                  </div>
+
+                  <div className="page-size-selector">
+                    <select
+                      id="page-size"
+                      value={entitiesPerPage}
+                      onChange={(e) => {
+                        setEntitiesPerPage(Number(e.target.value));
+                        setActualPage(1);
+                      }}
+                    >
+                      <option value={5}>5</option>
+                      <option value={10}>10</option>
+                      <option value={20}>20</option>
                     </select>
                   </div>
-
-                  <div className="all-trainers-container">
-                    {allTrainers.Trainers.map((trainer) => (
-                      <div key={trainer.User.Id} className="trainer-card">
-                        <div className="trainer-image-container">
-                          <img
-                            src={`${SERVER_IMAGE_URL}/${
-                              trainer.User.AvatarImageUrl || "default.png"
-                            }`}
-                            alt="Trainer"
-                            className="trainer-image"
-                          />
-                        </div>
-                        <div className="trainer-information-container">
-                          <div className="trainer-info-top">
-                            <h2>{trainer.User.Name}</h2>
-                            <span>Especialidades</span>
-                          </div>
-                          <button
-                            onClick={() =>
-                              navigate(`/trainer/${trainer.User.Id}`)
-                            }
-                          >
-                            Ver Perfil
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="pagination-container">
-                    <div className="pagination">
-                      <span
-                        className={actualPage === 1 ? "disabled" : "enabled"}
-                        onClick={() => setActualPage(1)}
-                      >
-                        &laquo;
-                      </span>
-                      <span
-                        className={actualPage === 1 ? "disabled" : "enabled"}
-                        onClick={() => {
-                          if (actualPage > 1) {
-                            setActualPage(actualPage - 1);
-                          }
-                        }}
-                      >
-                        &lt;
-                      </span>
-                      <span>{actualPage}</span>
-                      <span
-                        className={
-                          actualPage === allTrainers.TotalPages
-                            ? "disabled"
-                            : "enabled"
-                        }
-                        onClick={() => {
-                          if (actualPage < allTrainers.TotalPages) {
-                            setActualPage(actualPage + 1);
-                          }
-                        }}
-                      >
-                        &gt;
-                      </span>
-                      <span
-                        className={
-                          actualPage === allTrainers.TotalPages
-                            ? "disabled"
-                            : "enabled"
-                        }
-                        onClick={() => setActualPage(allTrainers.TotalPages)}
-                      >
-                        &raquo;
-                      </span>
-                    </div>
-
-                    <div className="page-size-selector">
-                      <select
-                        id="page-size"
-                        value={entitiesPerPage}
-                        onChange={(e) => {
-                          setEntitiesPerPage(Number(e.target.value));
-                          setActualPage(1);
-                        }}
-                      >
-                        <option value={5}>5</option>
-                        <option value={10}>10</option>
-                        <option value={20}>20</option>
-                      </select>
-                    </div>
-                  </div>
                 </div>
-              )}
-            </div>
+              </>
+            )}
           </div>
         )}
 
@@ -218,11 +230,7 @@ function AllTrainersView() {
           </div>
         )}
 
-        {loading && (
-          <div className="loading-container">
-            <Spinner />
-          </div>
-        )}
+        {loading && <Spinner />}
       </main>
     </>
   );

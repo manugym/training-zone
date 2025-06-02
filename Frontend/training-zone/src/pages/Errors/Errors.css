@@ -1,0 +1,66 @@
+.page-not-found {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #0a192f;
+  padding: 40px 20px;
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  max-width: 600px;
+  width: 100%;
+}
+
+.content h1 {
+  font-size: 6rem;
+  margin: 0;
+}
+
+.content h3 {
+  font-size: 1.5rem;
+  margin: 10px 0;
+}
+
+.description {
+  font-size: 1rem;
+  margin: 10px 0 20px;
+  color: #ccc;
+}
+
+.error-image {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.button {
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-weight: bold;
+  font-size: 16px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.button:hover {
+  background-color: var(--color-secondary);
+}
+
+@media (max-width: 768px) {
+  .content h1 {
+    font-size: 4rem;
+    margin: 0;
+  }
+}

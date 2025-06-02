@@ -19,31 +19,37 @@ public class TrainerService
         _trainerSmartSearchService = smartSearchService;
     }
 
-    public async Task<AllTrainersDto> GetAllTrainersByFilter(TrainerFilterDto filter)
+    public async Task<AllTrainersDto> GetAllTrainersByFilterAsync(TrainerFilterDto filter)
     {
-        //Todos los entrenadores filtrados por nombre y tipo de clase (implementar cuando tengamos las clases)
-        List<TrainerDto> trainers = await _trainerSmartSearchService.Search(filter.Name, null);
+        //All trainers filtered by name and class type (implementar cuando tengamos las clases)
+        List<TrainerDto> filteredTrainers = await _trainerSmartSearchService.Search(filter.Name, filter.ClassType);
 
-        int totalPages = (int)Math.Ceiling((double)trainers.Count / filter.EntitiesPerPage);
+        //Send all trainers for movile
+        if(filter.EntitiesPerPage == null || filter.ActualPage == null)
+        {
+            return new AllTrainersDto
+            {
+                TotalPages = 1,
+                Trainers = filteredTrainers
+            };
+        }
 
-        // Obtiene solo los entrenadores de la página actual
-        int skip = (filter.ActualPage - 1) * filter.EntitiesPerPage;
-        List<TrainerDto> pagedTrainers = trainers
+        int entitiesPerPage = filter.EntitiesPerPage.Value;
+        int actualPage = filter.ActualPage.Value;
+
+        int totalPages = (int)Math.Ceiling((double)filteredTrainers.Count / entitiesPerPage);
+        int skip = (actualPage - 1) * entitiesPerPage;
+
+        List<TrainerDto> pagedTrainers = filteredTrainers
             .Skip(skip)
-            .Take(filter.EntitiesPerPage)
+            .Take(entitiesPerPage)
             .ToList();
-
-        
 
         AllTrainersDto alltrainersDto = new AllTrainersDto
         {
             TotalPages = totalPages,
             Trainers = pagedTrainers
         };
-
-        //Añadir las clases que imparte
-
-
 
         return alltrainersDto;
     }
@@ -56,8 +62,11 @@ public class TrainerService
         if (user == null)
             return null;
 
-        TrainerDto trainer = new TrainerDto{
-            User = _userMapper.ToDto(user)
+        TrainerDto trainer = new TrainerDto
+        {
+            User = _userMapper.ToDto(user),
+            TrainerClasses = await _unitOfWork.ClassRepository.GetClassesByTrainerIdAsync(user.Id)
+
         };
 
 

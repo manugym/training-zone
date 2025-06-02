@@ -34,7 +34,7 @@ public class TrainerController : ControllerBase
     [HttpPost("allTrainers")]
     public async Task<AllTrainersDto> GetTrainersAsync([FromBody] TrainerFilterDto filter)
     {
-        return await _trainerService.GetAllTrainersByFilter(filter);
+        return await _trainerService.GetAllTrainersByFilterAsync(filter);
         
     }
 
