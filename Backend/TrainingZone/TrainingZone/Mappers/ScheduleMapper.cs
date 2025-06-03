@@ -29,9 +29,9 @@ namespace TrainingZone.Mappers
             };
         }
 
-        public List<ScheduleDto> ToDto(List<Schedule> users)
+        public IEnumerable<ScheduleDto> ToDto(List<Schedule> schedule)
         {
-            return users?.Select(ToDto).ToList() ?? new List<ScheduleDto>();
+            return schedule?.Select(ToDto).ToList() ?? new List<ScheduleDto>();
         }
     }
 }

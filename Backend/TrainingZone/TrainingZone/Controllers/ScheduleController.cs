@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TrainingZone.Models.DataBase;
+using TrainingZone.Models.Dtos.Schedule;
 using TrainingZone.Services;
 
 namespace TrainingZone.Controllers
@@ -18,9 +19,9 @@ namespace TrainingZone.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IEnumerable<Schedule>> GetScheduleByClass(int id)
+        public async Task<IEnumerable<ScheduleDto>> GetScheduleByClass(int id)
         {
-            IEnumerable<Schedule> schedule = await _scheduleService.GetScheduleByClass(id);
+            IEnumerable<ScheduleDto> schedule = await _scheduleService.GetScheduleByClass(id);
 
             if(schedule == null)
             {
