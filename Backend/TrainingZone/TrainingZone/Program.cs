@@ -90,6 +90,7 @@ public class Program
         builder.Services.AddScoped<ScheduleService>();
         builder.Services.AddScoped<TrainerSmartSearchService>();
         builder.Services.AddScoped<ChatService>();
+        builder.Services.AddScoped<RoutineGeneratorService>();
 
 
 
