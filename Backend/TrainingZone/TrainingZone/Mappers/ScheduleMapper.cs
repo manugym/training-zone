@@ -7,10 +7,12 @@ namespace TrainingZone.Mappers
     public class ScheduleMapper
     {
         private readonly UserMapper _userMapper;
+        private readonly UnitOfWork _unitOfWork;
 
-        public ScheduleMapper(UserMapper userMapper)
+        public ScheduleMapper(UserMapper userMapper, UnitOfWork unitOfWork)
         {
             _userMapper = userMapper;
+            _unitOfWork = unitOfWork;
         }
 
         public ScheduleDto ToDto (Schedule schedule)
@@ -32,6 +34,26 @@ namespace TrainingZone.Mappers
         public IEnumerable<ScheduleDto> ToDto(List<Schedule> schedule)
         {
             return schedule?.Select(ToDto).ToList() ?? new List<ScheduleDto>();
+        }
+
+        public async Task<Schedule> ToEntity(CreateScheduleDto createScheduleDto)
+        {
+            Class classData = await _unitOfWork.ClassRepository.GetClassByIdAsync(createScheduleDto.ClassId);
+
+            User userData = await _unitOfWork.UserRepository.GetByIdAsync(createScheduleDto.UserId);
+
+            return new Schedule
+            {
+                ClassId = createScheduleDto.ClassId,
+                Class = classData,
+                UserId = userData.Id,
+                User = userData,
+                MaxCapacity = createScheduleDto.MaxCapacity,
+                Price = createScheduleDto.Price,
+                StartDateTime = createScheduleDto.StartDateTime,
+                EndDateTime = createScheduleDto.EndDateTime
+
+            };
         }
     }
 }
