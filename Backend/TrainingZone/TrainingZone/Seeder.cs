@@ -261,16 +261,19 @@ public class Seeder
         new Class
         {
             Type = ClassType.SPINNING,
-            Description = "Clase de ciclo indoor"
+            Description = "Clase de ciclo indoor",
+            ClassImageUrl = "ClassPicture/crossfit.jpg"
         },
         new Class
         {
             Type = ClassType.CROSSFIT,
-            Description = "Entrenamiento funcional en grupo"
+            Description = "Entrenamiento funcional en grupo",
+            ClassImageUrl = "ClassPicture/crossfit.jpg"
         },
         new Class{
             Type = ClassType.BOXING,
-            Description = "Entrenamiento de boxeo en grupo"
+            Description = "Entrenamiento de boxeo en grupo",
+            ClassImageUrl = "ClassPicture/crossfit.jpg"
         }
 
         ];
