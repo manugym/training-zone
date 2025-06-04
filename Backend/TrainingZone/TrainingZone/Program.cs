@@ -12,6 +12,7 @@ using TrainingZone.Mappers;
 using TrainingZone.MiddleWares;
 using TrainingZone.WebSocketAdministration;
 using System.Text.Json;
+using QuestPDF.Infrastructure;
 
 namespace TrainingZone;
 
@@ -29,6 +30,8 @@ public class Program
 
         var builder = WebApplication.CreateBuilder(args);
 
+        //Para que no de fallos por licencia al crear el PDF
+        QuestPDF.Settings.License = LicenseType.Community;
 
         // *** Añadimos servicios al contenedor del inyector de dependencias ***
 
