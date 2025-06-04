@@ -19,6 +19,7 @@ namespace TrainingZone.Services
         {
             Schedule newSchedule = await _unitOfWork.ScheduleRepository.InsertAsync(schedule);
             await _unitOfWork.SaveAsync();
+
             return newSchedule;
         }
 
@@ -31,7 +32,7 @@ namespace TrainingZone.Services
             return activityScheduleDto;
         }
 
-        public async Task<Schedule> CreateSchedule(CreateScheduleDto newSchedule)
+        public async Task<ScheduleDto> CreateSchedule(CreateScheduleDto newSchedule)
         {
             if (newSchedule == null)
             {
@@ -43,7 +44,9 @@ namespace TrainingZone.Services
             try
             {
                 Schedule savedSchedule = await InsertSchedule(scheduleToSave);
-                return savedSchedule;
+                Schedule fullSavedSchedule = await _unitOfWork.ScheduleRepository.GetScheduleByIdAsync(savedSchedule.Id);
+                ScheduleDto savedScheduleDto = _scheduleMapper.ToDto(fullSavedSchedule);
+                return savedScheduleDto;
             }
             catch(Exception e)
             {
@@ -52,6 +55,6 @@ namespace TrainingZone.Services
 
             return null;
         }
-    }
 
+    }
 }

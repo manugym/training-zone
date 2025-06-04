@@ -13,5 +13,11 @@ namespace TrainingZone.Repositories
             return await _context.Schedules.Where(c => c.ClassId == classId).Include(c => c.Class)
                 .Include(u => u.User).OrderBy(d => d.StartDateTime).ToListAsync();
         }
+
+        public async Task<Schedule> GetScheduleByIdAsync(int scheduleId)
+        {
+            return await _context.Schedules.Include(c => c.Class).Include(u => u.User)
+                .FirstOrDefaultAsync(s => s.Id == scheduleId);
+        }
     }
 }

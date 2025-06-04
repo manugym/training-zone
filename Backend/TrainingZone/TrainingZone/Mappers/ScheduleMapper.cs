@@ -45,9 +45,7 @@ namespace TrainingZone.Mappers
             return new Schedule
             {
                 ClassId = createScheduleDto.ClassId,
-                Class = classData,
                 UserId = userData.Id,
-                User = userData,
                 MaxCapacity = createScheduleDto.MaxCapacity,
                 Price = createScheduleDto.Price,
                 StartDateTime = createScheduleDto.StartDateTime,

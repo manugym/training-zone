@@ -31,5 +31,23 @@ namespace TrainingZone.Controllers
 
             return schedule;
         }
+
+        [HttpPost]
+        public async Task<ActionResult<ScheduleDto>> CreateNewSchedule(CreateScheduleDto createScheduleDto)
+        {
+            if(createScheduleDto == null)
+            {
+                return BadRequest("Los datos enviados no son correctos.");
+            }
+
+            ScheduleDto newSchedule = await _scheduleService.CreateSchedule(createScheduleDto);
+
+            if(newSchedule == null)
+            {
+                return StatusCode(500, "No se pudo crear el horario");
+            }
+
+            return newSchedule;
+        }
     }
 }
