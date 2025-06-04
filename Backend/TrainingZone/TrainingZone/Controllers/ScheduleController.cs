@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using TrainingZone.Models.DataBase;
 using TrainingZone.Models.Dtos.Schedule;
@@ -18,7 +19,7 @@ namespace TrainingZone.Controllers
             _scheduleService = scheduleService;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("getAllByClass{id}")]
         public async Task<IEnumerable<ScheduleDto>> GetScheduleByClass(int id)
         {
             IEnumerable<ScheduleDto> schedule = await _scheduleService.GetScheduleByClass(id);
@@ -32,8 +33,8 @@ namespace TrainingZone.Controllers
             return schedule;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<ScheduleDto>> CreateNewSchedule(CreateScheduleDto createScheduleDto)
+        [HttpPost("create")]
+        public async Task<IActionResult> CreateNewSchedule([FromBody]CreateScheduleDto createScheduleDto)
         {
             if(createScheduleDto == null)
             {
@@ -47,7 +48,45 @@ namespace TrainingZone.Controllers
                 return StatusCode(500, "No se pudo crear el horario");
             }
 
-            return newSchedule;
+            return Ok(newSchedule);
+        }
+
+        [HttpDelete("{scheduleId}")]
+        public async Task<IActionResult> DeleteScheduleById(int scheduleId)
+        {
+            ScheduleDto deleteSchedule = await _scheduleService.DeleteScheduleById(scheduleId);
+        
+            if(deleteSchedule == null)
+            {
+                return NotFound("No se encontró el horario a eliminar");
+            }
+
+            return Ok(deleteSchedule);
+        }
+
+        [HttpPut("{scheduleId}")]
+        public async Task<IActionResult> UpdateSchedule(int scheduleId, [FromBody]UpdateScheduleDto updateData)
+        {
+            if(updateData == null)
+            {
+                return BadRequest();
+            }
+
+            Schedule schedule = await _scheduleService.GetScheduleById(scheduleId);
+
+            if(schedule == null)
+            {
+                return NotFound("No se encontró el horario a actualizar");
+            }
+
+            ScheduleDto updatedSchedule = await _scheduleService.UpdateSchedule(scheduleId, updateData);
+
+            if(updatedSchedule == null)
+            {
+                return NotFound("No se pudo actualizar el horario");
+            }
+
+            return Ok(updatedSchedule);
         }
     }
 }

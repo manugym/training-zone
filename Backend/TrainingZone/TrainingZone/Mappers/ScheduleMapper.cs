@@ -20,6 +20,7 @@ namespace TrainingZone.Mappers
 
             return new ScheduleDto
             {
+                Id = schedule.Id,
                 ClassId = schedule.ClassId,
                 ClassType = schedule.Class.Type.ToString(),
                 Description = schedule.Class.Description,
