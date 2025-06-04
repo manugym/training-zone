@@ -7,10 +7,12 @@ namespace TrainingZone.Mappers
     public class ScheduleMapper
     {
         private readonly UserMapper _userMapper;
+        private readonly UnitOfWork _unitOfWork;
 
-        public ScheduleMapper(UserMapper userMapper)
+        public ScheduleMapper(UserMapper userMapper, UnitOfWork unitOfWork)
         {
             _userMapper = userMapper;
+            _unitOfWork = unitOfWork;
         }
 
         public ScheduleDto ToDto (Schedule schedule)
@@ -18,6 +20,7 @@ namespace TrainingZone.Mappers
 
             return new ScheduleDto
             {
+                Id = schedule.Id,
                 ClassId = schedule.ClassId,
                 ClassType = schedule.Class.Type.ToString(),
                 Description = schedule.Class.Description,
@@ -29,9 +32,27 @@ namespace TrainingZone.Mappers
             };
         }
 
-        public List<ScheduleDto> ToDto(List<Schedule> users)
+        public IEnumerable<ScheduleDto> ToDto(List<Schedule> schedule)
         {
-            return users?.Select(ToDto).ToList() ?? new List<ScheduleDto>();
+            return schedule?.Select(ToDto).ToList() ?? new List<ScheduleDto>();
+        }
+
+        public async Task<Schedule> ToEntity(CreateScheduleDto createScheduleDto)
+        {
+            Class classData = await _unitOfWork.ClassRepository.GetClassByIdAsync(createScheduleDto.ClassId);
+
+            User userData = await _unitOfWork.UserRepository.GetByIdAsync(createScheduleDto.UserId);
+
+            return new Schedule
+            {
+                ClassId = createScheduleDto.ClassId,
+                UserId = userData.Id,
+                MaxCapacity = createScheduleDto.MaxCapacity,
+                Price = createScheduleDto.Price,
+                StartDateTime = createScheduleDto.StartDateTime,
+                EndDateTime = createScheduleDto.EndDateTime
+
+            };
         }
     }
 }
