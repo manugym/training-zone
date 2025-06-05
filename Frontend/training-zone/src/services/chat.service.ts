@@ -78,7 +78,9 @@ class ChatService {
     }
   }
 
-  private handleSocketMessage(message: SocketMessageGeneric<any>): void {
+  private async handleSocketMessage(
+    message: SocketMessageGeneric<any>
+  ): Promise<void> {
     switch (message.Type) {
       case SocketCommunicationType.CHAT:
         console.log("Mensaje de chat recibido:", message.Data);
@@ -89,33 +91,40 @@ class ChatService {
             this._allChats.next(message.Data.Data);
 
             break;
-          case ChatRequestType.CONVERSATION:
-            console.log("Conversación actual : ", message.Data.Data);
-            this._actualConversation.next(message.Data.Data);
-
-            break;
           case ChatRequestType.SEND_MESSAGE:
             try {
               const newMessage: ChatMessage = message.Data.Data;
               console.log("mensaje recibido : ", newMessage);
 
-              const currentConversation = this._actualConversation.getValue();
+              const allChats = this._allChats.getValue();
+              const chatDestination = allChats?.find(
+                (c) => c.Id === newMessage.ChatId
+              );
 
-              if (
-                currentConversation?.UserDestinationId === newMessage.UserId ||
-                currentConversation?.UserOriginId === newMessage.UserId
-              ) {
-                const updatedConversation = {
-                  ...currentConversation,
-                  ChatMessages: [
-                    ...(currentConversation.ChatMessages || []),
-                    newMessage,
-                  ],
+              //Update and emit the updated chat
+              if (chatDestination) {
+                const updatedMessages = [
+                  ...chatDestination.ChatMessages,
+                  newMessage,
+                ];
+
+                const updatedChat: Chat = {
+                  ...chatDestination,
+                  ChatMessages: updatedMessages,
                 };
 
-                this._actualConversation.next(updatedConversation);
+                const updatedAllChats = allChats.map((chat) =>
+                  chat.Id === updatedChat.Id ? updatedChat : chat
+                );
 
-                this.sendGetAllChatsRequest();
+                this._allChats.next(updatedAllChats);
+
+                //Update the actual conversation if it matches the updated chat
+                if (this._actualConversation.value?.Id === updatedChat.Id) {
+                  this._actualConversation.next(updatedChat);
+                }
+              } else {
+                await this.sendGetAllChatsRequest();
               }
             } catch (e) {
               console.error(e);
@@ -291,28 +300,6 @@ class ChatService {
     socketMessage.Data = request;
 
     console.log(`Eliminando el mensaje ${messageId}`, socketMessage);
-
-    websocketService.send(JSON.stringify(socketMessage));
-  }
-
-  async getConversationRequest(userId: number): Promise<void> {
-    if (!websocketService.isConnected()) {
-      console.warn("WebSocket no está conectado.");
-      return;
-    }
-
-    const request: ChatRequestGeneric<number> = {
-      ChatRequestType: ChatRequestType.CONVERSATION,
-      Data: userId,
-    };
-
-    const socketMessage = new SocketMessageGeneric<
-      ChatRequestGeneric<number>
-    >();
-    socketMessage.Type = SocketCommunicationType.CHAT;
-    socketMessage.Data = request;
-
-    console.log(`Obteniendo Conversación`, socketMessage);
 
     websocketService.send(JSON.stringify(socketMessage));
   }

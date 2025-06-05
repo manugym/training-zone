@@ -52,19 +52,6 @@ function Conversation() {
     };
   }, []);
 
-  //Mark actual conversation as Viewed
-  useEffect(() => {
-    async function markConversationAsViewed() {
-      await chatService.getConversationRequest(
-        conversation?.UserOriginId === currentUser?.Id
-          ? conversation?.UserDestinationId
-          : conversation?.UserOriginId || null
-      );
-    }
-
-    markConversationAsViewed();
-  }, []);
-
   //If a message arrives and the user is in the conversation, it is marked as Viewed.
   useEffect(() => {
     async function markMessageAsViewed() {
@@ -86,7 +73,7 @@ function Conversation() {
     }
 
     markMessageAsViewed();
-  }, [conversation]);
+  }, [conversation?.ChatMessages]);
 
   const handleSendMessageSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -300,7 +287,10 @@ function Conversation() {
                       )}
 
                       {message.UserId == currentUser.Id && (
-                        <IoCheckmarkDoneSharp />
+                        <IoCheckmarkDoneSharp
+                          size={16}
+                          color={message.IsViewed ? "var(--color-details)" : ""}
+                        />
                       )}
                     </span>
                   </div>
