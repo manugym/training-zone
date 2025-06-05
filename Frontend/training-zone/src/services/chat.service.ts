@@ -119,9 +119,16 @@ class ChatService {
 
                 this._allChats.next(updatedAllChats);
 
-                //Update the actual conversation if it matches the updated chat
+                // Update the actual conversation if it matches the updated chat
                 if (this._actualConversation.value?.Id === updatedChat.Id) {
                   this._actualConversation.next(updatedChat);
+
+                  const currentUser = userService.getCurrentUser();
+                  const isIncoming = newMessage.UserId !== currentUser.Id;
+
+                  if (isIncoming && !newMessage.IsViewed) {
+                    this.markMessageAsViewed(newMessage.Id);
+                  }
                 }
               } else {
                 await this.sendGetAllChatsRequest();
@@ -173,8 +180,6 @@ class ChatService {
             };
 
             this._actualConversation.next(updatedConversation);
-
-            this.sendGetAllChatsRequest();
 
             break;
           default:

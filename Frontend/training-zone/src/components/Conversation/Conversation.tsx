@@ -52,9 +52,9 @@ function Conversation() {
     };
   }, []);
 
-  //If a message arrives and the user is in the conversation, it is marked as Viewed.
+  //Mark messages as viewed when the conversation changes or when new messages are added
   useEffect(() => {
-    async function markMessageAsViewed() {
+    async function markMessagesAsViewed() {
       if (
         !conversation ||
         !conversation.ChatMessages ||
@@ -64,16 +64,17 @@ function Conversation() {
         return;
       }
 
-      const latestMessage =
-        conversation.ChatMessages[conversation.ChatMessages.length - 1];
+      const notViewedMessages = conversation.ChatMessages.filter(
+        (message) => message.UserId !== currentUser.Id && !message.IsViewed
+      );
 
-      if (latestMessage.UserId !== currentUser.Id && !latestMessage.IsViewed) {
-        await chatService.markMessageAsViewed(latestMessage.Id);
+      for (const message of notViewedMessages) {
+        await chatService.markMessageAsViewed(message.Id);
       }
     }
 
-    markMessageAsViewed();
-  }, [conversation?.ChatMessages]);
+    markMessagesAsViewed();
+  }, [conversation]);
 
   const handleSendMessageSubmit = (e: FormEvent) => {
     e.preventDefault();
