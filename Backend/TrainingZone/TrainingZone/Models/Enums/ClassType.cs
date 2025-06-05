@@ -2,13 +2,13 @@
 
 public enum ClassType
 {
-    Yoga,
-    Pilates,
-    Zumba,
-    Spinning,
-    CrossFit,
-    Kickboxing,
-    Boxing,
+    YOGA,
+    PILATES,
+    ZUMBA,
+    SPINNING,
+    CROSSFIT,
+    KICKBOXING,
+    BOXING,
     MMA,
-    PersonalTraining
+    PERSONALTRAINING
 }
