@@ -80,7 +80,12 @@ function Conversation() {
     e.preventDefault();
 
     async function sendMessage() {
-      await chatService.sendMessage(messageToSend);
+      await chatService.sendMessage(
+        messageToSend,
+        conversation.UserDestinationId === currentUser?.Id
+          ? conversation.UserOriginId
+          : conversation.UserDestinationId
+      );
     }
 
     sendMessage();

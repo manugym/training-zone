@@ -24,6 +24,9 @@ class ChatService {
 
   messageReceived$: Subscription;
 
+  //for no errors when sending a message to a new conversation
+  private lastMessageToUserId: number | null = null;
+
   constructor() {
     this.messageReceived$ = websocketService.messageReceived.subscribe(
       async (message) => await this.readMessage(message)
@@ -87,10 +90,30 @@ class ChatService {
 
         switch (message.Data.ChatRequestType) {
           case ChatRequestType.ALL_CHATS:
-            console.log("Todos los chats guardados : ", message.Data.Data);
-            this._allChats.next(message.Data.Data);
+            const allChats: Chat[] = message.Data.Data;
+            const currentUser = userService.getCurrentUser();
+            const targetDestinationUserId = this.lastMessageToUserId;
+
+            this._allChats.next(allChats);
+
+            // For show the new conversation
+            if (targetDestinationUserId != null) {
+              const newChat = allChats.find(
+                (chat) =>
+                  chat.ChatMessages.length === 1 &&
+                  chat.ChatMessages[0].UserId === currentUser.Id &&
+                  (chat.UserDestination.Id === targetDestinationUserId ||
+                    chat.UserOrigin.Id === targetDestinationUserId)
+              );
+
+              if (newChat) {
+                this._actualConversation.next(newChat);
+                this.lastMessageToUserId = null;
+              }
+            }
 
             break;
+
           case ChatRequestType.SEND_MESSAGE:
             try {
               const newMessage: ChatMessage = message.Data.Data;
@@ -206,22 +229,18 @@ class ChatService {
     websocketService.send(JSON.stringify(socketMessage));
   }
 
-  async sendMessage(message: string): Promise<void> {
+  async sendMessage(message: string, destinationUserId: number): Promise<void> {
     if (!websocketService.isConnected()) {
       console.warn("WebSocket no está conectado.");
       return;
     }
 
-    const currentUser = userService.getCurrentUser();
+    this.lastMessageToUserId = destinationUserId;
 
     const request: ChatRequestGeneric<SendMessageRequest> = {
       ChatRequestType: ChatRequestType.SEND_MESSAGE,
       Data: {
-        UserId:
-          this._actualConversation.getValue()?.UserOriginId === currentUser.Id
-            ? this._actualConversation.getValue()?.UserDestinationId
-            : this._actualConversation.getValue()?.UserOriginId,
-
+        UserId: destinationUserId,
         Message: message,
       },
     };
