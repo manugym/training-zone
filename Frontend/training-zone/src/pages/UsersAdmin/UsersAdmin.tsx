@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./UsersAdmin.css";
 import { useNavigate } from "react-router-dom";
 import userService from "../../services/user.service";

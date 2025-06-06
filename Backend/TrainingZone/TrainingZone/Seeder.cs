@@ -260,17 +260,20 @@ public class Seeder
         [
         new Class
         {
-            Type = ClassType.Spinning,
-            Description = "Clase de ciclo indoor"
+            Type = ClassType.SPINNING,
+            Description = "Clase de ciclo indoor",
+            ClassImageUrl = "ClassPicture/crossfit.jpg"
         },
         new Class
         {
-            Type = ClassType.CrossFit,
-            Description = "Entrenamiento funcional en grupo"
+            Type = ClassType.CROSSFIT,
+            Description = "Entrenamiento funcional en grupo",
+            ClassImageUrl = "ClassPicture/crossfit.jpg"
         },
         new Class{
-            Type = ClassType.Boxing,
-            Description = "Entrenamiento de boxeo en grupo"
+            Type = ClassType.BOXING,
+            Description = "Entrenamiento de boxeo en grupo",
+            ClassImageUrl = "ClassPicture/crossfit.jpg"
         }
 
         ];
@@ -282,8 +285,8 @@ public class Seeder
         var users = _trainingZoneContext.Users.ToList();
         var activities = _trainingZoneContext.Classes.ToList();
 
-        var spinning = activities.FirstOrDefault(c => c.Type == ClassType.Spinning);
-        var crossfit = activities.FirstOrDefault(c => c.Type == ClassType.CrossFit);
+        var spinning = activities.FirstOrDefault(c => c.Type == ClassType.SPINNING);
+        var crossfit = activities.FirstOrDefault(c => c.Type == ClassType.CROSSFIT);
 
         var trainer1 = users.FirstOrDefault(u => u.Name == "Ana López");
         var trainer2 = users.FirstOrDefault(u => u.Name == "Carlos Pérez");
