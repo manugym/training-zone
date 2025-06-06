@@ -88,5 +88,18 @@ namespace TrainingZone.Controllers
 
             return Ok(updatedSchedule);
         }
+
+        [HttpGet("byDate")]
+        public async Task<ActionResult<IEnumerable<ScheduleDto>>> GetSchedulesByDateAndClass([FromQuery] int classId, [FromQuery] DateOnly date)
+        {            
+            IEnumerable<ScheduleDto> scheduleByClassAndDate = await _scheduleService.getAllScheduleByDate(classId, date);
+
+            if (scheduleByClassAndDate == null)
+            {
+                return NotFound("No se encontró horario en la fecha indicada.");
+            }
+
+            return Ok(scheduleByClassAndDate);
+        }
     }
 }

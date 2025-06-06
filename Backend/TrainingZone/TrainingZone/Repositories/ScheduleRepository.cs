@@ -19,5 +19,15 @@ namespace TrainingZone.Repositories
             return await _context.Schedules.Include(c => c.Class).Include(u => u.User)
                 .FirstOrDefaultAsync(s => s.Id == scheduleId);
         }
+
+        public async Task<IEnumerable<Schedule>> GetAllSchedulesByDate(int classId, DateOnly date )
+        {
+            var startOfDay = date.ToDateTime(TimeOnly.MinValue);
+            var endOfDay = date.ToDateTime(TimeOnly.MaxValue);
+
+            return await _context.Schedules
+                .Where(s => s.StartDateTime >= startOfDay && s.StartDateTime <= endOfDay && s.ClassId == classId)
+                .Include(c => c.Class).Include(u => u.User).ToListAsync();
+        }
     }
 }
