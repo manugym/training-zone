@@ -74,8 +74,6 @@ export default function AllConversations() {
     sendGetChatRequest();
   }, []);
 
-  console.log(allChats);
-
   return (
     <>
       <Stack.Screen options={{ title: "Your conversations" }} />
@@ -95,7 +93,6 @@ export default function AllConversations() {
                     { borderBottomColor: theme.details, borderBottomWidth: 2 },
                   ]}
                 >
-                  {" "}
                   <Image
                     source={{
                       uri: `${SERVER_IMAGE_URL}/${
