@@ -20,6 +20,10 @@ import userService from "@/services/user.service";
 import { Colors } from "@/constants/Colors";
 import { Entypo, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { ChatMessage } from "@/models/chat-message";
+import websocketService from "@/services/websocket.service";
+import apiService from "@/services/api.service";
+import { ThemedView } from "@/components/ThemedView";
+import { ThemedText } from "@/components/ThemedText";
 
 export default function Conversation() {
   const colorScheme = useColorScheme() || "light";
@@ -59,22 +63,9 @@ export default function Conversation() {
     };
   }, []);
 
-  //Mark actual conversation as Viewed
+  //Mark messages as viewed when the conversation changes or when new messages are added
   useEffect(() => {
-    async function markConversationAsViewed() {
-      await chatService.getConversationRequest(
-        conversation.UserOriginId === currentUser.Id
-          ? conversation.UserDestinationId
-          : conversation.UserOriginId
-      );
-    }
-
-    markConversationAsViewed();
-  }, []);
-
-  //If a message arrives and the user is in the conversation, it is marked as Viewed.
-  useEffect(() => {
-    async function markMessageAsViewed() {
+    async function markMessagesAsViewed() {
       if (
         !conversation ||
         !conversation.ChatMessages ||
@@ -84,15 +75,16 @@ export default function Conversation() {
         return;
       }
 
-      const latestMessage =
-        conversation.ChatMessages[conversation.ChatMessages.length - 1];
+      const notViewedMessages = conversation.ChatMessages.filter(
+        (message) => message.UserId !== currentUser.Id && !message.IsViewed
+      );
 
-      if (latestMessage.UserId !== currentUser.Id && !latestMessage.IsViewed) {
-        await chatService.markMessageAsViewed(latestMessage.Id);
+      for (const message of notViewedMessages) {
+        await chatService.markMessageAsViewed(message.Id);
       }
     }
 
-    markMessageAsViewed();
+    markMessagesAsViewed();
   }, [conversation]);
 
   const handlePressOutsideTheMessage = () => {
@@ -110,7 +102,12 @@ export default function Conversation() {
 
   const handleSendMessage = async () => {
     if (!messageToSend.trim()) return;
-    await chatService.sendMessage(messageToSend.trim());
+    await chatService.sendMessage(
+      messageToSend.trim(),
+      conversation.UserDestinationId === currentUser?.Id
+        ? conversation.UserOriginId
+        : conversation.UserDestinationId
+    );
     setMessageToSend("");
   };
 
@@ -193,99 +190,124 @@ export default function Conversation() {
             ref={scrollRef}
             keyboardShouldPersistTaps="handled"
           >
-            {conversation?.ChatMessages?.map((message, index) => {
-              const isMine = message.UserId === currentUser?.Id;
-              const messageDate = new Date(message.MessageDateTime);
+            {conversation &&
+            conversation.ChatMessages &&
+            conversation.ChatMessages.length > 0 ? (
+              <>
+                {conversation.ChatMessages?.map((message, index) => {
+                  const isMine = message.UserId === currentUser?.Id;
+                  const messageDate = new Date(message.MessageDateTime);
 
-              // check that the date changes
-              const showDateHeader =
-                index === 0 ||
-                new Date(
-                  conversation.ChatMessages[index - 1].MessageDateTime
-                ).toDateString() !== messageDate.toDateString();
+                  // check that the date changes
+                  const showDateHeader =
+                    index === 0 ||
+                    new Date(
+                      conversation.ChatMessages[index - 1].MessageDateTime
+                    ).toDateString() !== messageDate.toDateString();
 
-              {
-                /*The message can be edited by long pressing it*/
-              }
-              return (
-                <React.Fragment key={message.Id}>
-                  {showDateHeader && (
-                    <View
-                      style={[
-                        { backgroundColor: theme.details },
-                        styles.dateContainer,
-                      ]}
-                    >
-                      <Text style={styles.dateText}>
-                        {getDateLabel(messageDate)}
-                      </Text>
-                    </View>
-                  )}
-
-                  <TouchableOpacity
-                    onLongPress={() => {
-                      if (isMine) {
-                        setMessageToEdit(message);
-                        setMessageToEditContent("");
-                      }
-                    }}
-                    activeOpacity={0.8}
-                    style={[
-                      {
-                        backgroundColor:
-                          messageToEdit === message
-                            ? theme.details
-                            : isMine
-                            ? theme.primary
-                            : theme.secondary,
-                      },
-                      isMine ? styles.mine : styles.other,
-                      styles.messageBox,
-                    ]}
-                  >
-                    {/*Edit and delete Icons */}
-                    {messageToEdit && messageToEdit === message && (
-                      <View style={styles.editButtons}>
-                        <Entypo
-                          name="edit"
-                          size={20}
-                          color="white"
-                          onPress={() => handlePressEditButton(message)}
-                        />
-                        <MaterialCommunityIcons
-                          name="delete-forever"
-                          size={26}
-                          color="red"
-                          onPress={() => handleDeleteMessage(message.Id)}
-                        />
-                      </View>
-                    )}
-
-                    {/*Message */}
-                    <Text style={styles.messageText}>{message.Message}</Text>
-                    <View style={styles.messageInfo}>
-                      <Text style={styles.messageTime}>
-                        {new Date(message.MessageDateTime).toLocaleTimeString(
-                          [],
-                          {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            hour12: false,
-                          }
-                        )}
-                      </Text>
-                      {isMine && (
-                        <Ionicons
-                          name="checkmark-done"
-                          size={20}
-                          color={message.IsViewed ? theme.details : "#ddd"}
-                        />
+                  {
+                    /*The message can be edited by long pressing it*/
+                  }
+                  return (
+                    <React.Fragment key={message.Id}>
+                      {showDateHeader && (
+                        <View
+                          style={[
+                            { backgroundColor: theme.details },
+                            styles.dateContainer,
+                          ]}
+                        >
+                          <Text style={styles.dateText}>
+                            {getDateLabel(messageDate)}
+                          </Text>
+                        </View>
                       )}
-                    </View>
-                  </TouchableOpacity>
-                </React.Fragment>
-              );
-            })}
+
+                      <TouchableOpacity
+                        onLongPress={() => {
+                          if (isMine) {
+                            setMessageToEdit(message);
+                            setMessageToEditContent("");
+                          }
+                        }}
+                        activeOpacity={0.8}
+                        style={[
+                          {
+                            backgroundColor:
+                              messageToEdit === message
+                                ? theme.details
+                                : isMine
+                                ? theme.primary
+                                : theme.secondary,
+                          },
+                          isMine ? styles.mine : styles.other,
+                          styles.messageBox,
+                        ]}
+                      >
+                        {/*Edit and delete Icons */}
+                        {messageToEdit && messageToEdit === message && (
+                          <View style={styles.editButtons}>
+                            <Entypo
+                              name="edit"
+                              size={20}
+                              color="white"
+                              onPress={() => handlePressEditButton(message)}
+                            />
+                            <MaterialCommunityIcons
+                              name="delete-forever"
+                              size={26}
+                              color="red"
+                              onPress={() => handleDeleteMessage(message.Id)}
+                            />
+                          </View>
+                        )}
+
+                        {/*Message */}
+                        <Text style={styles.messageText}>
+                          {message.Message}
+                        </Text>
+                        <View style={styles.messageInfo}>
+                          <Text style={styles.messageTime}>
+                            {new Date(
+                              message.MessageDateTime
+                            ).toLocaleTimeString([], {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                              hour12: false,
+                            })}
+                          </Text>
+                          {isMine && (
+                            <Ionicons
+                              name="checkmark-done"
+                              size={20}
+                              color={message.IsViewed ? theme.details : "#ddd"}
+                            />
+                          )}
+                        </View>
+                      </TouchableOpacity>
+                    </React.Fragment>
+                  );
+                })}
+              </>
+            ) : (
+              <ThemedView style={styles.noMessagesContainer}>
+                <ThemedText
+                  style={[{ color: theme.primary }, styles.noMessagesTitle]}
+                  type="title"
+                >
+                  No tienes mensajes con{" "}
+                  <ThemedText style={{ color: theme.details }} type="title">
+                    {conversation?.UserOriginId === currentUser?.Id
+                      ? conversation?.UserDestination?.Name ?? "Entrenador"
+                      : conversation?.UserOrigin?.Name ?? "Entrenador"}
+                  </ThemedText>{" "}
+                  aún.
+                </ThemedText>
+                <ThemedText style={styles.noMessagesSubtitle}>
+                  Envía el primero para comenzar la conversación
+                </ThemedText>
+              </ThemedView>
+            )}
           </ScrollView>
 
           {/*Input */}
@@ -417,5 +439,20 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 14,
     fontWeight: "500",
+  },
+
+  noMessagesContainer: {
+    alignItems: "center",
+    marginTop: 32,
+    gap: 30,
+  },
+
+  noMessagesTitle: {
+    textAlign: "center",
+  },
+
+  noMessagesSubtitle: {
+    fontStyle: "italic",
+    textAlign: "center",
   },
 });

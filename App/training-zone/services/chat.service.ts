@@ -24,6 +24,9 @@ class ChatService {
 
   messageReceived$: Subscription;
 
+  //for no errors when sending a message to a new conversation
+  private lastMessageToUserId: number | null = null;
+
   constructor() {
     this.messageReceived$ = websocketService.messageReceived.subscribe(
       async (message) => await this.readMessage(message)
@@ -78,44 +81,80 @@ class ChatService {
     }
   }
 
-  private handleSocketMessage(message: SocketMessageGeneric<any>): void {
+  private async handleSocketMessage(
+    message: SocketMessageGeneric<any>
+  ): Promise<void> {
     switch (message.Type) {
       case SocketCommunicationType.CHAT:
         console.log("Mensaje de chat recibido:", message.Data);
 
         switch (message.Data.ChatRequestType) {
           case ChatRequestType.ALL_CHATS:
-            console.log("Todos los chats guardados : ", message.Data.Data);
-            this._allChats.next(message.Data.Data);
+            const allChats: Chat[] = message.Data.Data;
+            const currentUser = userService.getCurrentUser();
+            const targetDestinationUserId = this.lastMessageToUserId;
+
+            this._allChats.next(allChats);
+
+            // For show the new conversation
+            if (targetDestinationUserId != null) {
+              const newChat = allChats.find(
+                (chat) =>
+                  chat.ChatMessages.length === 1 &&
+                  chat.ChatMessages[0].UserId === currentUser.Id &&
+                  (chat.UserDestination.Id === targetDestinationUserId ||
+                    chat.UserOrigin.Id === targetDestinationUserId)
+              );
+
+              if (newChat) {
+                this._actualConversation.next(newChat);
+                this.lastMessageToUserId = null;
+              }
+            }
 
             break;
-          case ChatRequestType.CONVERSATION:
-            console.log("Conversación actual : ", message.Data.Data);
-            this._actualConversation.next(message.Data.Data);
 
-            break;
           case ChatRequestType.SEND_MESSAGE:
             try {
               const newMessage: ChatMessage = message.Data.Data;
               console.log("mensaje recibido : ", newMessage);
 
-              const currentConversation = this._actualConversation.getValue();
+              const allChats = this._allChats.getValue();
+              const chatDestination = allChats?.find(
+                (c) => c.Id === newMessage.ChatId
+              );
 
-              if (
-                currentConversation?.UserDestinationId === newMessage.UserId ||
-                currentConversation?.UserOriginId === newMessage.UserId
-              ) {
-                const updatedConversation = {
-                  ...currentConversation,
-                  ChatMessages: [
-                    ...(currentConversation.ChatMessages || []),
-                    newMessage,
-                  ],
+              //Update and emit the updated chat
+              if (chatDestination) {
+                const updatedMessages = [
+                  ...chatDestination.ChatMessages,
+                  newMessage,
+                ];
+
+                const updatedChat: Chat = {
+                  ...chatDestination,
+                  ChatMessages: updatedMessages,
                 };
 
-                this._actualConversation.next(updatedConversation);
+                const updatedAllChats = allChats.map((chat) =>
+                  chat.Id === updatedChat.Id ? updatedChat : chat
+                );
 
-                this.sendGetAllChatsRequest();
+                this._allChats.next(updatedAllChats);
+
+                // Update the actual conversation if it matches the updated chat
+                if (this._actualConversation.value?.Id === updatedChat.Id) {
+                  this._actualConversation.next(updatedChat);
+
+                  const currentUser = userService.getCurrentUser();
+                  const isIncoming = newMessage.UserId !== currentUser.Id;
+
+                  if (isIncoming && !newMessage.IsViewed) {
+                    this.markMessageAsViewed(newMessage.Id);
+                  }
+                }
+              } else {
+                await this.sendGetAllChatsRequest();
               }
             } catch (e) {
               console.error(e);
@@ -165,8 +204,6 @@ class ChatService {
 
             this._actualConversation.next(updatedConversation);
 
-            this.sendGetAllChatsRequest();
-
             break;
           default:
             console.error("Tipo de solicitud no reconocido");
@@ -192,22 +229,18 @@ class ChatService {
     websocketService.send(JSON.stringify(socketMessage));
   }
 
-  async sendMessage(message: string): Promise<void> {
+  async sendMessage(message: string, destinationUserId: number): Promise<void> {
     if (!websocketService.isConnected()) {
       console.warn("WebSocket no está conectado.");
       return;
     }
 
-    const currentUser = userService.getCurrentUser();
+    this.lastMessageToUserId = destinationUserId;
 
     const request: ChatRequestGeneric<SendMessageRequest> = {
       ChatRequestType: ChatRequestType.SEND_MESSAGE,
       Data: {
-        UserId:
-          this._actualConversation.getValue()?.UserOriginId === currentUser.Id
-            ? this._actualConversation.getValue()?.UserDestinationId
-            : this._actualConversation.getValue()?.UserOriginId,
-
+        UserId: destinationUserId,
         Message: message,
       },
     };
@@ -291,28 +324,6 @@ class ChatService {
     socketMessage.Data = request;
 
     console.log(`Eliminando el mensaje ${messageId}`, socketMessage);
-
-    websocketService.send(JSON.stringify(socketMessage));
-  }
-
-  async getConversationRequest(userId: number): Promise<void> {
-    if (!websocketService.isConnected()) {
-      console.warn("WebSocket no está conectado.");
-      return;
-    }
-
-    const request: ChatRequestGeneric<number> = {
-      ChatRequestType: ChatRequestType.CONVERSATION,
-      Data: userId,
-    };
-
-    const socketMessage = new SocketMessageGeneric<
-      ChatRequestGeneric<number>
-    >();
-    socketMessage.Type = SocketCommunicationType.CHAT;
-    socketMessage.Data = request;
-
-    console.log(`Obteniendo Conversación`, socketMessage);
 
     websocketService.send(JSON.stringify(socketMessage));
   }
