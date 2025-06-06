@@ -6,9 +6,7 @@ import { Chat } from "../../models/chat";
 import userService from "../../services/user.service";
 
 function All_Users_With_Conversation() {
-  const SERVER_IMAGE_URL = `${
-    import.meta.env.VITE_SERVER_URL
-  }/UserProfilePicture`;
+  const SERVER_URL = `${import.meta.env.VITE_SERVER_URL}`;
 
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
@@ -76,10 +74,12 @@ function All_Users_With_Conversation() {
             onClick={() => setSelectedChat(chat)}
           >
             <img
-              src={`${SERVER_IMAGE_URL}/${
+              src={`${SERVER_URL}/${
                 chat.UserOriginId === currentUser.Id
-                  ? chat.UserDestination?.AvatarImageUrl || "default.png"
-                  : chat.UserOrigin?.AvatarImageUrl || "default.png"
+                  ? chat.UserDestination?.AvatarImageUrl ||
+                    "UserProfilePicture/default.png"
+                  : chat.UserOrigin?.AvatarImageUrl ||
+                    "UserProfilePicture/default.png"
               }`}
               alt="Avatar"
               className="avatar"
