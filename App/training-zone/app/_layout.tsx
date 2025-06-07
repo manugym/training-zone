@@ -13,6 +13,7 @@ import {
 
 import { Montserrat_700Bold } from "@expo-google-fonts/montserrat";
 import { Roboto_400Regular } from "@expo-google-fonts/roboto";
+import Toast from "react-native-toast-message";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -38,19 +39,22 @@ export default function RootLayout() {
   const theme = isDark ? CustomPaperDarkTheme : CustomPaperLightTheme;
 
   return (
-    <PaperProvider theme={theme}>
-      <Stack
-        screenOptions={{
-          headerStyle: {
-            backgroundColor: theme.colors.surfaceVariant,
-          },
-          headerTintColor: theme.colors.onBackground,
-        }}
-      >
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style={isDark ? "light" : "dark"} />
-    </PaperProvider>
+    <>
+      <PaperProvider theme={theme}>
+        <Stack
+          screenOptions={{
+            headerStyle: {
+              backgroundColor: theme.colors.surfaceVariant,
+            },
+            headerTintColor: theme.colors.onBackground,
+          }}
+        >
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+        <StatusBar style={isDark ? "light" : "dark"} />
+      </PaperProvider>
+      <Toast />
+    </>
   );
 }

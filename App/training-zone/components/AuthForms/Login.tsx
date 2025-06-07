@@ -1,29 +1,17 @@
-import React, { useEffect, useState } from "react";
-import {
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  useColorScheme,
-  Alert,
-} from "react-native";
-import { ThemedText } from "../ThemedText";
+import React, { useState } from "react";
+import { StyleSheet, Alert } from "react-native";
+import { TextInput, Button, useTheme } from "react-native-paper";
 import { ThemedView } from "../ThemedView";
-import Checkbox from "expo-checkbox";
-import { Colors } from "@/constants/Colors";
 import authService from "@/services/auth.service";
-import { useNavigation, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
+import Toast from "react-native-toast-message";
 
 function Login() {
+  const theme = useTheme();
   const router = useRouter();
 
-  const colorScheme = useColorScheme() || "light";
-  const theme = Colors[colorScheme];
-
   const [credentials, setCredentials] = useState("");
-  const [password, setPassword] = useState<string>("");
-
-  const [error, setError] = useState("");
+  const [password, setPassword] = useState("");
 
   const validateForm = () => {
     if (!credentials) return "Email o teléfono requerido.";
@@ -41,8 +29,17 @@ function Login() {
   };
 
   const handleSubmit = async () => {
-    setError(validateForm());
-    if (error) return;
+    const validationError = validateForm();
+
+    if (validationError) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: validationError,
+        position: "bottom",
+      });
+      return;
+    }
 
     try {
       await authService.login({
@@ -53,48 +50,53 @@ function Login() {
       Alert.alert("Inicio de sesión exitoso", "Bienvenido de nuevo!");
       router.push("/");
     } catch (err) {
-      setError(err.message || "Ocurrió un error. Intenta de nuevo.");
+      const message = err.message || "Ocurrió un error. Intenta de nuevo.";
+
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: message,
+        position: "bottom",
+      });
     }
   };
 
   return (
-    <ThemedView
-      style={[styles.container, { backgroundColor: theme.background }]}
-    >
+    <ThemedView style={styles.container}>
       <TextInput
-        style={[styles.input]}
-        placeholder="Email or Phone"
-        placeholderTextColor={"#aaa"}
+        label="Email o Teléfono"
         value={credentials}
-        onChangeText={setCredentials}
+        onChangeText={(text) => setCredentials(text.trim())}
+        mode="outlined"
+        keyboardType="email-address"
+        autoCapitalize="none"
+        theme={{
+          colors: {
+            primary: theme.colors.surface,
+          },
+        }}
       />
 
       <TextInput
-        style={[styles.input]}
-        placeholder="Password"
-        placeholderTextColor={"#aaa"}
-        secureTextEntry
+        label="Contraseña"
         value={password}
         onChangeText={setPassword}
+        secureTextEntry
+        mode="outlined"
+        theme={{
+          colors: {
+            primary: theme.colors.surface,
+          },
+        }}
       />
 
-      {error ? (
-        <ThemedText type="default" style={styles.error}>
-          {error}
-        </ThemedText>
-      ) : null}
-
-      <TouchableOpacity
-        style={[styles.loginButton, { backgroundColor: theme.primary }]}
+      <Button
+        mode="contained"
         onPress={handleSubmit}
+        labelStyle={{ fontSize: 18, paddingVertical: 6 }}
       >
-        <ThemedText
-          type="default"
-          style={[styles.loginButtonText, { color: "#fff" }]}
-        >
-          Login
-        </ThemedText>
-      </TouchableOpacity>
+        Iniciar sesión
+      </Button>
     </ThemedView>
   );
 }
@@ -103,34 +105,8 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     padding: 20,
-    alignItems: "center",
     justifyContent: "center",
-  },
-  input: {
-    backgroundColor: "#1f2937",
-    color: "#fff",
-    width: "100%",
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 15,
-  },
-  loginButton: {
-    paddingVertical: 14,
-    paddingHorizontal: 30,
-    borderRadius: 10,
-    alignItems: "center",
-    marginTop: 10,
-    width: "100%",
-  },
-  loginButtonText: {
-    fontSize: 16,
-    textAlign: "center",
-    fontWeight: "bold",
-  },
-  error: {
-    color: "#f87171",
-    marginBottom: 10,
-    alignSelf: "flex-start",
+    gap: 20,
   },
 });
 
