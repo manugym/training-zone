@@ -1,35 +1,28 @@
 import {
   StyleSheet,
-  TouchableOpacity,
   View,
-  useColorScheme,
   Animated,
   Dimensions,
   TextStyle,
 } from "react-native";
 import { useRef, useState } from "react";
+import { Text, Surface, useTheme, TouchableRipple } from "react-native-paper";
 
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
 import Login from "@/components/AuthForms/Login";
 import Register from "@/components/AuthForms/Register";
-import { Colors } from "@/constants/Colors";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
 export default function AuthScreen() {
-  const colorScheme = useColorScheme() || "light";
-  const theme = Colors[colorScheme];
-
+  const theme = useTheme();
   const [formType, setFormType] = useState<"login" | "register">("login");
   const position = useRef(new Animated.Value(0)).current;
 
   const slideTo = (type: "login" | "register") => {
     const toValue = type === "login" ? 0 : -SCREEN_WIDTH;
-
     Animated.timing(position, {
       toValue,
-      duration: 250,
+      duration: 350,
       useNativeDriver: true,
     }).start(() => {
       setFormType(type);
@@ -39,9 +32,9 @@ export default function AuthScreen() {
   const getTitleStyle = (type: "login" | "register") => {
     const isActive = formType === type;
     return {
-      color: isActive ? theme.primary : theme.text + "99",
+      color: isActive ? theme.colors.primary : theme.colors.onBackground + "99",
       borderBottomWidth: isActive ? 2 : 0,
-      borderBottomColor: isActive ? theme.primary : "transparent",
+      borderBottomColor: isActive ? theme.colors.primary : "transparent",
       fontWeight: isActive
         ? ("bold" as TextStyle["fontWeight"])
         : ("normal" as TextStyle["fontWeight"]),
@@ -52,19 +45,18 @@ export default function AuthScreen() {
   };
 
   return (
-    <ThemedView style={styles.container}>
+    <Surface
+      style={[{ backgroundColor: theme.colors.background }, styles.container]}
+      elevation={2}
+    >
       <View style={styles.switchContainer}>
-        <TouchableOpacity onPress={() => slideTo("login")}>
-          <ThemedText type="subtitle" style={getTitleStyle("login")}>
-            Login
-          </ThemedText>
-        </TouchableOpacity>
+        <TouchableRipple onPress={() => slideTo("login")} borderless>
+          <Text style={getTitleStyle("login")}>Login</Text>
+        </TouchableRipple>
 
-        <TouchableOpacity onPress={() => slideTo("register")}>
-          <ThemedText type="subtitle" style={getTitleStyle("register")}>
-            Register
-          </ThemedText>
-        </TouchableOpacity>
+        <TouchableRipple onPress={() => slideTo("register")} borderless>
+          <Text style={getTitleStyle("register")}>Register</Text>
+        </TouchableRipple>
       </View>
 
       <View style={styles.formWrapper}>
@@ -82,7 +74,7 @@ export default function AuthScreen() {
           </View>
         </Animated.View>
       </View>
-    </ThemedView>
+    </Surface>
   );
 }
 
