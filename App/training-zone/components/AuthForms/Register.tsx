@@ -36,7 +36,8 @@ export default function Register() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phoneRegex = /^[0-9]{9}$/;
     if (!emailRegex.test(email.trim())) return "Correo electrónico inválido.";
-    if (!phoneRegex.test(phone)) return "El teléfono debe tener 9 dígitos."; // <-- aquí
+    if (phoneRegex.test(phone.trim()))
+      return "El teléfono debe tener 9 dígitos.";
     if (password.length < 6)
       return "La contraseña debe tener al menos 6 caracteres.";
     if (password !== confirmPassword) return "Las contraseñas no coinciden.";
@@ -104,7 +105,7 @@ export default function Register() {
       <TextInput
         label="Correo electrónico"
         value={email}
-        onChangeText={(text) => setEmail(text.trim())}
+        onChangeText={setEmail}
         mode="outlined"
         keyboardType="email-address"
         autoCapitalize="none"
@@ -117,7 +118,7 @@ export default function Register() {
       <TextInput
         label="Teléfono"
         value={phone}
-        onChangeText={(text) => setPhone(text.trim())}
+        onChangeText={setPhone}
         mode="outlined"
         keyboardType="phone-pad"
         theme={{
