@@ -57,7 +57,7 @@ function AllClassesView() {
                         </p>
                       </div>
                       <button onClick={() =>
-                        navigate(`/classes/${activity.Id}`)
+                        navigate(`/class/${activity.Id}`)
                       }>
                         Ver Clase
                       </button>
