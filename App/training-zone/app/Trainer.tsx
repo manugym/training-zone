@@ -104,13 +104,13 @@ export default function TrainerView() {
 
         marked[dateString] = {
           selected: true,
-          selectedColor: theme.colors.secondaryContainer,
+          selectedColor: theme.colors.secondary,
         };
       });
     });
 
     return marked;
-  }, [trainer, theme.colors.secondaryContainer]);
+  }, [trainer]);
 
   if (!id) {
     return (
