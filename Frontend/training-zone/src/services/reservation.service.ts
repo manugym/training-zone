@@ -5,7 +5,7 @@ class ReservationService {
   private readonly RESERVATION_URL = "Reservation"
 
 
-  async getReservationById(): Promise<Reservation[]> {
+  async getReservationsByUser(): Promise<Reservation[]> {
     const response = await apiService.get<Reservation[]>(`${this.RESERVATION_URL}/reservationsByUser`);
 
     if(!response.success) {
