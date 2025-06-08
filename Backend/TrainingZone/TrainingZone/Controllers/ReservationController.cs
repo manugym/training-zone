@@ -32,7 +32,10 @@ namespace TrainingZone.Controllers
 
             ReservationDto newReservation = await _reservationService.CreateReservationAsync(userIdInt, scheduleId);
 
-            if (newReservation == null) return null;
+            if (newReservation == null)
+            {
+                return NotFound("El id de la reserva no existe");
+            }
 
             return Ok(newReservation);
         }

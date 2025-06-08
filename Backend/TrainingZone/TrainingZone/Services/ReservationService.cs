@@ -18,6 +18,9 @@ namespace TrainingZone.Services
         public async Task<ReservationDto> CreateReservationAsync(int userId, int scheduleId)
         {
             Schedule schedule = await _unitOfWork.ScheduleRepository.GetScheduleByIdAsync(scheduleId);
+
+            if (schedule == null) return null;
+
             Reservation reservation = new Reservation
             {
                 UserId = userId,
