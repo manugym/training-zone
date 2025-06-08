@@ -25,7 +25,7 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding-bottom: 0.5rem;
+  padding-bottom: 1rem;
 }
 
 .image-panel img {
@@ -79,6 +79,7 @@
 }
 
 .class-list-panel {
+  width: 100%;
   overflow-x: auto;
 }
 
@@ -100,11 +101,16 @@
 .class-table th,
 .class-table td {
   padding: 0.5rem;
-  text-align: left;
+  text-align: center;
   word-break: break-word;
 }
 
 @media (max-width: 480px) {
+  .class-table{
+    min-width: 100%;
+  }
+  .class-table th:nth-child(1),
+  .class-table td:nth-child(1),
   .class-table th:nth-child(2),
   .class-table td:nth-child(2) {
     display: none;
