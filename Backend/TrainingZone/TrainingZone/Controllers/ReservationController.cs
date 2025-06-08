@@ -21,7 +21,7 @@ namespace TrainingZone.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> createReservation([FromBody] CreateReservationDto createReservationDto)
+        public async Task<IActionResult> createReservation(int scheduleId)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -30,7 +30,7 @@ namespace TrainingZone.Controllers
                 return Unauthorized();
             }
 
-            ReservationDto newReservation = await _reservationService.CreateReservationAsync(userIdInt, createReservationDto);
+            ReservationDto newReservation = await _reservationService.CreateReservationAsync(userIdInt, scheduleId);
 
             if (newReservation == null) return null;
 

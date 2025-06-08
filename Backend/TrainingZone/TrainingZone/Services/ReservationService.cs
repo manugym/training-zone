@@ -15,13 +15,13 @@ namespace TrainingZone.Services
             _reservationMapper = reservationMapper;
         }
 
-        public async Task<ReservationDto> CreateReservationAsync(int userId, CreateReservationDto createReservationDto)
+        public async Task<ReservationDto> CreateReservationAsync(int userId, int scheduleId)
         {
-            Schedule schedule = await _unitOfWork.ScheduleRepository.GetScheduleByIdAsync(createReservationDto.ScheduleId);
+            Schedule schedule = await _unitOfWork.ScheduleRepository.GetScheduleByIdAsync(scheduleId);
             Reservation reservation = new Reservation
             {
                 UserId = userId,
-                ScheduleId = createReservationDto.ScheduleId,
+                ScheduleId = scheduleId,
                 ReservationDate = schedule.StartDateTime
             };
 
