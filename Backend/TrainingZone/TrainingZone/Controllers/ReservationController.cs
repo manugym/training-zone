@@ -57,7 +57,7 @@ namespace TrainingZone.Controllers
         }
 
         [Authorize]
-        [HttpDelete()]
+        [HttpDelete]
         public async Task<IActionResult> DeleteReservationById(int reservationId)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

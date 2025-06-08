@@ -31,7 +31,9 @@ namespace TrainingZone.Services
             _unitOfWork.Context.Reservations.Add(reservation);
             await _unitOfWork.Context.SaveChangesAsync();
 
-            ReservationDto reservationDto = await _reservationMapper.ToDto(reservation);
+            Reservation fullReservation = await _unitOfWork.ReservationRepository.GetReservationByIdAsync(reservation.Id);
+
+            ReservationDto reservationDto = _reservationMapper.ToDto(fullReservation);
 
             return reservationDto;
         }
@@ -40,18 +42,18 @@ namespace TrainingZone.Services
         {
             IEnumerable<Reservation> reservations = await _unitOfWork.ReservationRepository.GetReservationsByUserIdAsync(userId);
 
-            IEnumerable<ReservationDto> reservationsDto = await _reservationMapper.ToDto(reservations);
+            IEnumerable<ReservationDto> reservationsDto = _reservationMapper.ToDto(reservations);
 
             return reservationsDto;
         }
 
         public async Task<ReservationDto> DeleteReservationByIdAsync(int reservationId, int userId)
         {
-            Reservation reservation = await _unitOfWork.ReservationRepository.GetReservationByIdAsync(reservationId);
-
-            ReservationDto reservationDto = await _reservationMapper.ToDto(reservation);
+             Reservation reservation = await _unitOfWork.ReservationRepository.GetReservationByIdAsync(reservationId);
 
             if (reservation == null || reservation.UserId != userId) return null;
+
+            ReservationDto reservationDto = _reservationMapper.ToDto(reservation);
 
             _unitOfWork.ReservationRepository.Delete(reservation);
             await _unitOfWork.SaveAsync();
