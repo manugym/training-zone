@@ -3,7 +3,7 @@ import "./Chat.css";
 import NavBar from "../../components/NavBar/NavBar";
 import websocketService from "../../services/websocket.service";
 import chatService from "../../services/chat.service";
-import All_Users_With_Conversation from "../../components/All_Users_With_Conversation/All_Users_With_Conversation";
+import All_Users_With_Conversation from "../../components/All_Conversations/All_Conversations";
 import Conversation from "../../components/Conversation/Conversation";
 import userService from "../../services/user.service";
 import { useNavigate } from "react-router-dom";

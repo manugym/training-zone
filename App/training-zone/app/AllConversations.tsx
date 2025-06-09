@@ -21,6 +21,8 @@ import websocketService from "@/services/websocket.service";
 import userService from "@/services/user.service";
 
 export default function AllConversations() {
+  const SERVER_IMAGE_URL = `${ServerUrl}/UserProfilePicture`;
+
   const theme = useTheme();
   const router = useRouter();
 
@@ -118,9 +120,8 @@ export default function AllConversations() {
                       <Avatar.Image
                         size={50}
                         source={{
-                          uri: `${ServerUrl}/${
-                            destinationUser?.AvatarImageUrl ||
-                            "UserProfilePicture/default.png"
+                          uri: `${SERVER_IMAGE_URL}/${
+                            destinationUser?.AvatarImageUrl || "default.png"
                           }`,
                         }}
                         style={{

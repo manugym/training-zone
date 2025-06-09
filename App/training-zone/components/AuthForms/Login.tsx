@@ -5,6 +5,7 @@ import { ThemedView } from "../ThemedView";
 import authService from "@/services/auth.service";
 import { useRouter } from "expo-router";
 import Toast from "react-native-toast-message";
+import { Shapes } from "@/constants/Shapes";
 
 function Login() {
   const theme = useTheme();
@@ -93,7 +94,13 @@ function Login() {
       <Button
         mode="contained"
         onPress={handleSubmit}
-        labelStyle={{ fontSize: 18, paddingVertical: 6 }}
+        style={{
+          borderRadius: Shapes.medium,
+        }}
+        labelStyle={{
+          fontSize: 18,
+          paddingVertical: 6,
+        }}
       >
         Iniciar sesión
       </Button>

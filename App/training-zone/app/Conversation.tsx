@@ -24,6 +24,7 @@ import userService from "@/services/user.service";
 import { User } from "@/models/user";
 import { Chat } from "@/models/chat";
 import { ChatMessage } from "@/models/chat-message";
+import { Shapes } from "@/constants/Shapes";
 
 export default function Conversation() {
   const theme = useTheme();
@@ -223,6 +224,8 @@ export default function Conversation() {
                               ? theme.colors.primary
                               : theme.colors.secondary,
                           alignSelf: isMine ? "flex-end" : "flex-start",
+                          borderBottomRightRadius: isMine ? 0 : undefined,
+                          borderBottomLeftRadius: isMine ? undefined : 0,
                         },
                       ]}
                     >
@@ -389,7 +392,7 @@ const styles = StyleSheet.create({
   },
   messageBox: {
     padding: 10,
-    borderRadius: 10,
+    borderRadius: Shapes.medium,
     marginBottom: 8,
     maxWidth: "75%",
   },
@@ -431,7 +434,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 8,
+    borderRadius: Shapes.small,
     elevation: 2,
   },
   dateText: {

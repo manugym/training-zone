@@ -15,6 +15,7 @@ import { AllTrainers } from "@/models/all-trainers";
 import { ClassType } from "@/models/enums/class-type";
 import { TrainerFilter } from "@/models/trainer-filter";
 import trainerService from "@/services/trainer.service";
+import { Shapes } from "@/constants/Shapes";
 
 export default function AllTrainersPage() {
   const theme = useTheme();
@@ -173,7 +174,8 @@ export default function AllTrainersPage() {
                   <Image
                     source={{
                       uri: `${SERVER_IMAGE_URL}/${
-                        trainer.User.AvatarImageUrl || "default.png"
+                        trainer.User.AvatarImageUrl ||
+                        "UserProfilePicture/default.png"
                       }`,
                     }}
                     style={styles.trainerImage}
@@ -276,7 +278,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
   trainerCard: {
-    borderRadius: 12,
+    borderRadius: Shapes.small,
     overflow: "hidden",
     borderWidth: 2,
     marginBottom: 16,
@@ -289,7 +291,7 @@ const styles = StyleSheet.create({
     width: "50%",
     margin: 16,
     aspectRatio: 1,
-    borderRadius: 8,
+    borderRadius: Shapes.small,
   },
   trainerInfo: {
     flex: 1,
