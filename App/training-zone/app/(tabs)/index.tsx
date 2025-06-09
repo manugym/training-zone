@@ -1,67 +1,78 @@
-import { StyleSheet, Button, Alert } from "react-native";
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
+import { StyleSheet, Alert } from "react-native";
+import { Button, Surface, Text, useTheme } from "react-native-paper";
 import { useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import apiService from "@/services/api.service";
 import userService from "@/services/user.service";
-import { useEffect, useState } from "react";
-import { User } from "@/models/user";
 import authService from "@/services/auth.service";
+import { User } from "@/models/user";
+import { Shapes } from "@/constants/Shapes";
 
 export default function HomeScreen() {
   const router = useRouter();
-
+  const theme = useTheme();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   useEffect(() => {
     async function isUserLogin() {
       await apiService.initializeJwt();
       if (!apiService.jwt) {
-        Alert.alert("!Bienvenido!", "Inicia sesión para continuar");
+        Alert.alert("¡Bienvenido!", "Inicia sesión para continuar");
         router.push("/Auth");
       }
     }
-
     isUserLogin();
   }, [currentUser]);
 
-  //subscription to get the current user
   useEffect(() => {
     const subscription = userService.currentUser$.subscribe((user) => {
       setCurrentUser(user);
     });
-
     return () => {
       subscription.unsubscribe();
     };
   }, []);
 
   return (
-    <ThemedView style={styles.container}>
-      <ThemedText type="title" style={styles.title}>
+    <Surface
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+      elevation={0}
+    >
+      <Text variant="displayMedium" style={styles.title}>
         Welcome! {currentUser?.Name}
-      </ThemedText>
-      <Button title="Go to Auth" onPress={() => router.push("/Auth")} />
+      </Text>
       <Button
-        title="Logout"
+        mode="contained"
+        onPress={() => router.push("/Auth")}
+        style={styles.button}
+      >
+        Go to Auth
+      </Button>
+      <Button
+        mode="contained"
         onPress={async () => {
           await authService.logout();
           router.push("/Auth");
         }}
-      />
+        style={styles.button}
+      >
+        Logout
+      </Button>
       <Button
-        title="Chat"
-        onPress={() => {
-          router.push("/AllConversations");
-        }}
-      />
+        mode="contained"
+        onPress={() => router.push("/AllConversations")}
+        style={styles.button}
+      >
+        Chat
+      </Button>
       <Button
-        title="All Trainers"
-        onPress={() => {
-          router.push("/AllTrainers");
-        }}
-      />
-    </ThemedView>
+        mode="contained"
+        onPress={() => router.push("/AllTrainers")}
+        style={styles.button}
+      >
+        All Trainers
+      </Button>
+    </Surface>
   );
 }
 
@@ -77,5 +88,10 @@ const styles = StyleSheet.create({
   title: {
     marginBottom: 16,
     textAlign: "center",
+  },
+  button: {
+    marginVertical: 6,
+    width: "80%",
+    borderRadius: Shapes.medium,
   },
 });

@@ -14,16 +14,17 @@ public class ImageService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<String> InsertAsync(IFormFile image)
+    public async Task<string> InsertAsync(IFormFile image)
     {
         try
         {
             string relativePath;
             if (image != null)
-            { 
-                relativePath = $"{IMAGES_FOLDER}/{Guid.NewGuid()}_{image.FileName}";
+            {
+                string imageName = $"{Guid.NewGuid()}_{image.FileName}";
+                relativePath = $"{IMAGES_FOLDER}/{imageName}";
                 await StoreImageAsync(relativePath, image);
-                return relativePath;
+                return imageName;
             }
 
         }
