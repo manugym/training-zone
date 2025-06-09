@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import chatService from "../../services/chat.service";
 import { User } from "../../models/user";
-import "./All_Users_With_Conversation.css";
+import "./All_Conversations.css";
 import { Chat } from "../../models/chat";
 import userService from "../../services/user.service";
 
 function All_Users_With_Conversation() {
-  const SERVER_URL = `${import.meta.env.VITE_SERVER_URL}`;
+  const SERVER_IMAGE_URL = `${
+    import.meta.env.VITE_SERVER_URL
+  }/UserProfilePicture`;
 
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
@@ -74,12 +76,10 @@ function All_Users_With_Conversation() {
             onClick={() => setSelectedChat(chat)}
           >
             <img
-              src={`${SERVER_URL}/${
+              src={`${SERVER_IMAGE_URL}/${
                 chat.UserOriginId === currentUser.Id
-                  ? chat.UserDestination?.AvatarImageUrl ||
-                    "UserProfilePicture/default.png"
-                  : chat.UserOrigin?.AvatarImageUrl ||
-                    "UserProfilePicture/default.png"
+                  ? chat.UserDestination?.AvatarImageUrl || "default.png"
+                  : chat.UserOrigin?.AvatarImageUrl || "default.png"
               }`}
               alt="Avatar"
               className="avatar"

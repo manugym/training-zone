@@ -22,6 +22,8 @@ import { Table, TableWrapper, Row, Cell } from "react-native-table-component";
 import { Shapes } from "@/constants/Shapes";
 
 export default function TrainerView() {
+  const SERVER_IMAGE_URL = `${ServerUrl}/UserProfilePicture`;
+
   const { id } = useLocalSearchParams();
   const theme = useTheme();
 
@@ -146,9 +148,8 @@ export default function TrainerView() {
             <View style={styles.trainerImageContainer}>
               <Image
                 source={{
-                  uri: `${ServerUrl}/${
-                    trainer.User.AvatarImageUrl ||
-                    "UserProfilePicture/default.png"
+                  uri: `${SERVER_IMAGE_URL}/${
+                    trainer.User.AvatarImageUrl || "default.png"
                   }`,
                 }}
                 style={styles.trainerImage}

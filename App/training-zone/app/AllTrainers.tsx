@@ -174,7 +174,8 @@ export default function AllTrainersPage() {
                   <Image
                     source={{
                       uri: `${SERVER_IMAGE_URL}/${
-                        trainer.User.AvatarImageUrl || "default.png"
+                        trainer.User.AvatarImageUrl ||
+                        "UserProfilePicture/default.png"
                       }`,
                     }}
                     style={styles.trainerImage}
