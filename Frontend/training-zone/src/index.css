@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Open+Sans:wght@400;600&display=swap");
+
 /*Light Theme*/
 :root {
   --color-background: #e3f2fd;
@@ -9,6 +11,9 @@
   --button-bg: rgba(152, 206, 244, 0.635);
   --button-bg-alt: rgba(152, 206, 244, 0.301);
   --icon-color: #0a192f;
+
+  --font-title: "Bebas Neue", sans-serif;
+  --font-body: "Open Sans", sans-serif;
 }
 
 /*Dark Theme*/
@@ -31,7 +36,7 @@ html,
 body {
   background-color: var(--color-background);
   color: var(--color-text);
-  font-family: Arial, sans-serif;
+  font-family: var(--font-body);
   margin: 0;
   padding: 0;
   width: 100%;
@@ -39,4 +44,14 @@ body {
   min-height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-title);
+  letter-spacing: 1px;
 }
