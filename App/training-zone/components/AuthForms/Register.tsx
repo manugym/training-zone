@@ -1,33 +1,25 @@
 import React, { useState } from "react";
-import {
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Image,
-  useColorScheme,
-  Alert,
-} from "react-native";
-import Checkbox from "expo-checkbox";
+import { StyleSheet, Image, Alert, TouchableOpacity } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { Colors } from "@/constants/Colors";
+import { TextInput, Button, useTheme } from "react-native-paper";
 import { ThemedText } from "../ThemedText";
 import { ThemedView } from "../ThemedView";
 import defaultAvatar from "@/assets/images/default-avatar.jpg";
 import authService from "@/services/auth.service";
+import Toast from "react-native-toast-message";
+import { useRouter } from "expo-router";
+import { Shapes } from "@/constants/Shapes";
 
 export default function Register() {
-  const colorScheme = useColorScheme() || "light";
-  const theme = Colors[colorScheme];
+  const theme = useTheme();
+  const router = useRouter();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [image, setImage] = useState<string>(null);
-
-  const [error, setError] = useState("");
+  const [image, setImage] = useState<string | null>(null);
 
   const handlePickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -36,8 +28,6 @@ export default function Register() {
       quality: 0.5,
     });
 
-    console.log(result);
-
     if (!result.canceled && result.assets.length > 0) {
       setImage(result.assets[0].uri);
     }
@@ -45,8 +35,9 @@ export default function Register() {
 
   const validateForm = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) return "Correo electrónico inválido.";
-    if (!/^[0-9]{9}$/.test(phone)) return "El teléfono debe tener 9 dígitos.";
+    const phoneRegex = /^[0-9]{9}$/;
+    if (!emailRegex.test(email.trim())) return "Correo electrónico inválido.";
+    if (!phoneRegex.test(phone)) return "El teléfono debe tener 9 dígitos.";
     if (password.length < 6)
       return "La contraseña debe tener al menos 6 caracteres.";
     if (password !== confirmPassword) return "Las contraseñas no coinciden.";
@@ -54,10 +45,14 @@ export default function Register() {
   };
 
   const handleSubmit = async () => {
-    setError("");
     const validationError = validateForm();
     if (validationError) {
-      setError(validationError);
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: validationError,
+        position: "bottom",
+      });
       return;
     }
 
@@ -71,15 +66,21 @@ export default function Register() {
       });
 
       Alert.alert("Registro exitoso", "¡Te has registrado correctamente!");
+      router.push("/");
     } catch (err) {
-      setError("Ocurrió un error. Intenta de nuevo.");
+      const message = err.message || "Ocurrió un error. Intenta de nuevo.";
+
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: message,
+        position: "bottom",
+      });
     }
   };
 
   return (
-    <ThemedView
-      style={[styles.container, { backgroundColor: theme.background }]}
-    >
+    <ThemedView style={styles.container}>
       <TouchableOpacity onPress={handlePickImage} style={styles.imageContainer}>
         <Image
           source={image ? { uri: image } : defaultAvatar}
@@ -91,57 +92,76 @@ export default function Register() {
       </TouchableOpacity>
 
       <TextInput
-        style={styles.input}
-        placeholder="Nombre completo"
-        placeholderTextColor="#aaa"
+        label="Nombre completo"
         value={name}
         onChangeText={setName}
+        mode="outlined"
+        theme={{
+          colors: {
+            primary: theme.colors.surface,
+          },
+        }}
       />
       <TextInput
-        style={styles.input}
-        placeholder="Correo electrónico"
-        keyboardType="email-address"
-        placeholderTextColor="#aaa"
+        label="Correo electrónico"
         value={email}
-        onChangeText={setEmail}
+        onChangeText={(text) => setEmail(text.trim())}
+        mode="outlined"
+        keyboardType="email-address"
+        autoCapitalize="none"
+        theme={{
+          colors: {
+            primary: theme.colors.surface,
+          },
+        }}
       />
       <TextInput
-        style={styles.input}
-        placeholder="Teléfono"
-        keyboardType="phone-pad"
-        placeholderTextColor="#aaa"
+        label="Teléfono"
         value={phone}
-        onChangeText={setPhone}
+        onChangeText={(text) => setPhone(text.trim())}
+        mode="outlined"
+        keyboardType="phone-pad"
+        theme={{
+          colors: {
+            primary: theme.colors.surface,
+          },
+        }}
       />
       <TextInput
-        style={styles.input}
-        placeholder="Contraseña"
-        placeholderTextColor="#aaa"
-        secureTextEntry
+        label="Contraseña"
         value={password}
         onChangeText={setPassword}
+        mode="outlined"
+        secureTextEntry
+        theme={{
+          colors: {
+            primary: theme.colors.surface,
+          },
+        }}
       />
       <TextInput
-        style={styles.input}
-        placeholder="Confirmar contraseña"
-        placeholderTextColor="#aaa"
-        secureTextEntry
+        label="Confirmar contraseña"
         value={confirmPassword}
         onChangeText={setConfirmPassword}
+        mode="outlined"
+        secureTextEntry
+        theme={{
+          colors: {
+            primary: theme.colors.surface,
+          },
+        }}
       />
 
-      {error ? (
-        <ThemedText type="default" style={styles.error}>
-          {error}
-        </ThemedText>
-      ) : null}
-
-      <TouchableOpacity
-        style={[styles.registerButton, { backgroundColor: theme.primary }]}
+      <Button
+        mode="contained"
         onPress={handleSubmit}
+        labelStyle={{ fontSize: 18, paddingVertical: 6 }}
+        style={{
+          borderRadius: Shapes.medium,
+        }}
       >
-        <ThemedText style={styles.registerButtonText}>Registrarse</ThemedText>
-      </TouchableOpacity>
+        Registrarse
+      </Button>
     </ThemedView>
   );
 }
@@ -150,25 +170,19 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     padding: 20,
-    alignItems: "center",
     justifyContent: "center",
+    gap: 20,
   },
-  input: {
-    backgroundColor: "#1f2937",
-    color: "#fff",
-    width: "100%",
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 15,
-  },
+
   imageContainer: {
     marginBottom: 20,
     position: "relative",
+    alignSelf: "center",
   },
   profileImage: {
     width: 100,
     height: 100,
-    borderRadius: 50,
+    borderRadius: Shapes.pill,
   },
   addImageText: {
     position: "absolute",
@@ -177,27 +191,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#1565c0",
     color: "#fff",
     fontSize: 18,
-    borderRadius: 12,
+    borderRadius: Shapes.pill,
     width: 24,
     height: 24,
     textAlign: "center",
     lineHeight: 24,
-  },
-  error: {
-    color: "#f87171",
-    marginBottom: 10,
-    alignSelf: "flex-start",
-  },
-  registerButton: {
-    paddingVertical: 14,
-    paddingHorizontal: 30,
-    borderRadius: 10,
-    alignItems: "center",
-    width: "100%",
-  },
-  registerButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
   },
 });

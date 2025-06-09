@@ -74,6 +74,7 @@ public class Seeder
             Phone = "612345678",
             Password = _passwordService.Hash("1234"),
             Role = Role.TRAINER.ToString().ToLower(),
+            AvatarImageUrl = "ana-lopez.png"
         },
         new User
         {
@@ -82,6 +83,8 @@ public class Seeder
             Phone = "623456789",
             Password = _passwordService.Hash("1234"),
             Role = Role.TRAINER.ToString().ToLower(),
+            AvatarImageUrl = "carlos-perez.png"
+
         },
         new User
         {
@@ -90,6 +93,7 @@ public class Seeder
             Phone = "634567891",
             Password = _passwordService.Hash("1234"),
             Role = Role.TRAINER.ToString().ToLower(),
+            AvatarImageUrl = "maria-garcia.png"
         },
         new User
         {
@@ -98,6 +102,7 @@ public class Seeder
             Phone = "645678912",
             Password = _passwordService.Hash("1234"),
             Role = Role.TRAINER.ToString().ToLower(),
+            AvatarImageUrl = "luis-fernandez.png"
         },
         new User
         {
@@ -106,6 +111,7 @@ public class Seeder
             Phone = "656789123",
             Password = _passwordService.Hash("1234"),
             Role = Role.TRAINER.ToString().ToLower(),
+            AvatarImageUrl = "elena-sanchez.png"
         },
         new User
         {
@@ -114,6 +120,7 @@ public class Seeder
             Phone = "667891234",
             Password = _passwordService.Hash("1234"),
             Role = Role.TRAINER.ToString().ToLower(),
+            AvatarImageUrl = "diego-torres.png"
         },
         new User
         {
@@ -122,6 +129,7 @@ public class Seeder
             Phone = "678912345",
             Password = _passwordService.Hash("1234"),
             Role = Role.TRAINER.ToString().ToLower(),
+            AvatarImageUrl = "lucia-romero.png"
         },
         new User
         {
@@ -130,6 +138,7 @@ public class Seeder
             Phone = "689123456",
             Password = _passwordService.Hash("1234"),
             Role = Role.TRAINER.ToString().ToLower(),
+            AvatarImageUrl = "javier-herrera.png"
         },
         new User
         {
@@ -138,6 +147,7 @@ public class Seeder
             Phone = "691234567",
             Password = _passwordService.Hash("1234"),
             Role = Role.TRAINER.ToString().ToLower(),
+            AvatarImageUrl = "sofia-jimenez.png"
         },
         new User
         {
@@ -146,6 +156,7 @@ public class Seeder
             Phone = "602345678",
             Password = _passwordService.Hash("1234"),
             Role = Role.TRAINER.ToString().ToLower(),
+            AvatarImageUrl = "fernando-ruiz.png"
         },
     ];
 

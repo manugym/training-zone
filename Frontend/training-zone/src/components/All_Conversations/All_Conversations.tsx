@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import chatService from "../../services/chat.service";
 import { User } from "../../models/user";
-import "./All_Users_With_Conversation.css";
+import "./All_Conversations.css";
 import { Chat } from "../../models/chat";
 import userService from "../../services/user.service";
 

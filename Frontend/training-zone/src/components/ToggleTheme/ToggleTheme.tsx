@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./ToggleTheme.css";
-import { FaRegSun } from "react-icons/fa";
 import { FaRegMoon } from "react-icons/fa";
+import { HiSun } from "react-icons/hi";
 
 function ToggleTheme() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -43,7 +43,7 @@ function ToggleTheme() {
       <label className="dark_mode_label" htmlFor="darkmode-toggle">
         <FaRegMoon className="icon moon" />
         <span className="toggle_ball" />
-        <FaRegSun className="icon sun" />
+        <HiSun className="icon sun" />
       </label>
     </div>
   );

@@ -1,37 +1,32 @@
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
-import Spinner from "@/components/ui/Spinner";
-import { Colors } from "@/constants/Colors";
+import { ScrollView, StyleSheet, View, Image } from "react-native";
+import {
+  TextInput,
+  Button,
+  Menu,
+  Card,
+  Text,
+  useTheme,
+  ActivityIndicator,
+} from "react-native-paper";
+import { Stack, useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import { ServerUrl } from "@/constants/ServerUrl";
 import { AllTrainers } from "@/models/all-trainers";
 import { ClassType } from "@/models/enums/class-type";
 import { TrainerFilter } from "@/models/trainer-filter";
 import trainerService from "@/services/trainer.service";
-import { Stack, useRouter } from "expo-router";
-import { useEffect, useState } from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  TextInput,
-  Image,
-  View,
-  useColorScheme,
-  TouchableOpacity,
-} from "react-native";
-import { Dropdown } from "react-native-element-dropdown";
+import { Shapes } from "@/constants/Shapes";
 
 export default function AllTrainersPage() {
+  const theme = useTheme();
   const router = useRouter();
-
-  const colorScheme = useColorScheme() || "light";
-  const theme = Colors[colorScheme];
 
   const SERVER_IMAGE_URL = `${ServerUrl}/UserProfilePicture`;
 
   const [allTrainers, setAllTrainers] = useState<AllTrainers | null>(null);
 
   const [classType, setClassType] = useState<ClassType | null>(null);
-  const [name, setName] = useState<string>("");
+  const [name, setName] = useState("");
 
   // Initial filter
   const [filter, setFilter] = useState<TrainerFilter>({
@@ -41,7 +36,11 @@ export default function AllTrainersPage() {
 
   const [loading, setLoading] = useState(false);
 
-  // Handle filter changes
+  // For Menu dropdown
+  const [menuVisible, setMenuVisible] = useState(false);
+  const openMenu = () => setMenuVisible(true);
+  const closeMenu = () => setMenuVisible(false);
+
   useEffect(() => {
     setFilter({
       ClassType: classType,
@@ -67,9 +66,7 @@ export default function AllTrainersPage() {
     const fetchTrainers = async () => {
       try {
         setLoading(true);
-
         const allTrainers = await trainerService.getAllTrainers(filter);
-        console.log("Trainers", allTrainers);
         setAllTrainers(allTrainers);
       } catch (error) {
         console.error("Error fetching trainers", error);
@@ -77,121 +74,182 @@ export default function AllTrainersPage() {
         setLoading(false);
       }
     };
-
     fetchTrainers();
   }, [filter]);
 
+  // Dropdown options for class types
+  const classTypeOptions = [
+    { label: "Todas las clases", value: null },
+    ...Object.keys(ClassType)
+      .filter((key) => isNaN(Number(key)))
+      .map((key) => ({
+        label: key,
+        value: ClassType[key as keyof typeof ClassType],
+      })),
+  ];
+
+  // Get label for current classType value
+  const currentClassLabel =
+    classTypeOptions.find((opt) => opt.value === classType)?.label ||
+    "Selecciona clase";
+
   return (
-    <ThemedView style={styles.viewContainer}>
-      <Stack.Screen
-        options={{
-          title: "All Trainers",
-        }}
-      />
+    <View
+      style={[
+        styles.viewContainer,
+        { backgroundColor: theme.colors.background },
+      ]}
+    >
+      <Stack.Screen options={{ title: "All Trainers" }} />
 
       {/*Searcher */}
       <View style={styles.searchContainer}>
         <TextInput
-          style={[styles.input, { color: theme.text, borderColor: theme.text }]}
+          mode="outlined"
+          style={styles.textInput}
+          label="Buscar entrenador..."
           value={name}
           onChangeText={setName}
-          placeholder="Buscar entrenador..."
-          placeholderTextColor={theme.text + "99"}
+          theme={{
+            colors: {
+              primary: theme.colors.surface,
+            },
+          }}
         />
 
-        <Dropdown
-          style={[styles.input, { borderColor: theme.text }]}
-          data={[
-            { label: "Todas las clases", value: null },
-            ...Object.keys(ClassType)
-              .filter((key) => isNaN(Number(key)))
-              .map((key) => ({
-                label: key,
-                value: ClassType[key as keyof typeof ClassType],
-              })),
-          ]}
-          labelField="label"
-          valueField="value"
-          placeholder="Selecciona clase"
-          value={classType}
-          onChange={(item) => setClassType(item.value)}
-          placeholderStyle={{ color: theme.text + "99" }}
-          selectedTextStyle={{ color: theme.text }}
-          maxHeight={200}
-        />
+        <Menu
+          visible={menuVisible}
+          onDismiss={closeMenu}
+          anchor={
+            <Button
+              mode="outlined"
+              onPress={openMenu}
+              style={styles.menuButton}
+              textColor={theme.colors.onBackground}
+              icon="menu-down"
+            >
+              {currentClassLabel}
+            </Button>
+          }
+        >
+          {classTypeOptions.map(({ label, value }) => (
+            <Menu.Item
+              key={label}
+              onPress={() => {
+                setClassType(value);
+                closeMenu();
+              }}
+              title={label}
+              titleStyle={{
+                color:
+                  classType === value
+                    ? theme.colors.primary
+                    : theme.colors.onSurface,
+                fontWeight: classType === value ? "700" : "400",
+              }}
+            />
+          ))}
+        </Menu>
       </View>
 
-      {/*Trainers List */}
       <ScrollView
-        style={{ backgroundColor: theme.background }}
         keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ paddingBottom: 20 }}
       >
-        {allTrainers && allTrainers.Trainers.length > 0 && (
+        {allTrainers && allTrainers.Trainers.length > 0 ? (
           <View style={styles.trainersGrid}>
             {allTrainers.Trainers.map((trainer) => (
-              <View
+              <Card
                 key={trainer.User.Id}
-                style={[{ borderColor: theme.details }, styles.trainerCard]}
+                style={[
+                  styles.trainerCard,
+                  {
+                    borderColor: theme.colors.secondary,
+                    backgroundColor: "transparent",
+                  },
+                ]}
+                mode="outlined"
               >
-                <View style={styles.trainerImageContainer}>
+                <View style={styles.trainerRow}>
                   <Image
                     source={{
                       uri: `${SERVER_IMAGE_URL}/${
-                        trainer.User.AvatarImageUrl || "default.png"
+                        trainer.User.AvatarImageUrl ||
+                        "UserProfilePicture/default.png"
                       }`,
                     }}
                     style={styles.trainerImage}
                     resizeMode="cover"
                   />
-                </View>
-                <View style={styles.trainerInfo}>
-                  <View style={styles.trainerInfoTop}>
-                    <ThemedText type="subtitle">{trainer.User.Name}</ThemedText>
 
-                    {trainer.TrainerClasses.map((c, i) => (
-                      <ThemedText
-                        key={c.Id}
-                        style={{
-                          color: i % 2 === 0 ? theme.secondary : theme.details,
-                        }}
-                      >
-                        {ClassType[c.Type]}
-                      </ThemedText>
-                    ))}
-                  </View>
-                  <TouchableOpacity
-                    style={[
-                      { backgroundColor: theme.primary },
-                      styles.profileButton,
-                    ]}
-                    onPress={() =>
-                      router.push({
-                        pathname: "/Trainer",
-                        params: { id: trainer.User.Id },
-                      })
-                    }
-                  >
-                    <ThemedText type="subtitle" style={{ fontSize: 18 }}>
+                  <View style={styles.trainerInfo}>
+                    <Text
+                      variant="headlineMedium"
+                      style={{
+                        color: theme.colors.onSurface,
+                        textAlign: "left",
+                      }}
+                    >
+                      {trainer.User.Name}
+                    </Text>
+
+                    <View style={styles.classTypesContainer}>
+                      {trainer.TrainerClasses.map((c, i) => (
+                        <Text
+                          key={c.Id}
+                          style={{
+                            color:
+                              i % 2 === 0
+                                ? theme.colors.secondary
+                                : theme.colors.primary,
+                            fontWeight: "600",
+                            marginRight: 8,
+                          }}
+                          variant="bodyMedium"
+                        >
+                          {ClassType[c.Type]}
+                        </Text>
+                      ))}
+                    </View>
+
+                    <Button
+                      mode="contained"
+                      onPress={() =>
+                        router.push({
+                          pathname: "/Trainer",
+                          params: { id: trainer.User.Id },
+                        })
+                      }
+                      style={styles.profileButton}
+                      contentStyle={{ paddingVertical: 4 }}
+                      labelStyle={{ fontSize: 14, fontWeight: "700" }}
+                    >
                       Ver Perfil
-                    </ThemedText>
-                  </TouchableOpacity>
+                    </Button>
+                  </View>
                 </View>
-              </View>
+              </Card>
             ))}
           </View>
-        )}
-
-        {!loading && (!allTrainers || allTrainers.Trainers.length === 0) && (
+        ) : !loading ? (
           <View style={styles.noResultsContainer}>
-            <ThemedText type="subtitle">
+            <Text
+              variant="titleMedium"
+              style={{ color: theme.colors.onSurface }}
+            >
               No se encontraron entrenadores
-            </ThemedText>
+            </Text>
           </View>
+        ) : (
+          <ActivityIndicator
+            animating={true}
+            size="large"
+            color={theme.colors.primary}
+            style={{ marginTop: 20 }}
+          />
         )}
-
-        {loading && <Spinner />}
       </ScrollView>
-    </ThemedView>
+    </View>
   );
 }
 
@@ -199,26 +257,19 @@ const styles = StyleSheet.create({
   viewContainer: {
     flex: 1,
     paddingTop: 20,
-    paddingBottom: 20,
   },
   searchContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: "column",
     paddingHorizontal: 16,
     paddingBottom: 20,
     gap: 12,
-    flexWrap: "wrap",
   },
-  input: {
-    flexGrow: 1,
-    minWidth: 200,
-    height: 44,
-    paddingHorizontal: 14,
-    borderRadius: 8,
-    borderWidth: 1,
-    fontSize: 16,
-    backgroundColor: "transparent",
+  textInput: {
+    width: "100%",
+  },
+  menuButton: {
+    width: "100%",
+    justifyContent: "center",
   },
 
   trainersGrid: {
@@ -226,52 +277,37 @@ const styles = StyleSheet.create({
     gap: 20,
     flexDirection: "column",
   },
-
   trainerCard: {
-    flexDirection: "row",
-    borderRadius: 12,
+    borderRadius: Shapes.small,
     overflow: "hidden",
     borderWidth: 2,
-    elevation: 4,
+    marginBottom: 16,
   },
-
-  trainerImageContainer: {
-    width: "50%",
-    aspectRatio: 1,
-    padding: 10,
-    justifyContent: "center",
+  trainerRow: {
+    flexDirection: "row",
     alignItems: "center",
   },
-
   trainerImage: {
-    width: "100%",
-    height: "100%",
-    borderRadius: 8,
+    width: "50%",
+    margin: 16,
+    aspectRatio: 1,
+    borderRadius: Shapes.small,
   },
-
   trainerInfo: {
     flex: 1,
     paddingVertical: 20,
     paddingHorizontal: 16,
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 10,
+    justifyContent: "flex-start",
+    gap: 16,
   },
-
-  trainerInfoTop: {
-    marginBottom: 10,
-    gap: 10,
+  classTypesContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
   },
   profileButton: {
-    marginTop: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 18,
-    borderRadius: 6,
-    alignSelf: "center",
+    alignSelf: "flex-start",
   },
-
   noResultsContainer: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
     paddingTop: 50,
