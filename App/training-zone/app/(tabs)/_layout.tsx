@@ -50,6 +50,15 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="AllTrainers"
+        options={{
+          title: "Entrenadores",
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="account-tie" size={28} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="AllClasses"
         options={{
           title: "Clases",
