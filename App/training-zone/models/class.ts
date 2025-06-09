@@ -5,5 +5,6 @@ export interface Class {
   Id: number;
   Type: ClassType;
   Description: string;
+  ClassImageUrl: string;
   Schedules: Schedule[];
 }
