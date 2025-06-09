@@ -19,6 +19,7 @@ import { Trainer } from "@/models/trainer";
 import { Class } from "@/models/class";
 import { ClassType } from "@/models/enums/class-type";
 import { Table, TableWrapper, Row, Cell } from "react-native-table-component";
+import { Shapes } from "@/constants/Shapes";
 
 export default function TrainerView() {
   const { id } = useLocalSearchParams();
@@ -350,7 +351,6 @@ const styles = StyleSheet.create({
     padding: 10,
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 8,
     overflow: "hidden",
   },
   trainerImage: {
@@ -359,7 +359,7 @@ const styles = StyleSheet.create({
   },
   button: {
     alignSelf: "center",
-    borderRadius: 6,
+    borderRadius: Shapes.medium,
   },
   classesContainer: {
     flex: 1,
@@ -367,7 +367,7 @@ const styles = StyleSheet.create({
   },
   calendar: {
     borderWidth: 1,
-    borderRadius: 12,
+    borderRadius: Shapes.small,
     padding: 20,
     height: 350,
   },

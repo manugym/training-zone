@@ -8,6 +8,7 @@ import defaultAvatar from "@/assets/images/default-avatar.jpg";
 import authService from "@/services/auth.service";
 import Toast from "react-native-toast-message";
 import { useRouter } from "expo-router";
+import { Shapes } from "@/constants/Shapes";
 
 export default function Register() {
   const theme = useTheme();
@@ -155,6 +156,9 @@ export default function Register() {
         mode="contained"
         onPress={handleSubmit}
         labelStyle={{ fontSize: 18, paddingVertical: 6 }}
+        style={{
+          borderRadius: Shapes.medium,
+        }}
       >
         Registrarse
       </Button>
@@ -178,7 +182,7 @@ const styles = StyleSheet.create({
   profileImage: {
     width: 100,
     height: 100,
-    borderRadius: 50,
+    borderRadius: Shapes.pill,
   },
   addImageText: {
     position: "absolute",
@@ -187,7 +191,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#1565c0",
     color: "#fff",
     fontSize: 18,
-    borderRadius: 12,
+    borderRadius: Shapes.pill,
     width: 24,
     height: 24,
     textAlign: "center",

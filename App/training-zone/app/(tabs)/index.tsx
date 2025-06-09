@@ -6,12 +6,11 @@ import apiService from "@/services/api.service";
 import userService from "@/services/user.service";
 import authService from "@/services/auth.service";
 import { User } from "@/models/user";
+import { Shapes } from "@/constants/Shapes";
 
 export default function HomeScreen() {
   const router = useRouter();
-
   const theme = useTheme();
-
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -93,5 +92,6 @@ const styles = StyleSheet.create({
   button: {
     marginVertical: 6,
     width: "80%",
+    borderRadius: Shapes.medium,
   },
 });
