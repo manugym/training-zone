@@ -1,1 +1,4 @@
-export const ServerUrl = "http://192.168.18.100:7089";
+if (!process.env.EXPO_PUBLIC_BASE_URL) {
+  throw new Error('EXPO_PUBLIC_BASE_URL not defined');
+}
+export const ServerUrl = process.env.EXPO_PUBLIC_BASE_URL;

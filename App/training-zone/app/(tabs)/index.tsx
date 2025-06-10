@@ -1,97 +1,33 @@
-import { StyleSheet, Alert } from "react-native";
-import { Button, Surface, Text, useTheme } from "react-native-paper";
-import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
-import apiService from "@/services/api.service";
-import userService from "@/services/user.service";
-import authService from "@/services/auth.service";
-import { User } from "@/models/user";
-import { Shapes } from "@/constants/Shapes";
+import React from "react";
+import { ScrollView, StyleSheet, useColorScheme } from "react-native";
+import SectionLogReg from "@/components/HomeSections/SectionLogReg";
+import SectionCards from "@/components/HomeSections/SectionCard";
+import { ThemedView } from "@/components/ThemedView";
+import { Colors } from "@/constants/Colors";
 
-export default function HomeScreen() {
-  const router = useRouter();
-  const theme = useTheme();
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    async function isUserLogin() {
-      await apiService.initializeJwt();
-      if (!apiService.jwt) {
-        Alert.alert("¡Bienvenido!", "Inicia sesión para continuar");
-        router.push("/Auth");
-      }
-    }
-    isUserLogin();
-  }, [currentUser]);
-
-  useEffect(() => {
-    const subscription = userService.currentUser$.subscribe((user) => {
-      setCurrentUser(user);
-    });
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, []);
+export default function Home() {
+  const colorScheme = useColorScheme() || "light";
+  const theme = Colors[colorScheme];
 
   return (
-    <Surface
-      style={[styles.container, { backgroundColor: theme.colors.background }]}
-      elevation={0}
-    >
-      <Text variant="displayMedium" style={styles.title}>
-        Welcome! {currentUser?.Name}
-      </Text>
-      <Button
-        mode="contained"
-        onPress={() => router.push("/Auth")}
-        style={styles.button}
-      >
-        Go to Auth
-      </Button>
-      <Button
-        mode="contained"
-        onPress={async () => {
-          await authService.logout();
-          router.push("/Auth");
-        }}
-        style={styles.button}
-      >
-        Logout
-      </Button>
-      <Button
-        mode="contained"
-        onPress={() => router.push("/AllConversations")}
-        style={styles.button}
-      >
-        Chat
-      </Button>
-      <Button
-        mode="contained"
-        onPress={() => router.push("/AllTrainers")}
-        style={styles.button}
-      >
-        All Trainers
-      </Button>
-    </Surface>
+    <ThemedView style={[styles.container, { backgroundColor: theme.background }]}>
+      <ScrollView contentContainerStyle={styles.content}>
+        <SectionLogReg />
+        <SectionCards />
+      </ScrollView>
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: "100%",
-    height: "100%",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 16,
   },
-  title: {
-    marginBottom: 16,
-    textAlign: "center",
-  },
-  button: {
-    marginVertical: 6,
-    width: "80%",
-    borderRadius: Shapes.medium,
+  content: {
+    flexGrow: 1,
+    justifyContent: "flex-start",
+    alignItems: "stretch",
+    paddingBottom: 40,
+    gap: 18,
   },
 });
