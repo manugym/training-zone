@@ -138,5 +138,18 @@ namespace TrainingZone.Controllers
             return Ok(allSchedulesDto);
         }
 
+        [HttpGet("trainers")]
+        public async Task<ActionResult<IEnumerable<ScheduleTrainerDto>>> GetAllScheduleTrainers()
+        {
+            IEnumerable<ScheduleTrainerDto> allScheduleTrainers = await _scheduleService.GetAllScheduleTrainers();
+
+            if(allScheduleTrainers == null)
+            {
+                return NotFound("No se encontraron los entrenadores");
+            }
+
+            return Ok(allScheduleTrainers);
+        }
+
     }
 }

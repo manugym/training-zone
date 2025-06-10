@@ -9,11 +9,14 @@ namespace TrainingZone.Services
     {
         private readonly UnitOfWork _unitOfWork;
         private readonly ScheduleMapper _scheduleMapper;
+        private readonly UserMapper _userMapper;
 
-        public ScheduleService (UnitOfWork unitOfWork, ScheduleMapper scheduleMapper)
+        public ScheduleService (UnitOfWork unitOfWork, ScheduleMapper scheduleMapper, UserMapper userMapper)
         {
             _unitOfWork = unitOfWork;
             _scheduleMapper = scheduleMapper;
+            _userMapper = userMapper;
+            
         }
 
         public async Task<Schedule> InsertSchedule(Schedule schedule)
@@ -148,6 +151,15 @@ namespace TrainingZone.Services
             IEnumerable<ScheduleDto> allSchedulesDto = _scheduleMapper.ToDto(allSchedules.ToList());
 
             return allSchedulesDto;
+        }
+
+        public async Task<IEnumerable<ScheduleTrainerDto>> GetAllScheduleTrainers()
+        {
+            IEnumerable<User> allTrainers = await _unitOfWork.UserRepository.GetAllTrainersAsync();
+
+            IEnumerable<ScheduleTrainerDto> allTrainersDtos = _userMapper.ToScheduleTrainerDto(allTrainers);
+
+            return allTrainersDtos;
         }
     }
 }
