@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import apiService from "../../services/api.service";
 import NavBar from "../../components/NavBar/NavBar";
 import defaultAvatar from "../../assets/default-avatar-.jpg";
-import "./UserView.css";
+import "./UserProfile.css";
 import authService from "../../services/auth.service";
 
 export default function EditUser() {
@@ -54,8 +54,6 @@ export default function EditUser() {
 
       if (user.AvatarImageUrl)
         setImagePreview(`${SERVER_IMAGE_URL}/${user.AvatarImageUrl}`);
-
-      setImagePreview(defaultAvatar);
     });
 
     return () => subscription.unsubscribe();

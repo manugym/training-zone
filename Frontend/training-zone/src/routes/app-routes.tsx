@@ -7,7 +7,7 @@ import Chat from "../pages/Chat/Chat";
 import UsersAdmin from "../pages/UsersAdmin/UsersAdmin";
 import ForbiddenPage from "../pages/Errors/ForbiddenPage";
 import PageNotFound from "../pages/Errors/PageNotFound";
-import UserView from "../pages/UserView/UserView";
+import UserView from "../pages/UserProfile/UserProfile";
 
 function AppRoutes() {
   return (
