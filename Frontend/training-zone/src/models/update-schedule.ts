@@ -3,6 +3,6 @@ export interface UpdateSchedule {
   UserId: number;
   MaxCapacity?: number;
   Price?: number;
-  StartDateTime?: number;
-  EndDateTime?: number;
+  StartDateTime?: Date;
+  EndDateTime?: Date;
 }
