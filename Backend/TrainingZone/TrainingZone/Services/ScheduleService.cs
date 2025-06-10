@@ -1,6 +1,7 @@
 ﻿using TrainingZone.Mappers;
 using TrainingZone.Models.DataBase;
 using TrainingZone.Models.Dtos.Schedule;
+using TrainingZone.Models.Enums;
 
 namespace TrainingZone.Services
 {
@@ -46,6 +47,13 @@ namespace TrainingZone.Services
                 return null;
             }
 
+            User trainer = await _unitOfWork.UserRepository.GetByIdAsync(newSchedule.UserId);
+
+            if (trainer.Role != Role.TRAINER.ToString().ToLower())
+            {
+                throw new InvalidOperationException("El usuario no tiene el rol adecuado");
+            }
+
             Schedule scheduleToSave = await _scheduleMapper.ToEntity(newSchedule);
 
             try
@@ -82,6 +90,13 @@ namespace TrainingZone.Services
         {
             if (updateScheduleDto == null) return null;
 
+            User trainer = await _unitOfWork.UserRepository.GetByIdAsync(updateScheduleDto.UserId);
+
+            if (trainer.Role != Role.TRAINER.ToString().ToLower())
+            {
+                throw new InvalidOperationException("El usuario no tiene el rol adecuado");
+            }
+
             try
             {
                 Schedule schedule = await _unitOfWork.ScheduleRepository.GetScheduleByIdAsync(scheduleId);
@@ -90,7 +105,7 @@ namespace TrainingZone.Services
 
                 schedule.ClassId = updateScheduleDto.ClassId ?? schedule.ClassId;
 
-                schedule.UserId = updateScheduleDto.UserId ?? schedule.UserId;
+                schedule.UserId = updateScheduleDto.UserId;
 
                 schedule.MaxCapacity = updateScheduleDto.MaxCapacity ?? schedule.MaxCapacity;
 
