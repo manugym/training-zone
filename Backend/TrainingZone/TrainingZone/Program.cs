@@ -94,6 +94,7 @@ public class Program
         builder.Services.AddScoped<TrainerSmartSearchService>();
         builder.Services.AddScoped<ChatService>();
         builder.Services.AddScoped<RoutineGeneratorService>();
+        builder.Services.AddScoped<ReservationService>();
 
 
 
@@ -107,6 +108,7 @@ public class Program
         builder.Services.AddTransient<UserMapper>();
         builder.Services.AddTransient<ScheduleMapper>();
         builder.Services.AddTransient<ChatMapper>();
+        builder.Services.AddTransient<ReservationMapper>();
 
 
 

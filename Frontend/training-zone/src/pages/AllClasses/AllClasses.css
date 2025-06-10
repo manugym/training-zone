@@ -1,0 +1,131 @@
+.all-classes-view-container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--color-background);
+  padding: 100px 1rem 20px 1rem;
+}
+
+.all-classes-view-container h1 {
+  font-size: 2.5rem;
+  color: var(--color-text);
+  margin: 20px 0;
+  text-align: center;
+}
+
+.content-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.top-section {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 20px;
+  gap: 20px;
+  text-align: center;
+}
+
+.all-classes-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 1300px;
+  justify-items: center;
+  padding: 0 20px;
+}
+
+.class-card {
+  display: flex;
+  width: 100%;
+  max-width: 600px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px var(--color-details);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  border: 1px solid var(--color-details);
+  overflow: hidden;
+  min-height: 220px;
+  margin: 0 auto;
+}
+
+.class-image-container {
+  width: 50%;
+  height: 100%;
+}
+
+.class-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  padding: 10px;
+}
+
+.class-information-container {
+  width: 50%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.class-info-top h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--color-text);
+}
+
+.class-description {
+  margin-top: 8px;
+  color: var(--color-secondary);
+  font-size: 1rem;
+}
+
+.class-information-container button {
+  align-self: flex-start;
+  padding: 8px 16px;
+  border: none;
+  background-color: var(--color-primary);
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.class-information-container button:hover {
+  background-color: var(--color-secondary);
+}
+
+.no-classes-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .all-classes-view-container h1 {
+    font-size: 2rem;
+  }
+
+  .all-classes-container {
+    grid-template-columns: 1fr;
+    padding: 0 20px;
+  }
+
+  .class-card {
+    max-width: 100%;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .class-card h2 {
+    font-size: 1.3rem;
+  }
+}

@@ -6,12 +6,12 @@ namespace TrainingZone.Services
     {
         private readonly UnitOfWork _unitOfWork;
 
-        public ClassService (UnitOfWork unitOfWork)
+        public ClassService(UnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Class> GetClassById (int classId)
+        public async Task<Class> GetClassById(int classId)
         {
             Class activity = await _unitOfWork.ClassRepository.GetClassByIdAsync(classId);
 
@@ -21,5 +21,11 @@ namespace TrainingZone.Services
             return activity;
         }
 
+        public async Task<List<Class>> GetAllClassesAsync()
+        {
+            List<Class> activities = (await _unitOfWork.ClassRepository.GetAllAsync()).ToList();
+
+            return activities;
+        }
     }
 }

@@ -24,7 +24,7 @@ function TrainerPage() {
   const navigate = useNavigate();
 
   if (!id) {
-    return <h1>Trainer ID not found</h1>;
+    return <h1>El ID del entrenador no se encontró</h1>;
   }
 
   const [trainer, setTrainer] = useState<Trainer | null>(null);

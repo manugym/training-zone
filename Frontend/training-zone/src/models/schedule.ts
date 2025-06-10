@@ -1,7 +1,12 @@
+import { ClassType } from "./enums/class-type.ts";
+import { Trainer } from "./trainer.ts";
+
 export interface Schedule {
   Id: number;
   ClassId: number;
-  UserId: number;
+  ClassType: ClassType;
+  Description: string;
+  Trainer?: Trainer;
   MaxCapacity: number;
   Price: number;
   StartDateTime: Date;

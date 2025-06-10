@@ -20,6 +20,7 @@ public class TrainingZoneContext : DbContext
     public DbSet<Class> Classes { get; set; }
     public DbSet<Schedule> Schedules { get; set; }
     public DbSet<ChatMessage> ChatsMessages { get; set; }
+    public DbSet<Reservation> Reservations { get; set; }
 
 
 

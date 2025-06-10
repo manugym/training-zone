@@ -22,7 +22,7 @@ namespace TrainingZone.Mappers
             {
                 Id = schedule.Id,
                 ClassId = schedule.ClassId,
-                ClassType = schedule.Class.Type.ToString(),
+                ClassType = schedule.Class.Type,
                 Description = schedule.Class.Description,
                 Trainer = _userMapper.ToDto(schedule.User),
                 MaxCapacity = schedule.MaxCapacity,

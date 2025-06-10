@@ -21,7 +21,7 @@ export default function AllTrainersPage() {
   const theme = useTheme();
   const router = useRouter();
 
-  const SERVER_IMAGE_URL = `${ServerUrl}/UserProfilePicture`;
+  const SERVER_IMAGE_URL = `${ServerUrl}/`;
 
   const [allTrainers, setAllTrainers] = useState<AllTrainers | null>(null);
 

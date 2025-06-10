@@ -116,5 +116,14 @@ namespace TrainingZone.Services
 
             return null;
         }
+
+        public async Task<IEnumerable<ScheduleDto>> getAllScheduleByDate (int classId, DateOnly date)
+        {
+            IEnumerable<Schedule> classSchedule = await _unitOfWork.ScheduleRepository.GetAllSchedulesByDate(classId, date);
+
+            IEnumerable<ScheduleDto> classScheduleDto = _scheduleMapper.ToDto(classSchedule.ToList());
+
+            return classScheduleDto;
+        }
     }
 }
