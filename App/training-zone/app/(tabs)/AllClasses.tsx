@@ -55,7 +55,7 @@ export default function AllClassesScreen() {
                 key={activity.Id}
                 style={[styles.classCard, { backgroundColor: theme.details, borderColor: theme.primary }]}
                 activeOpacity={0.9}
-                onPress={() => router.push({ pathname: "/class", params: { id: activity.Id } })}
+                onPress={() => router.push({ pathname: "/ClassDetail", params: { id: activity.Id } })}
               >
                 <Image
                   source={{
@@ -73,7 +73,7 @@ export default function AllClassesScreen() {
                   </ThemedText>
                   <TouchableOpacity
                     style={[styles.button, { backgroundColor: theme.primary }]}
-                    onPress={() => router.push({ pathname: "/class", params: { id: activity.Id } })}
+                    onPress={() => router.push({ pathname: "/ClassDetail", params: { id: activity.Id } })}
                   >
                     <Text style={styles.buttonText}>Ver Clase</Text>
                   </TouchableOpacity>
