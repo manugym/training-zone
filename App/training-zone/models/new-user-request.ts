@@ -1,5 +1,3 @@
-import { ImagePickerAsset } from "expo-image-picker";
-
 export interface NewUserRequest {
   name: string;
   phone: string;
