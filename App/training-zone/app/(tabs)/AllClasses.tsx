@@ -36,8 +36,13 @@ export default function AllClassesScreen() {
 
   return (
     <ThemedView style={[styles.container, { backgroundColor: theme.background }]}>
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        <ThemedText type="title" style={[styles.title, { color: theme.text }]}>Nuestras Clases</ThemedText>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
+        <ThemedText type="title" style={[styles.title, { color: theme.text }]}>
+          Nuestras Clases
+        </ThemedText>
         {loading && (
           <ActivityIndicator size="large" color={theme.primary} style={{ marginTop: 48 }} />
         )}
@@ -65,7 +70,7 @@ export default function AllClassesScreen() {
                   resizeMode="cover"
                 />
                 <View style={styles.infoContainer}>
-                  <ThemedText type="subtitle" style={[styles.classType, { color: theme.secondary }]}>
+                  <ThemedText type="subtitle" style={[styles.classType, { color: theme.primary }]}>
                     {ClassType[activity.Type]}
                   </ThemedText>
                   <ThemedText style={[styles.classDescription, { color: theme.text }]}>
@@ -96,7 +101,7 @@ const styles = StyleSheet.create({
     minHeight: "100%",
   },
   content: {
-    paddingHorizontal: 12,
+    paddingHorizontal: 16,
     alignItems: "center",
     width: "100%",
     paddingBottom: 32,
@@ -125,7 +130,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 8,
     elevation: 2,
-    backgroundColor: "#fff",
   },
   classImage: {
     width: "100%",
@@ -139,7 +143,7 @@ const styles = StyleSheet.create({
   },
   classType: {
     fontSize: 19,
-    fontWeight: "700",
+    fontWeight: "bold",
     marginBottom: 3,
   },
   classDescription: {
