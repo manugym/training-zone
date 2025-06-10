@@ -140,5 +140,14 @@ namespace TrainingZone.Services
 
             return classScheduleDto;
         }
+
+        public async Task<IEnumerable<ScheduleDto>> GetAllSchedulesAsync()
+        {
+            IEnumerable<Schedule> allSchedules = await _unitOfWork.ScheduleRepository.GetAllSchedulesAsync();
+
+            IEnumerable<ScheduleDto> allSchedulesDto = _scheduleMapper.ToDto(allSchedules.ToList());
+
+            return allSchedulesDto;
+        }
     }
 }

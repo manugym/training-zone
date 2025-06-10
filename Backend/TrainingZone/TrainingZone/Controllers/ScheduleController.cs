@@ -33,7 +33,7 @@ namespace TrainingZone.Controllers
         }
 
         [Authorize(Roles = "admin")]
-        [HttpPost("create")]
+        [HttpPost()]
         public async Task<IActionResult> CreateNewSchedule([FromBody] CreateScheduleDto createScheduleDto)
         {
             if (createScheduleDto == null)
@@ -110,6 +110,7 @@ namespace TrainingZone.Controllers
             return Ok(updatedSchedule);
         }
 
+        [Authorize]
         [HttpGet("byDate")]
         public async Task<ActionResult<IEnumerable<ScheduleDto>>> GetSchedulesByDateAndClass([FromQuery] int classId, [FromQuery] DateOnly date)
         {
@@ -122,5 +123,20 @@ namespace TrainingZone.Controllers
 
             return Ok(scheduleByClassAndDate);
         }
+
+        [Authorize]
+        [HttpGet("schedules")]
+        public async Task<ActionResult<IEnumerable<ScheduleDto>>> GetAllSchedules()
+        {
+            IEnumerable<ScheduleDto> allSchedulesDto = await _scheduleService.GetAllSchedulesAsync();
+
+            if (allSchedulesDto == null)
+            {
+                return NotFound("No se encontraron horarios");
+            }
+
+            return Ok(allSchedulesDto);
+        }
+
     }
 }
