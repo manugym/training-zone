@@ -11,8 +11,11 @@ import {
   CustomPaperDarkTheme,
 } from "@/constants/ReactNativePaperTheme";
 
-import { Montserrat_700Bold } from "@expo-google-fonts/montserrat";
-import { Roboto_400Regular } from "@expo-google-fonts/roboto";
+import { BebasNeue_400Regular } from "@expo-google-fonts/bebas-neue";
+import {
+  OpenSans_400Regular,
+  OpenSans_600SemiBold,
+} from "@expo-google-fonts/open-sans";
 import Toast from "react-native-toast-message";
 
 SplashScreen.preventAutoHideAsync();
@@ -22,10 +25,10 @@ export default function RootLayout() {
   const isDark = colorScheme === "dark";
 
   const [loaded] = useFonts({
-    Montserrat_700Bold,
-    Roboto_400Regular,
+    BebasNeue_400Regular,
+    OpenSans_400Regular,
+    OpenSans_600SemiBold,
   });
-
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();

@@ -1,6 +1,7 @@
 import { BehaviorSubject } from "rxjs";
 import { User } from "../models/user";
 import apiService from "./api.service";
+import { NewUserRequest } from "../models/new-user-request";
 
 class UserService {
   private _currentUser = new BehaviorSubject<User | null>(null);
@@ -45,6 +46,27 @@ class UserService {
 
   public getCurrentUser(): User {
     return this._currentUser.value;
+  }
+
+  public async editUseData(newData: NewUserRequest): Promise<void> {
+    const formData = new FormData();
+    formData.append("Name", newData.name);
+    formData.append("Phone", newData.phone);
+    formData.append("Email", newData.email);
+    formData.append("Password", newData.password);
+
+    if (newData.image) {
+      formData.append("Image", newData.image);
+    }
+
+    const response = await apiService.put<User>(this.USER_URL, formData);
+
+    if (!response.success) {
+      throw new Error("Updated user failed");
+    }
+
+    console.log("User updated successful:", response);
+    this._currentUser.next(response.data);
   }
 
   public async getAllUsers(): Promise<User[]> {

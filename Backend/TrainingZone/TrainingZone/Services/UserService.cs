@@ -56,8 +56,8 @@ public class UserService
             if (newData.Password != null)
                 user.Password = _passWordService.Hash(newData.Password);
 
-            if(newData.ImagePath != null)
-                user.AvatarImageUrl = await _imageService.InsertAsync(newData.ImagePath);
+            if(newData.Image != null)
+                user.AvatarImageUrl = await _imageService.InsertAsync(newData.Image);
 
             _unitOfWork.UserRepository.Update(user);
             await _unitOfWork.SaveAsync();

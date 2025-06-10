@@ -80,8 +80,6 @@ class ApiService {
       config.headers["Content-Type"] = "multipart/form-data";
     }
 
-    console.log("Headers", config.headers);
-
     return this.sendRequest<T>(
       axios.post(`${this.BASE_URL}${path}`, body, config)
     );
@@ -95,6 +93,10 @@ class ApiService {
     const config: AxiosRequestConfig = {
       headers: this.getHeaders(undefined, contentType),
     };
+
+    if (body instanceof FormData) {
+      config.headers["Content-Type"] = "multipart/form-data";
+    }
 
     return this.sendRequest<T>(
       axios.put(`${this.BASE_URL}${path}`, body, config)
