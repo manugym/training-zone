@@ -6,8 +6,13 @@ import apiService from "../../services/api.service";
 import NavBar from "../../components/NavBar/NavBar";
 import defaultAvatar from "../../assets/default-avatar-.jpg";
 import "./UserView.css";
+import authService from "../../services/auth.service";
 
 export default function EditUser() {
+  const SERVER_IMAGE_URL = `${
+    import.meta.env.VITE_SERVER_URL
+  }/UserProfilePicture`;
+
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
@@ -46,7 +51,11 @@ export default function EditUser() {
       setName(user.Name || "");
       setEmail(user.Email || "");
       setPhone(user.Phone || "");
-      setImagePreview(user.AvatarImageUrl || defaultAvatar);
+
+      if (user.AvatarImageUrl)
+        setImagePreview(`${SERVER_IMAGE_URL}/${user.AvatarImageUrl}`);
+
+      setImagePreview(defaultAvatar);
     });
 
     return () => subscription.unsubscribe();
@@ -88,6 +97,14 @@ export default function EditUser() {
     }
 
     try {
+      userService.editUseData({
+        name,
+        email,
+        phone,
+        password,
+        image,
+      });
+
       Swal.fire({
         icon: "success",
         title: "Datos actualizados correctamente",
@@ -96,6 +113,22 @@ export default function EditUser() {
         toast: true,
         position: "top-end",
       });
+
+      if (password) {
+        authService.logout();
+
+        Swal.fire({
+          toast: true,
+          position: "top-end",
+          icon: "warning",
+          title: "Necesitas iniciar sesión de nuevo",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+        });
+
+        navigate("/auth", { state: { from: location.pathname } });
+      }
     } catch (err: any) {
       setError(err.message || "Error al actualizar.");
     }
