@@ -21,7 +21,8 @@
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.5.0",
     "rxjs": "^7.8.2",
-    "sweetalert2": "^11.17.2"
+    "sweetalert2": "^11.17.2",
+    "zustand": "^5.0.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

@@ -4,6 +4,7 @@ import AppRoutes from "./routes/app-routes";
 import { useEffect } from "react";
 import apiService from "./services/api.service";
 import userService from "./services/user.service";
+import { usePreferencesStore } from "./store/preferences";
 
 function App() {
   useEffect(() => {
@@ -19,6 +20,12 @@ function App() {
 
     fetchUser();
   }, []);
+
+  const theme = usePreferencesStore((state) => state.theme);
+
+  useEffect(()=> {
+    document.body.setAttribute("data-theme", theme);
+  }, [theme]);
 
   return (
     <BrowserRouter>
