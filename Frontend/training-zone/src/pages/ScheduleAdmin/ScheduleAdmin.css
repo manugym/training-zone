@@ -186,7 +186,7 @@ button.select:focus-visible {
 }
 
 .form-row label {
-  width: 120px; /* Fijo: para alinear todos los labels */
+  width: 120px;
   text-align: left;
   font-weight: 600;
   color: var(--color-text);
