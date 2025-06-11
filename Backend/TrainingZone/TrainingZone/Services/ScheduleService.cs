@@ -52,6 +52,11 @@ namespace TrainingZone.Services
 
             User trainer = await _unitOfWork.UserRepository.GetByIdAsync(newSchedule.UserId);
 
+            if(trainer == null)
+            {
+                throw new InvalidOperationException("Se necesita un entrenador en el horario");
+            }
+
             if (trainer.Role != Role.TRAINER.ToString().ToLower())
             {
                 throw new InvalidOperationException("El usuario no tiene el rol adecuado");
