@@ -7,7 +7,6 @@ import {
   useColorScheme,
   Platform,
 } from "react-native";
-import Dialog from "react-native-dialog";
 import { useRouter } from "expo-router";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -96,17 +95,6 @@ export default function SectionLogReg() {
           </View>
         )}
       </View>
-
-      {(Platform.OS === "android" || Platform.OS === "ios") && (
-        <Dialog.Container visible={showLogoutDialog}>
-          <Dialog.Title>¿Cerrar sesión?</Dialog.Title>
-          <Dialog.Description>
-            ¿Estás seguro de que quieres cerrar tu sesión?
-          </Dialog.Description>
-          <Dialog.Button label="Cancelar" onPress={() => setShowLogoutDialog(false)} />
-          <Dialog.Button label="Cerrar sesión" onPress={confirmLogout} />
-        </Dialog.Container>
-      )}
     </ThemedView>
   );
 }
