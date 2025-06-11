@@ -1,0 +1,201 @@
+UsuarioID,Nombre,Edad,Género,TipoSuscripción,FechaRegistro,GimnasioID
+1,Demetrio Piña Carbonell,54,M,Trimestral,2025-05-23,4
+2,Aurelio Viñas Pizarro,44,M,Mensual,2024-08-16,4
+3,Gloria Ramírez,39,M,Anual,2024-02-12,1
+4,Constanza Batalla Medina,45,F,Anual,2024-08-27,5
+5,Rocío Vicens Salazar,28,M,Anual,2025-06-06,5
+6,Eulalia Ocaña-Guerrero,52,M,Trimestral,2024-06-05,1
+7,Montserrat Barrena Mena,34,F,Anual,2025-03-01,1
+8,Adelaida Elisabet Samper Ayuso,18,M,Anual,2023-11-10,2
+9,Trini Balaguer Carpio,56,M,Mensual,2024-11-19,3
+10,Delia Ricart Dominguez,36,M,Trimestral,2024-03-16,3
+11,Tania Echevarría,39,F,Mensual,2024-08-28,4
+12,Sarita Mariño Cañellas,56,F,Mensual,2024-04-02,5
+13,Alcides Artigas,55,M,Trimestral,2024-05-17,4
+14,Martín Martinez,54,M,Anual,2024-01-23,3
+15,Moisés Moles Guillén,43,F,Anual,2023-07-07,2
+16,Irene Canales Sanmiguel,45,M,Mensual,2024-06-05,2
+17,Prudencio Almagro Pedrero,53,F,Trimestral,2024-03-21,5
+18,Concepción Nebot-Garcés,19,F,Mensual,2023-10-13,3
+19,Albina Guillén,40,F,Mensual,2024-06-27,1
+20,Ezequiel Bou Casals,61,F,Mensual,2023-11-22,1
+21,Maricruz Ríos-Goñi,27,M,Trimestral,2023-08-12,4
+22,Loida Mayoral Alemán,21,F,Mensual,2024-06-12,4
+23,Mohamed Herrero Villena,50,F,Trimestral,2023-07-30,1
+24,Serafina Asensio Andreu,61,F,Trimestral,2025-05-05,5
+25,Carla Linares Castell,58,F,Mensual,2025-03-04,2
+26,Dionisio Aparicio,29,F,Mensual,2024-02-11,5
+27,Cesar de Cervera,28,F,Mensual,2023-07-21,5
+28,Guiomar Barroso Pinilla,18,M,Trimestral,2024-12-31,5
+29,Néstor Benet Cantero,44,F,Anual,2024-04-12,5
+30,Ulises Barroso,65,M,Trimestral,2024-01-30,2
+31,Wálter Casal Carvajal,64,F,Mensual,2024-11-17,5
+32,Petrona Azorin Torrent,46,M,Anual,2023-06-22,5
+33,Piedad Quero Alberola,60,F,Trimestral,2025-05-10,4
+34,María Ángeles Perez Arnaiz,59,M,Mensual,2025-01-05,5
+35,Cristian Bayo Rosselló,50,F,Mensual,2024-04-21,3
+36,Gisela Contreras-Angulo,59,M,Anual,2025-02-12,5
+37,José Ángel de Reig,58,F,Mensual,2025-04-21,2
+38,Araceli Mayoral Blanch,33,M,Trimestral,2024-03-07,2
+39,Juanito Solano Jimenez,55,M,Trimestral,2024-08-03,3
+40,Carmelo Ocaña,36,F,Anual,2024-10-07,4
+41,Dan Carmona Molins,22,F,Trimestral,2024-03-17,2
+42,Gala Bernat Múñiz,44,F,Anual,2025-05-21,2
+43,Néstor Barros Tapia,34,F,Mensual,2023-09-06,1
+44,Lola Valle Vallés,25,M,Mensual,2023-09-05,4
+45,Pedro Sanmartín Martorell,62,F,Anual,2023-12-17,5
+46,Nacho Guzmán-Becerra,61,F,Mensual,2024-07-19,3
+47,Jesusa Villanueva Saavedra,25,M,Anual,2023-09-13,4
+48,Felicidad Aroca Fortuny,31,F,Anual,2023-10-12,2
+49,Juan Bautista Jiménez,35,M,Anual,2025-02-01,3
+50,Febe Pinedo Cabello,30,F,Mensual,2025-05-03,1
+51,Modesta Bauzà-Espinosa,33,F,Anual,2023-12-28,2
+52,Gastón Valle Madrid,21,F,Mensual,2023-11-26,2
+53,Patricia Arellano Serrano,39,F,Mensual,2024-09-12,1
+54,Galo Vera Mayol,40,M,Mensual,2025-01-24,4
+55,Faustino Beltrán Piñol,23,M,Mensual,2024-02-15,5
+56,Ibán Tapia Salvà,47,F,Trimestral,2023-10-09,4
+57,Paulina de Azorin,26,M,Trimestral,2024-09-30,3
+58,Benjamín Ceferino Piquer Tur,19,M,Trimestral,2023-07-19,1
+59,Flavia Cuéllar Campillo,65,F,Trimestral,2025-02-08,3
+60,Venceslás Noriega,30,F,Anual,2025-04-16,4
+61,Socorro Zurita-Guzmán,32,M,Mensual,2023-11-08,2
+62,Melisa Guerra,34,F,Mensual,2024-12-21,5
+63,Marisa Aguilar,52,F,Anual,2023-07-12,3
+64,Maximiliano del Jordá,21,F,Mensual,2023-07-11,1
+65,Paz Bartolomé Vaquero,46,M,Anual,2024-10-09,2
+66,Micaela Trujillo Rocamora,24,F,Mensual,2023-07-25,3
+67,Cornelio Cano Olivera,28,M,Anual,2023-11-23,3
+68,Rubén Ríos Arias,25,F,Trimestral,2025-06-07,4
+69,Gema de Gallego,32,F,Trimestral,2024-09-11,3
+70,Bernarda de Segovia,53,F,Trimestral,2025-03-21,1
+71,Antonia Sotelo Casanova,40,M,Trimestral,2025-05-14,4
+72,María Ángeles Gual Plaza,38,M,Trimestral,2023-11-27,3
+73,Cleto del Paniagua,63,F,Anual,2024-11-21,2
+74,Fito Andres Luz,61,F,Mensual,2023-11-05,1
+75,María Belén del Cadenas,29,M,Trimestral,2024-08-07,1
+76,Lucio Belda Cabañas,53,M,Trimestral,2024-07-28,2
+77,Nico Plana Aparicio,22,F,Mensual,2024-11-08,3
+78,Gil Manuel Bravo,43,M,Mensual,2023-09-10,3
+79,Telmo Valero Navarro,60,M,Anual,2023-06-21,5
+80,Micaela Jordá Olivares,55,M,Mensual,2024-12-28,4
+81,Guillermo Mohamed Mercader Olmedo,31,F,Mensual,2024-03-08,2
+82,Paula Ámbar Carlos Terrón,61,M,Mensual,2024-04-21,1
+83,Valero Vila Urrutia,44,M,Trimestral,2025-05-04,5
+84,Simón Porcel Menendez,59,M,Mensual,2024-09-10,5
+85,Roxana de Avilés,62,F,Anual,2024-03-03,4
+86,Ulises Quintana,19,M,Mensual,2023-11-09,3
+87,Lorenzo León Conesa,27,F,Trimestral,2024-03-28,1
+88,Simón Talavera Marqués,62,M,Trimestral,2024-12-18,2
+89,Emma del Jordá,34,F,Trimestral,2024-07-25,3
+90,Jeremías Álvarez Arnaiz,49,M,Anual,2023-12-08,3
+91,Felicidad de Cid,18,M,Trimestral,2024-02-29,4
+92,Remedios Villanueva Campo,26,F,Trimestral,2024-01-29,4
+93,Bartolomé Salas Flor,27,F,Trimestral,2024-04-28,5
+94,Cecilia Vila Cáceres,23,M,Anual,2024-05-21,5
+95,Ariadna Valcárcel Oliva,40,F,Mensual,2024-10-13,1
+96,Iker Belda García,22,F,Anual,2023-07-09,5
+97,Emilia Cerdá-Mur,23,F,Trimestral,2023-06-27,4
+98,Lucila Hoyos Mancebo,58,F,Mensual,2024-10-17,2
+99,Guadalupe Julián-Olivé,23,F,Trimestral,2025-01-24,2
+100,José Antonio Trinidad Alsina Lluch,30,M,Trimestral,2023-12-08,4
+101,Nilo Antón Mercader,25,F,Trimestral,2024-08-31,5
+102,Sancho Español Mateos,36,F,Trimestral,2025-05-25,5
+103,Gregorio Castejón Falcón,40,M,Trimestral,2024-07-24,1
+104,Marcela Robles Carbonell,50,F,Anual,2023-11-25,4
+105,Vanesa Sanmiguel-Perea,62,F,Trimestral,2023-09-12,4
+106,Plácido Camacho Vicente,48,F,Mensual,2023-11-25,5
+107,Candela Palacio Grande,27,F,Mensual,2025-04-05,1
+108,Marta Evita Macías Losa,49,M,Mensual,2025-06-05,2
+109,Augusto Dalmau Gomis,38,F,Trimestral,2024-05-26,4
+110,María Ángeles Piñeiro,60,M,Mensual,2024-10-03,1
+111,Encarnación Sales Sanabria,33,F,Mensual,2024-08-30,2
+112,Bernarda María José Mayoral Godoy,43,M,Anual,2023-10-27,5
+113,Chema del Sobrino,63,M,Mensual,2023-07-27,4
+114,Gracia Sevillano Valderrama,33,F,Anual,2025-01-31,4
+115,Paca Alberdi Tomás,24,M,Mensual,2023-12-20,4
+116,Agapito Jonatan Enríquez Asensio,26,F,Trimestral,2024-11-28,1
+117,Sara Amorós Viñas,41,M,Trimestral,2024-08-12,2
+118,Isidro Adadia Carbajo,40,M,Mensual,2023-10-26,4
+119,Crescencia Nevado Piquer,59,M,Anual,2023-06-21,2
+120,Juan Pablo Díaz Rubio,56,M,Anual,2024-05-06,1
+121,Chema de Guitart,46,M,Anual,2024-05-27,2
+122,Laura Galiano-Salvador,64,F,Mensual,2024-07-07,4
+123,Amada Boada-Egea,35,F,Trimestral,2023-10-28,3
+124,Marciano Valentín Morell,40,F,Anual,2024-03-09,1
+125,Jacinta Piquer Castellanos,39,M,Trimestral,2023-10-22,3
+126,Ruperta Mariño Cañas,42,M,Anual,2024-09-13,2
+127,Fabiana Villaverde Leal,25,M,Anual,2024-08-04,5
+128,Jacinto Ruiz Fonseca,26,F,Anual,2024-10-27,5
+129,Leonardo Felix Pulido Barba,21,M,Trimestral,2024-07-09,5
+130,Teobaldo Vicente Acedo,51,M,Mensual,2025-01-22,1
+131,Bartolomé Soto Arribas,39,F,Trimestral,2024-08-30,3
+132,Joaquín Cárdenas Cabeza,19,F,Trimestral,2024-05-09,3
+133,Rubén Carvajal Falcó,25,F,Trimestral,2023-06-19,4
+134,Desiderio Fuster Vega,42,M,Trimestral,2024-02-25,5
+135,Rafael Zorrilla Noguera,29,F,Mensual,2024-12-06,1
+136,Daniela Sales Llanos,41,F,Anual,2025-01-31,1
+137,Calisto Torrecilla,51,F,Mensual,2024-08-27,3
+138,Yolanda Tomas Ugarte,56,M,Anual,2024-09-12,2
+139,Eustaquio Nicanor Rivero Cabello,28,F,Mensual,2024-11-21,1
+140,Agustina Vilalta Checa,36,F,Mensual,2025-03-15,3
+141,Juan Antonio Llabrés Millán,40,M,Trimestral,2024-06-19,3
+142,Rosario Uriarte,20,F,Mensual,2024-07-12,5
+143,Sandra Carrillo Quesada,43,M,Anual,2024-10-16,1
+144,Hugo Goyo Vall Camino,20,F,Mensual,2025-02-05,1
+145,Hilario Monreal Ordóñez,22,F,Mensual,2024-06-03,4
+146,Abril Maricruz Pintor Pedro,31,M,Anual,2025-04-15,3
+147,Francisco Jose Iglesia Méndez,22,F,Trimestral,2024-01-21,5
+148,David del Pina,27,M,Mensual,2023-12-16,2
+149,Gastón Bueno Boix,50,M,Anual,2024-06-09,4
+150,Carmelo Mosquera Galan,50,F,Mensual,2024-04-15,2
+151,Albert Miguel-Terrón,24,F,Mensual,2024-12-04,2
+152,Melisa Clemente-Cózar,29,M,Mensual,2023-12-22,3
+153,Buenaventura Arroyo Alcalde,24,F,Trimestral,2025-02-12,4
+154,Dora Villar Otero,21,M,Mensual,2024-02-04,2
+155,Wilfredo Briones Cabello,34,F,Mensual,2024-05-03,1
+156,René Arias Ballester,43,F,Anual,2024-08-27,5
+157,Baldomero del Soria,52,F,Anual,2024-08-19,5
+158,Nerea Estevez Marí,28,M,Trimestral,2023-10-15,2
+159,Amílcar de Mesa,51,M,Trimestral,2023-10-15,5
+160,Cipriano Amigó,44,F,Anual,2024-08-11,2
+161,Gracia Chamorro Amat,50,F,Mensual,2025-03-16,5
+162,Marcial Arcos,21,M,Anual,2024-04-21,1
+163,Úrsula Blazquez Reyes,65,F,Anual,2024-08-19,2
+164,Rubén Terrón,58,M,Mensual,2023-07-06,4
+165,Estela Tamarit-Reguera,60,M,Anual,2023-08-11,4
+166,Chucho de Zaragoza,22,F,Trimestral,2023-10-29,3
+167,Marcia Solano-Fiol,53,F,Anual,2025-01-02,5
+168,Gerardo Azorin Rodriguez,50,M,Trimestral,2025-04-04,5
+169,Marisela de Saldaña,51,M,Mensual,2024-01-25,4
+170,Víctor Abascal Font,49,F,Trimestral,2023-07-04,3
+171,Morena Pérez Barrios,53,M,Anual,2024-01-16,3
+172,Jaime Curro Porras Galván,59,F,Mensual,2023-07-11,3
+173,Albina Abascal-Riquelme,58,F,Anual,2024-10-18,5
+174,Marco Zurita,56,F,Trimestral,2023-10-30,1
+175,Miriam Yésica Benavente Agullo,33,F,Mensual,2025-04-27,1
+176,Victor Nuñez,42,F,Mensual,2024-10-11,4
+177,Bernarda Gallo Ayala,31,M,Trimestral,2023-11-08,4
+178,Regina Abascal Crespo,26,F,Mensual,2024-12-21,3
+179,Remedios Armas Pujol,63,F,Anual,2024-09-20,4
+180,Tecla Carlos Villena,21,F,Anual,2025-04-30,5
+181,Isabel Peláez Lara,20,F,Anual,2024-12-29,4
+182,Rubén Lobo Bustos,30,F,Trimestral,2023-09-17,1
+183,Maximiliano Andrés Salgado,60,M,Trimestral,2025-01-25,4
+184,Filomena Sanz Escolano,50,F,Mensual,2024-04-06,5
+185,Cándido de Manzanares,64,M,Trimestral,2023-07-07,2
+186,Hernando Castelló Meléndez,44,F,Anual,2024-03-01,5
+187,Loreto Porras Luján,30,M,Trimestral,2024-09-30,3
+188,Selena Sebastián Vilar,37,F,Mensual,2025-04-04,4
+189,Aurora Tur Ros,65,M,Mensual,2024-01-10,1
+190,Cristina Villegas,34,M,Anual,2025-04-20,4
+191,Virgilio Arias Robledo,32,M,Trimestral,2024-07-15,2
+192,Verónica Arteaga-Guardia,37,M,Mensual,2024-06-01,5
+193,Pilar Verdugo Isern,37,M,Mensual,2024-08-05,4
+194,Encarna del Antúnez,49,M,Anual,2023-11-09,2
+195,Íngrid Valle Guerrero,58,M,Trimestral,2024-06-23,5
+196,Manuel Julio César Villalba Casas,54,M,Trimestral,2025-05-08,2
+197,Loida Soler Canales,19,F,Trimestral,2025-03-31,4
+198,Juliana Riquelme Noguera,35,F,Mensual,2023-11-03,3
+199,Lucas Maestre Salvà,56,M,Trimestral,2024-12-19,3
+200,Aurora Marisa Palacio Dalmau,59,M,Trimestral,2025-05-27,1
