@@ -117,105 +117,105 @@ export default function ScheduleAdmin() {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const now = new Date();
+    const now = new Date();
 
-  if (!Number.isInteger(form.ClassId) || form.ClassId <= 0) {
-    return Swal.fire({
-      icon: "warning",
-      title: "Clase requerida",
-      text: "Selecciona una clase válida.",
-    });
-  }
-
-  if (!Number.isInteger(form.UserId) || form.UserId <= 0) {
-    return Swal.fire({
-      icon: "warning",
-      title: "Entrenador requerido",
-      text: "Debes seleccionar un entrenador válido.",
-    });
-  }
-
-  if (form.MaxCapacity <= 0) {
-    return Swal.fire({
-      icon: "warning",
-      title: "Capacidad inválida",
-      text: "La capacidad debe ser mayor que cero.",
-    });
-  }
-
-  if (form.Price < 0) {
-    return Swal.fire({
-      icon: "warning",
-      title: "Precio inválido",
-      text: "El precio no puede ser negativo.",
-    });
-  }
-
-  if (!form.StartDateTime || !form.EndDateTime) {
-    return Swal.fire({
-      icon: "warning",
-      title: "Fechas incompletas",
-      text: "Debes seleccionar una hora de inicio y una de fin.",
-    });
-  }
-
-  if (form.StartDateTime < now) {
-    return Swal.fire({
-      icon: "warning",
-      title: "Inicio en el pasado",
-      text: "La hora de inicio no puede estar en el pasado.",
-    });
-  }
-
-  if (form.EndDateTime <= form.StartDateTime) {
-    return Swal.fire({
-      icon: "warning",
-      title: "Hora de fin inválida",
-      text: "La hora de fin debe ser posterior a la de inicio.",
-    });
-  }
-
-  try {
-    if (editingId === null) {
-      await scheduleService.createSchedule(form);
-      Swal.fire({
-        icon: "success",
-        title: "Horario creado",
-        text: "El horario se ha creado correctamente.",
-        timer: 2000,
-        showConfirmButton: false,
-      });
-    } else {
-      const updateData: UpdateSchedule = {
-        ClassId: form.ClassId,
-        UserId: form.UserId,
-        MaxCapacity: form.MaxCapacity,
-        Price: form.Price,
-        StartDateTime: form.StartDateTime,
-        EndDateTime: form.EndDateTime,
-      };
-      await scheduleService.updateSchedule(editingId, updateData);
-      Swal.fire({
-        icon: "success",
-        title: "Horario actualizado",
-        text: "El horario se ha actualizado correctamente.",
-        timer: 2000,
-        showConfirmButton: false,
+    if (!Number.isInteger(form.ClassId) || form.ClassId <= 0) {
+      return Swal.fire({
+        icon: "warning",
+        title: "Clase requerida",
+        text: "Selecciona una clase válida.",
       });
     }
 
-    await fetchSchedules();
-    closeModal();
-  } catch (err: any) {
-    Swal.fire({
-      icon: "error",
-      title: "Error",
-      text: err.message || "Error guardando el horario",
-    });
-  }
-};
+    if (!Number.isInteger(form.UserId) || form.UserId <= 0) {
+      return Swal.fire({
+        icon: "warning",
+        title: "Entrenador requerido",
+        text: "Debes seleccionar un entrenador válido.",
+      });
+    }
+
+    if (form.MaxCapacity <= 0) {
+      return Swal.fire({
+        icon: "warning",
+        title: "Capacidad inválida",
+        text: "La capacidad debe ser mayor que cero.",
+      });
+    }
+
+    if (form.Price < 0) {
+      return Swal.fire({
+        icon: "warning",
+        title: "Precio inválido",
+        text: "El precio no puede ser negativo.",
+      });
+    }
+
+    if (!form.StartDateTime || !form.EndDateTime) {
+      return Swal.fire({
+        icon: "warning",
+        title: "Fechas incompletas",
+        text: "Debes seleccionar una hora de inicio y una de fin.",
+      });
+    }
+
+    if (form.StartDateTime < now) {
+      return Swal.fire({
+        icon: "warning",
+        title: "Inicio en el pasado",
+        text: "La hora de inicio no puede estar en el pasado.",
+      });
+    }
+
+    if (form.EndDateTime <= form.StartDateTime) {
+      return Swal.fire({
+        icon: "warning",
+        title: "Hora de fin inválida",
+        text: "La hora de fin debe ser posterior a la de inicio.",
+      });
+    }
+
+    try {
+      if (editingId === null) {
+        await scheduleService.createSchedule(form);
+        Swal.fire({
+          icon: "success",
+          title: "Horario creado",
+          text: "El horario se ha creado correctamente.",
+          timer: 2000,
+          showConfirmButton: false,
+        });
+      } else {
+        const updateData: UpdateSchedule = {
+          ClassId: form.ClassId,
+          UserId: form.UserId,
+          MaxCapacity: form.MaxCapacity,
+          Price: form.Price,
+          StartDateTime: form.StartDateTime,
+          EndDateTime: form.EndDateTime,
+        };
+        await scheduleService.updateSchedule(editingId, updateData);
+        Swal.fire({
+          icon: "success",
+          title: "Horario actualizado",
+          text: "El horario se ha actualizado correctamente.",
+          timer: 2000,
+          showConfirmButton: false,
+        });
+      }
+
+      await fetchSchedules();
+      closeModal();
+    } catch (err: any) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: err.message || "Error guardando el horario",
+      });
+    }
+  };
 
   const handleDelete = async (id: number) => {
     const result = await Swal.fire({
@@ -330,72 +330,91 @@ export default function ScheduleAdmin() {
             <div className="modal-content">
               <form onSubmit={handleSubmit} className="modal-form">
                 <h2>{editingId === null ? "Crear Horario" : "Editar Horario"}</h2>
-                <label htmlFor="ClassId" style={{ textAlign: "left" }}>Clase: </label>
-                <select
-                  className="select"
-                  name="ClassId"
-                  value={form.ClassId}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value={0}>Selecciona una clase</option>
-                  {classes.map(cls => (
-                    <option key={cls.Id} value={cls.Id}>
-                      {ClassType[cls.Type]}
-                    </option>
-                  ))}
-                </select>
-                <label htmlFor="UserId" style={{ textAlign: "left" }}>Entrenador:</label>
-                <select
-                  className="select"
-                  name="UserId"
-                  value={form.UserId}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value={0}>Selecciona un entrenador</option>
-                  {trainers.map(tr => (
-                    <option key={tr.Id} value={tr.Id}>
-                      {tr.Name}
-                    </option>
-                  ))}
-                </select>
-                <label htmlFor="MaxCapacity" style={{ textAlign: "left" }}>Capacidad:</label>
-                <input
-                  className="select"
-                  type="number"
-                  name="MaxCapacity"
-                  placeholder="Capacidad"
-                  value={form.MaxCapacity}
-                  onChange={handleChange}
-                  required
-                />
-                <label htmlFor="Price" style={{ textAlign: "left" }}>Precio:</label>
-                <input
-                  className="select"
-                  type="number"
-                  name="Price"
-                  placeholder="Precio"
-                  value={form.Price}
-                  onChange={handleChange}
-                  required
-                />
-                <input
-                  className="select"
-                  type="datetime-local"
-                  name="StartDateTime"
-                  value={inputDateValue(form.StartDateTime)}
-                  onChange={handleChange}
-                  required
-                />
-                <input
-                  className="select"
-                  type="datetime-local"
-                  name="EndDateTime"
-                  value={inputDateValue(form.EndDateTime)}
-                  onChange={handleChange}
-                  required
-                />
+                <div className="form-row">
+                  <label htmlFor="ClassId">Clase:</label>
+                  <select
+                    className="select"
+                    name="ClassId"
+                    value={form.ClassId}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value={0}>Selecciona una clase</option>
+                    {classes.map(cls => (
+                      <option key={cls.Id} value={cls.Id}>
+                        {ClassType[cls.Type]}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="form-row">
+                  <label htmlFor="UserId">Entrenador:</label>
+                  <select
+                    className="select"
+                    name="UserId"
+                    value={form.UserId}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value={0}>Selecciona un entrenador</option>
+                    {trainers.map(tr => (
+                      <option key={tr.Id} value={tr.Id}>
+                        {tr.Name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-row">
+                  <label htmlFor="MaxCapacity">Capacidad:</label>
+                  <input
+                    className="select"
+                    type="number"
+                    name="MaxCapacity"
+                    placeholder="Capacidad"
+                    value={form.MaxCapacity}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
+                <div className="form-row">
+                  <label htmlFor="Price">Precio:</label>
+                  <input
+                    className="select"
+                    type="number"
+                    name="Price"
+                    placeholder="Precio"
+                    value={form.Price}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
+                <div className="form-row">
+                  <label htmlFor="StartDateTime">Inicio:</label>
+                  <input
+                    className="select"
+                    type="datetime-local"
+                    name="StartDateTime"
+                    value={inputDateValue(form.StartDateTime)}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
+                <div className="form-row">
+                  <label htmlFor="EndDateTime">Fin:</label>
+                  <input
+                    className="select"
+                    type="datetime-local"
+                    name="EndDateTime"
+                    value={inputDateValue(form.EndDateTime)}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
                 <div className="modal-buttons">
                   <button className="select" type="submit">
                     {editingId === null ? "Crear" : "Guardar"}
@@ -405,6 +424,7 @@ export default function ScheduleAdmin() {
                   </button>
                 </div>
               </form>
+
             </div>
           </div>
         )}
