@@ -327,6 +327,11 @@ class ChatService {
 
     websocketService.send(JSON.stringify(socketMessage));
   }
+
+  public cleanService() {
+    this._allChats.next(null);
+    this._actualConversation.next(null);
+  }
 }
 
 export default new ChatService();
