@@ -1,16 +1,18 @@
 import { FaDumbbell } from "react-icons/fa";
 import { FiMenu, FiX } from "react-icons/fi";
-import ToggleTheme from "../ToggleTheme/ToggleTheme";
-import "./NavBar.css";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import ToggleTheme from "../ToggleTheme/ToggleTheme";
+import "./NavBar.css";
+import { useUserStore } from "../../store/userStore";
 
 function NavBar() {
+  
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => setMenuOpen((prev) => !prev);
   const closeMenu = () => setMenuOpen(false);
-
+  const user = useUserStore((state) => state.currentUser);
   return (
     <nav className="navbar">
       <div className="nav-icon">
@@ -26,6 +28,9 @@ function NavBar() {
       </div>
 
       <div className="navbar-right">
+        {user && <span className="user-name">¡Bienvenido, {user.Name}!</span>}
+        {user?.AvatarImageUrl && (
+        <img src={user.AvatarImageUrl} alt="Avatar" className="user-avatar" />)}
         <ToggleTheme />
         <button className="menu-toggle" onClick={toggleMenu}>
           {menuOpen ? <FiX /> : <FiMenu />}
