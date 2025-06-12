@@ -67,6 +67,15 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="Routine"
+        options={{
+          title: "Rutinas",
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="dumbbell" size={28} color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }
