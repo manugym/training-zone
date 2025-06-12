@@ -6,7 +6,7 @@ export interface User {
   Phone: string;
   Email: string;
   Password: string;
-  Role: Role;
+  Role: string;
   AvatarImageUrl?: string;
 }
 
