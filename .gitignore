@@ -1,0 +1,3 @@
+App/training-zone/.env
+App/training-zone/.env.production
+Frontend/training-zone/.env.development
