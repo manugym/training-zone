@@ -115,6 +115,15 @@ class UserService {
 
     return response.data;
   }
+
+  public clearUser(): void {
+  this._currentUser.next(null);
+}
+
+public setCurrentUser(user: User): void {
+  this._currentUser.next(user);
+}
+
 }
 
 export default new UserService();

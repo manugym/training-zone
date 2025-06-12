@@ -1,7 +1,6 @@
 import { AuthRequest } from "../models/auth-request";
 import { AuthResponse } from "../models/auth-response";
 import { NewUserRequest } from "../models/new-user-request";
-import { useUserStore } from "../store/userStore";
 import ApiService from "./api.service";
 import chatService from "./chat.service";
 import userService from "./user.service";
@@ -29,11 +28,9 @@ class AuthService {
     this.logout();
 
     this.setSession(response.data.accessToken, remember);
-
     const user = await userService.getAuthenticatedUser();
-    if (user) {
-      useUserStore.getState().clearUser();
-      useUserStore.getState().setCurrentUser(user);
+    if(user){
+      userService.setCurrentUser(user);
     }
   }
 
@@ -61,6 +58,10 @@ class AuthService {
 
     console.log("Registration successful:", response);
     this.setSession(response.data.accessToken, remember);
+    const user = await userService.getAuthenticatedUser();
+    if(user){
+      userService.getCurrentUser();
+    }
   }
 
   async logout(): Promise<void> {
@@ -68,12 +69,15 @@ class AuthService {
     sessionStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.TOKEN_KEY);
     ApiService.jwt = null;
+    userService.clearUser();
+
     useUserStore.getState().clearUser();
 
     //Clear all services
     userService.cleanService();
     chatService.cleanService();
     websocketService.disconnect();
+
   }
 
   private async setSession(token: string, remember: boolean): Promise<void> {
