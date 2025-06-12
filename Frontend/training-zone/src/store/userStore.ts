@@ -13,12 +13,12 @@ export const useUserStore = create<UserState>()(
     (set) => ({
       currentUser: null,
       setCurrentUser: (user) => set({ currentUser: user }),
-      clearUser: () => set({ currentUser: null })
+      clearUser: () => set({ currentUser: null }),
     }),
     {
       name: "user-storage",
       storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({currentUser: state.currentUser}),
+      partialize: (state) => ({ currentUser: state.currentUser }),
     }
   )
 );

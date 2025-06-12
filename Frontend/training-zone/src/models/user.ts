@@ -9,3 +9,5 @@ export interface User {
   Role: string;
   AvatarImageUrl?: string;
 }
+
+export type SafeUser = Pick<User, "Id" | "Name" | "Role" | "AvatarImageUrl">;
