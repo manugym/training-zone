@@ -48,7 +48,6 @@ function All_Users_With_Conversation() {
     };
   }, []);
 
-  //get all users chats request
   useEffect(() => {
     if (!selectedChat) return;
 
@@ -69,42 +68,56 @@ function All_Users_With_Conversation() {
   return (
     <section className="users_container">
       {allChats && allChats.length > 0 ? (
-        allChats.map((chat) => (
-          <div
-            key={chat.Id}
-            className={`user_item ${selectedChat === chat ? "selected" : ""}`}
-            onClick={() => setSelectedChat(chat)}
-          >
-            <img
-              src={`${SERVER_IMAGE_URL}/${
-                chat.UserOriginId === currentUser.Id
-                  ? chat.UserDestination?.AvatarImageUrl || "default.png"
-                  : chat.UserOrigin?.AvatarImageUrl || "default.png"
-              }`}
-              alt="Avatar"
-              className="avatar"
-            />
+        allChats.map((chat) => {
+          const notViewedMessagesCounter =
+            chat.ChatMessages?.filter(
+              (message) =>
+                !message.IsViewed && message.UserId !== currentUser.Id
+            ).length || 0;
 
-            <div className="user_info">
-              <p className="user_name">
-                {chat.UserOriginId === currentUser.Id
-                  ? chat.UserDestination?.Name
-                  : chat.UserOrigin?.Name}
-              </p>
+          return (
+            <div
+              key={chat.Id}
+              className={`user_item ${selectedChat === chat ? "selected" : ""}`}
+              onClick={() => setSelectedChat(chat)}
+            >
+              <img
+                src={`${SERVER_IMAGE_URL}/${
+                  chat.UserOriginId === currentUser.Id
+                    ? chat.UserDestination?.AvatarImageUrl || "default.png"
+                    : chat.UserOrigin?.AvatarImageUrl || "default.png"
+                }`}
+                alt="Avatar"
+                className="avatar"
+              />
 
-              <p className="last-message">
-                {chat.ChatMessages && chat.ChatMessages.length > 0
-                  ? chat.ChatMessages[chat.ChatMessages.length - 1].Message
-                      .length > 20
-                    ? chat.ChatMessages[
-                        chat.ChatMessages.length - 1
-                      ].Message.slice(0, 20) + "..."
-                    : chat.ChatMessages[chat.ChatMessages.length - 1].Message
-                  : "No hay mensajes"}
-              </p>
+              <div className="user_info">
+                <div className="user_name_wrapper">
+                  <p className="user_name">
+                    {chat.UserOriginId === currentUser.Id
+                      ? chat.UserDestination?.Name
+                      : chat.UserOrigin?.Name}
+                  </p>
+
+                  {notViewedMessagesCounter > 0 && (
+                    <span className="counter">{notViewedMessagesCounter}</span>
+                  )}
+                </div>
+
+                <p className="last-message">
+                  {chat.ChatMessages && chat.ChatMessages.length > 0
+                    ? chat.ChatMessages[chat.ChatMessages.length - 1].Message
+                        .length > 20
+                      ? chat.ChatMessages[
+                          chat.ChatMessages.length - 1
+                        ].Message.slice(0, 20) + "..."
+                      : chat.ChatMessages[chat.ChatMessages.length - 1].Message
+                    : "No hay mensajes"}
+                </p>
+              </div>
             </div>
-          </div>
-        ))
+          );
+        })
       ) : (
         <p>No hay usuarios con conversaciones.</p>
       )}
