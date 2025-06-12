@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import ToggleTheme from "../ToggleTheme/ToggleTheme";
 import "./NavBar.css";
-import { useUserStore } from "../../store/userStore";
+import UserDropdownMenu from "../DropdownMenu/UserDropdownMenu";
 
 function NavBar() {
   
@@ -12,7 +12,6 @@ function NavBar() {
 
   const toggleMenu = () => setMenuOpen((prev) => !prev);
   const closeMenu = () => setMenuOpen(false);
-  const user = useUserStore((state) => state.currentUser);
   return (
     <nav className="navbar">
       <div className="nav-icon">
@@ -28,10 +27,8 @@ function NavBar() {
       </div>
 
       <div className="navbar-right">
-        {user && <span className="user-name">¡Bienvenido, {user.Name}!</span>}
-        {user?.AvatarImageUrl && (
-        <img src={user.AvatarImageUrl} alt="Avatar" className="user-avatar" />)}
         <ToggleTheme />
+        <UserDropdownMenu />
         <button className="menu-toggle" onClick={toggleMenu}>
           {menuOpen ? <FiX /> : <FiMenu />}
         </button>

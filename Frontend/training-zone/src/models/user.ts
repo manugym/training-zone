@@ -1,5 +1,3 @@
-export type Role = "admin" | "user" | "trainer";
-
 export interface User {
   Id: number;
   Name: string;
@@ -10,4 +8,3 @@ export interface User {
   AvatarImageUrl?: string;
 }
 
-export type SafeUser = Pick<User, "Id" | "Name" | "Role" | "AvatarImageUrl">;

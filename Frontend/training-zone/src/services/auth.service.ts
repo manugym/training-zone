@@ -1,7 +1,6 @@
 import { AuthRequest } from "../models/auth-request";
 import { AuthResponse } from "../models/auth-response";
 import { NewUserRequest } from "../models/new-user-request";
-import { useUserStore } from "../store/userStore";
 import ApiService from "./api.service";
 import userService from "./user.service";
 
@@ -17,7 +16,7 @@ class AuthService {
       credential: request.credential,
       password: request.password,
     });
-    
+
     if (!response.success || !response.data?.accessToken) {
       throw new Error("Login failed: Token not received");
     }
@@ -25,11 +24,9 @@ class AuthService {
     console.log("Login successful:", response);
 
     this.setSession(response.data.accessToken, remember);
-
     const user = await userService.getAuthenticatedUser();
     if(user){
-      useUserStore.getState().clearUser();
-      useUserStore.getState().setCurrentUser(user);
+      userService.setCurrentUser(user);
     }
   }
 
@@ -55,6 +52,10 @@ class AuthService {
 
     console.log("Registration successful:", response);
     this.setSession(response.data.accessToken, remember);
+    const user = await userService.getAuthenticatedUser();
+    if(user){
+      userService.getCurrentUser();
+    }
   }
 
   async logout(): Promise<void> {
@@ -62,7 +63,7 @@ class AuthService {
     sessionStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.TOKEN_KEY);
     ApiService.jwt = null;
-    useUserStore.getState().clearUser();
+    userService.clearUser();
   }
 
   private async setSession(token: string, remember: boolean): Promise<void> {
