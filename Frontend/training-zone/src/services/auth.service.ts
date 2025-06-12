@@ -29,7 +29,7 @@ class AuthService {
 
     this.setSession(response.data.accessToken, remember);
     const user = await userService.getAuthenticatedUser();
-    if(user){
+    if (user) {
       userService.setCurrentUser(user);
     }
   }
@@ -59,7 +59,7 @@ class AuthService {
     console.log("Registration successful:", response);
     this.setSession(response.data.accessToken, remember);
     const user = await userService.getAuthenticatedUser();
-    if(user){
+    if (user) {
       userService.getCurrentUser();
     }
   }
@@ -69,15 +69,10 @@ class AuthService {
     sessionStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.TOKEN_KEY);
     ApiService.jwt = null;
-    userService.clearUser();
-
-    useUserStore.getState().clearUser();
-
     //Clear all services
     userService.cleanService();
     chatService.cleanService();
     websocketService.disconnect();
-
   }
 
   private async setSession(token: string, remember: boolean): Promise<void> {
