@@ -1,7 +1,7 @@
 // screens/GenerateRoutineScreen.tsx
 import React, { useState } from 'react';
 import { View, Button, ActivityIndicator, Alert, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import * as Sharing from 'expo-sharing';
 import type { RoutinePreferences } from '@/models/routine-preferences';
 import routineService from '@/services/routine.service';
 import { UserLanguage } from '@/models/enums/user-language';
@@ -12,7 +12,6 @@ import { UserPreferredActivities } from '@/models/enums/user-preferred-activitie
 
 export default function GenerateRoutineScreen() {
   const [loading, setLoading] = useState(false);
-  const navigation = useNavigation<any>();
 
   const handleGenerate = async () => {
     setLoading(true);
@@ -30,8 +29,16 @@ export default function GenerateRoutineScreen() {
         preferredActivities: UserPreferredActivities.Calisthenics,
       };
 
-      const uri = await routineService.getRoutine(prefs);
-      navigation.navigate('RoutinePdfViewer', { uri });
+      const fileUri = await routineService.getRoutine(prefs);
+
+      Alert.alert("¡Descargado!", "La rutina se ha guardado correctamente en el dispositivo.");
+
+      const isAvailable = await Sharing.isAvailableAsync();
+      if (isAvailable) {
+        await Sharing.shareAsync(fileUri);
+      } else {
+        Alert.alert("Archivo listo", "No se puede compartir desde este dispositivo.");
+      }
     } catch (err: any) {
       Alert.alert('Error', err.message || 'No se pudo generar la rutina');
     } finally {
@@ -43,7 +50,7 @@ export default function GenerateRoutineScreen() {
     <View style={styles.container}>
       {loading
         ? <ActivityIndicator size="large" />
-        : <Button title="Generar rutina PDF" onPress={handleGenerate} />
+        : <Button title="Descargar rutina PDF" onPress={handleGenerate} />
       }
     </View>
   );
