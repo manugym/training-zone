@@ -6,8 +6,6 @@ export interface User {
   Phone: string;
   Email: string;
   Password: string;
-  Role: Role;
+  Role: string;
   AvatarImageUrl?: string;
 }
-
-export type SafeUser = Pick<User, "Id" | "Name" | "Role" | "AvatarImageUrl">;
