@@ -10,6 +10,7 @@ import ForbiddenPage from "../pages/Errors/ForbiddenPage";
 import PageNotFound from "../pages/Errors/PageNotFound";
 import ClassDetail from "../pages/ClassDetail/ClassDetail";
 import UserView from "../pages/UserProfile/UserProfile";
+import ScheduleAdmin from "../pages/ScheduleAdmin/ScheduleAdmin";
 
 
 function AppRoutes() {
@@ -23,6 +24,7 @@ function AppRoutes() {
       <Route path="/class/:classId" element={<ClassDetail />} />
       <Route path="/chat" element={<Chat />} />
       <Route path="/users-admin" element={<UsersAdmin />} />
+      <Route path="/schedule-admin" element={<ScheduleAdmin />}/>
       <Route path="/forbidden" element={<ForbiddenPage />} />
       <Route path="/me" element={<UserView />} />
       + <Route path="*" element={<PageNotFound />} />

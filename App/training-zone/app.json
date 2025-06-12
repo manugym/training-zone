@@ -50,6 +50,9 @@
         "projectId": "9fc3cc35-3a9b-4aff-a656-19ac7e2d7037"
       }
     },
-    "owner": "agalmad"
+    "owners": [
+      "agalmad",
+      "manugym"
+    ]
   }
 }
