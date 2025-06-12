@@ -22,21 +22,21 @@ const SectionCards: React.FC = () => {
           title="Entrenamiento Personal"
           descriptionText="Logra tus objetivos de manera eficiente gracias a tu entrenador y clases personalizadas"
           buttonText="Conocer más"
-          scrollToId="section-one"
+          navigateTo="/trainers"
           />
           <HomeCard
             icon={<PiUsersFourFill />}
             title="Entrenamiento en Grupo"
             descriptionText="El entrenamiento en grupo permite mejorar tu físico de una manera divertida"
             buttonText="Ver descripción"
-            scrollToId="section-one"
+            navigateTo="/classes"
             />
             <HomeCard
             icon={<IoPhonePortraitOutline />}
             title="Plan de entrenamiento"
             descriptionText="Consigue un plan de entrenamiento personalizado gracias a nuestra IA"
             buttonText="Conocer más"
-            scrollToId="section-one"
+            navigateTo="/trainers"
             />
         </div>
       </div>

@@ -48,6 +48,10 @@ class UserService {
     return this._currentUser.value;
   }
 
+  public cleanService() {
+    this._currentUser.next(null);
+  }
+
   public async editUseData(newData: NewUserRequest): Promise<void> {
     const formData = new FormData();
     formData.append("Name", newData.name);
@@ -110,6 +114,10 @@ class UserService {
     }
 
     return response.data;
+  }
+
+  public setCurrentUser(user: User): void {
+    this._currentUser.next(user);
   }
 }
 

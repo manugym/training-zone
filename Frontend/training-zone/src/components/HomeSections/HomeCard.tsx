@@ -1,22 +1,28 @@
 import React from "react";
 import './HomeCard.css';
+import { useNavigate } from "react-router-dom";
 
 interface CardProps {
   icon: React.ReactNode;
   title: string;
   descriptionText: string;
   buttonText: string;
-  scrollToId?: string;
+  navigateTo?: string;
 }
 
-const HomeCard: React.FC<CardProps> = ({ icon, title, descriptionText, buttonText, scrollToId}) => {
+const HomeCard: React.FC<CardProps> = ({
+  icon,
+  title,
+  descriptionText,
+  buttonText,
+  navigateTo
+}) => {
+  const navigate = useNavigate();
+
   const handleClick = () => {
-    if (scrollToId) {
-      const section = document.getElementById(scrollToId);
-      section?.scrollIntoView({ behavior: 'smooth'});
-    }
+    navigate(navigateTo);
   };
-  
+
   return (
     <div className="home-card">
       <div className="card-icon">{icon}</div>

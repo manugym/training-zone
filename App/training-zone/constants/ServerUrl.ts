@@ -1,1 +1,1 @@
-export const ServerUrl = "http://192.168.18.100:7089";
+export const ServerUrl = "https://training-zone.runasp.net";

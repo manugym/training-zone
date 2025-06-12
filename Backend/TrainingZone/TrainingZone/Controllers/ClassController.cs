@@ -31,5 +31,13 @@ namespace TrainingZone.Controllers
 
             return activity;
         }
+
+        [HttpGet("getAll")]
+        public async Task<List<Class>> GetAllClasses()
+        {
+            List<Class> activities = await _classService.GetAllClassesAsync();
+
+            return activities;
+        }
     }
 }

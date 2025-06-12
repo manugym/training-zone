@@ -1,34 +1,19 @@
-import React, { useEffect, useState } from "react";
 import "./ToggleTheme.css";
 import { FaRegMoon } from "react-icons/fa";
 import { HiSun } from "react-icons/hi";
+import { usePreferencesStore } from "../../store/preferences";
 
 function ToggleTheme() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const theme = usePreferencesStore((state) => state.theme);
+  const setTheme = usePreferencesStore((state) => state.setTheme);
 
-  // Check if the user has a stored theme preference or system preference
-  useEffect(() => {
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
-
-    // If the user has a stored theme preference, use that
-    // Otherwise, use the system preference
-    const storedTheme = localStorage.getItem("theme");
-    if (storedTheme === "dark" || (storedTheme === null && prefersDark)) {
-      setIsDarkMode(true);
-      document.body.setAttribute("data-theme", "dark");
-    } else {
-      setIsDarkMode(false);
-      document.body.setAttribute("data-theme", "light");
-    }
-  }, []);
+  
+  const isDarkMode = theme === "dark";
 
   const toggleTheme = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTheme = e.target.checked ? "dark" : "light";
-    setIsDarkMode(e.target.checked);
-    document.body.setAttribute("data-theme", newTheme);
-    localStorage.setItem("theme", newTheme); // Save the user's preference in local storage
+    setTheme(newTheme);
+    
   };
 
   return (

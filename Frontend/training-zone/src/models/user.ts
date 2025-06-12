@@ -7,3 +7,4 @@ export interface User {
   Role: string;
   AvatarImageUrl?: string;
 }
+

@@ -13,13 +13,16 @@
     "@react-rxjs/core": "^0.10.8",
     "@react-rxjs/utils": "^0.9.7",
     "axios": "^1.8.4",
+    "date-fns": "^4.1.0",
     "react": "^19.0.0",
     "react-calendar": "^5.1.0",
+    "react-datepicker": "^8.4.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.5.0",
     "rxjs": "^7.8.2",
-    "sweetalert2": "^11.17.2"
+    "sweetalert2": "^11.17.2",
+    "zustand": "^5.0.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

@@ -1,4 +1,6 @@
 ﻿using TrainingZone.Models.DataBase;
+using TrainingZone.Models.Dtos.Schedule;
+using TrainingZone.Models.Dtos.Trainer;
 using TrainingZone.Models.Dtos.User;
 using TrainingZone.Services;
 
@@ -61,6 +63,18 @@ public class UserMapper
             Role = "user",
             AvatarImageUrl = "",
         };
+    }
+
+    public IEnumerable<ScheduleTrainerDto> ToScheduleTrainerDto(IEnumerable<User> trainers)
+    {
+        var trainersDto = trainers.Select(t => new ScheduleTrainerDto
+        {
+            Id = t.Id,
+            Name = t.Name,
+            Role = t.Role
+        }).ToList();
+
+        return trainersDto;
     }
 
 

@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom";
 import "./SectionLogReg.css";
 import logoDark from "../../assets/home-logo-dark.svg";
 import logoLight from "../../assets/home-logo-light.svg";
+import { useCurrentUser } from "../../hooks/useCurrentUser";
 
 const SectionLogReg: React.FC = () => {
   const navigate = useNavigate();
   const [isDarkTheme, setIsDarkTheme] = useState(false);
+  const user = useCurrentUser();
 
   useEffect(() => {
     const currentTheme = document.body.getAttribute("data-theme");
@@ -38,12 +40,21 @@ const SectionLogReg: React.FC = () => {
           </div>
         </div>
         <div className="auth-buttons">
-          <button className="login-button" onClick={() => navigate("/auth")}>
-            Inicia Sesión{" "}
-          </button>
-          <button className="register-button" onClick={() => navigate("/auth")}>
-            Regístrate
-          </button>
+          {user ? (
+            <>
+              <button className="activities-button" onClick={() => navigate("/trainers")}>Entrenadores</button>
+              <button className="activities-button" onClick={() => navigate("/classes")}>Reservar</button>
+            </>
+          ) : (
+            <>
+              <button className="login-button" onClick={() => navigate("/auth")}>
+                Inicia Sesión{" "}
+              </button>
+              <button className="register-button" onClick={() => navigate("/auth")}>
+                Regístrate
+              </button>
+            </>
+          )}
         </div>
       </div>
     </section>

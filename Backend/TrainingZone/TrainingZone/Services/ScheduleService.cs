@@ -1,6 +1,7 @@
 ﻿using TrainingZone.Mappers;
 using TrainingZone.Models.DataBase;
 using TrainingZone.Models.Dtos.Schedule;
+using TrainingZone.Models.Enums;
 
 namespace TrainingZone.Services
 {
@@ -8,11 +9,14 @@ namespace TrainingZone.Services
     {
         private readonly UnitOfWork _unitOfWork;
         private readonly ScheduleMapper _scheduleMapper;
+        private readonly UserMapper _userMapper;
 
-        public ScheduleService (UnitOfWork unitOfWork, ScheduleMapper scheduleMapper)
+        public ScheduleService (UnitOfWork unitOfWork, ScheduleMapper scheduleMapper, UserMapper userMapper)
         {
             _unitOfWork = unitOfWork;
             _scheduleMapper = scheduleMapper;
+            _userMapper = userMapper;
+            
         }
 
         public async Task<Schedule> InsertSchedule(Schedule schedule)
@@ -44,6 +48,18 @@ namespace TrainingZone.Services
             if (newSchedule == null)
             {
                 return null;
+            }
+
+            User trainer = await _unitOfWork.UserRepository.GetByIdAsync(newSchedule.UserId);
+
+            if(trainer == null)
+            {
+                throw new InvalidOperationException("Se necesita un entrenador en el horario");
+            }
+
+            if (trainer.Role != Role.TRAINER.ToString().ToLower())
+            {
+                throw new InvalidOperationException("El usuario no tiene el rol adecuado");
             }
 
             Schedule scheduleToSave = await _scheduleMapper.ToEntity(newSchedule);
@@ -82,6 +98,13 @@ namespace TrainingZone.Services
         {
             if (updateScheduleDto == null) return null;
 
+            User trainer = await _unitOfWork.UserRepository.GetByIdAsync(updateScheduleDto.UserId);
+
+            if (trainer.Role != Role.TRAINER.ToString().ToLower())
+            {
+                throw new InvalidOperationException("El usuario no tiene el rol adecuado");
+            }
+
             try
             {
                 Schedule schedule = await _unitOfWork.ScheduleRepository.GetScheduleByIdAsync(scheduleId);
@@ -90,7 +113,7 @@ namespace TrainingZone.Services
 
                 schedule.ClassId = updateScheduleDto.ClassId ?? schedule.ClassId;
 
-                schedule.UserId = updateScheduleDto.UserId ?? schedule.UserId;
+                schedule.UserId = updateScheduleDto.UserId;
 
                 schedule.MaxCapacity = updateScheduleDto.MaxCapacity ?? schedule.MaxCapacity;
 
@@ -115,6 +138,33 @@ namespace TrainingZone.Services
             }
 
             return null;
+        }
+
+        public async Task<IEnumerable<ScheduleDto>> getAllScheduleByDate (int classId, DateOnly date)
+        {
+            IEnumerable<Schedule> classSchedule = await _unitOfWork.ScheduleRepository.GetAllSchedulesByDate(classId, date);
+
+            IEnumerable<ScheduleDto> classScheduleDto = _scheduleMapper.ToDto(classSchedule.ToList());
+
+            return classScheduleDto;
+        }
+
+        public async Task<IEnumerable<ScheduleDto>> GetAllSchedulesAsync()
+        {
+            IEnumerable<Schedule> allSchedules = await _unitOfWork.ScheduleRepository.GetAllSchedulesAsync();
+
+            IEnumerable<ScheduleDto> allSchedulesDto = _scheduleMapper.ToDto(allSchedules.ToList());
+
+            return allSchedulesDto;
+        }
+
+        public async Task<IEnumerable<ScheduleTrainerDto>> GetAllScheduleTrainers()
+        {
+            IEnumerable<User> allTrainers = await _unitOfWork.UserRepository.GetAllTrainersAsync();
+
+            IEnumerable<ScheduleTrainerDto> allTrainersDtos = _userMapper.ToScheduleTrainerDto(allTrainers);
+
+            return allTrainersDtos;
         }
     }
 }

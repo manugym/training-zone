@@ -41,11 +41,11 @@ export default function UserProfile() {
 
   useEffect(() => {
     const subscription = userService.currentUser$.subscribe((user) => {
-      setName(user.Name || "");
-      setEmail(user.Email || "");
-      setPhone(user.Phone || "");
+      setName(user?.Name || "");
+      setEmail(user?.Email || "");
+      setPhone(user?.Phone || "");
 
-      if (user.AvatarImageUrl)
+      if (user?.AvatarImageUrl)
         setImage(`${SERVER_IMAGE_URL}/${user.AvatarImageUrl}`);
     });
 

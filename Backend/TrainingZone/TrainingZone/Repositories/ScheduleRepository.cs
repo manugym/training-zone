@@ -7,7 +7,7 @@ namespace TrainingZone.Repositories
     public class ScheduleRepository : Repository<Schedule, int>
     {
         public ScheduleRepository(TrainingZoneContext context) : base(context) { }
-        
+
         public async Task<IEnumerable<Schedule>> GetScheduleByClassAsync(int classId)
         {
             return await _context.Schedules.Where(c => c.ClassId == classId).Include(c => c.Class)
@@ -19,5 +19,23 @@ namespace TrainingZone.Repositories
             return await _context.Schedules.Include(c => c.Class).Include(u => u.User)
                 .FirstOrDefaultAsync(s => s.Id == scheduleId);
         }
+
+        public async Task<IEnumerable<Schedule>> GetAllSchedulesByDate(int classId, DateOnly date)
+        {
+            var startOfDay = date.ToDateTime(TimeOnly.MinValue);
+            var endOfDay = date.ToDateTime(TimeOnly.MaxValue);
+
+            return await _context.Schedules
+                .Where(s => s.StartDateTime >= startOfDay && s.StartDateTime <= endOfDay && s.ClassId == classId)
+                .Include(c => c.Class).Include(u => u.User).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Schedule>> GetAllSchedulesAsync()
+        {
+            IEnumerable<Schedule> allSchedules = await _context.Schedules.Include(u => u.User).Include(c => c.Class).ToListAsync();
+
+            return allSchedules;
+        }
+
     }
 }

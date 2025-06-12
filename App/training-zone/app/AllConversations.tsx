@@ -19,6 +19,7 @@ import { ServerUrl } from "@/constants/ServerUrl";
 import chatService from "@/services/chat.service";
 import websocketService from "@/services/websocket.service";
 import userService from "@/services/user.service";
+import { Shapes } from "@/constants/Shapes";
 
 export default function AllConversations() {
   const SERVER_IMAGE_URL = `${ServerUrl}/UserProfilePicture`;
@@ -90,6 +91,12 @@ export default function AllConversations() {
                   })
                 : "";
 
+              const notViewedMessagesCounter =
+                chat.ChatMessages?.filter(
+                  (message) =>
+                    !message.IsViewed && message.UserId !== currentUser.Id
+                ).length || 0;
+
               return (
                 <TouchableRipple
                   key={chat.Id}
@@ -133,15 +140,18 @@ export default function AllConversations() {
                       />
                     )}
                     right={() => (
-                      <View style={styles.timeContainer}>
-                        <Text
-                          style={{
-                            color: theme.colors.onSurfaceVariant,
-                            fontSize: 12,
-                          }}
-                        >
-                          {lastMessageTime}
-                        </Text>
+                      <View>
+                        <Text>{lastMessageTime}</Text>
+                        {notViewedMessagesCounter > 0 && (
+                          <View
+                            style={[
+                              { backgroundColor: theme.colors.primary },
+                              styles.counter,
+                            ]}
+                          >
+                            <Text>{notViewedMessagesCounter}</Text>
+                          </View>
+                        )}
                       </View>
                     )}
                     style={{ paddingVertical: 8 }}
@@ -193,5 +203,14 @@ const styles = StyleSheet.create({
     padding: 20,
     justifyContent: "center",
     alignItems: "center",
+  },
+
+  counter: {
+    marginTop: 4,
+    borderRadius: Shapes.pill,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

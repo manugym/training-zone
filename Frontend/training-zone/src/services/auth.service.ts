@@ -2,6 +2,9 @@ import { AuthRequest } from "../models/auth-request";
 import { AuthResponse } from "../models/auth-response";
 import { NewUserRequest } from "../models/new-user-request";
 import ApiService from "./api.service";
+import chatService from "./chat.service";
+import userService from "./user.service";
+import websocketService from "./websocket.service";
 
 class AuthService {
   private readonly TOKEN_KEY = "token";
@@ -22,7 +25,13 @@ class AuthService {
 
     console.log("Login successful:", response);
 
+    this.logout();
+
     this.setSession(response.data.accessToken, remember);
+    const user = await userService.getAuthenticatedUser();
+    if (user) {
+      userService.setCurrentUser(user);
+    }
   }
 
   async register(request: NewUserRequest, remember: boolean): Promise<void> {
@@ -45,8 +54,14 @@ class AuthService {
       throw new Error("Registration failed: Token not received");
     }
 
+    this.logout();
+
     console.log("Registration successful:", response);
     this.setSession(response.data.accessToken, remember);
+    const user = await userService.getAuthenticatedUser();
+    if (user) {
+      userService.getCurrentUser();
+    }
   }
 
   async logout(): Promise<void> {
@@ -54,6 +69,10 @@ class AuthService {
     sessionStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.TOKEN_KEY);
     ApiService.jwt = null;
+    //Clear all services
+    userService.cleanService();
+    chatService.cleanService();
+    websocketService.disconnect();
   }
 
   private async setSession(token: string, remember: boolean): Promise<void> {
