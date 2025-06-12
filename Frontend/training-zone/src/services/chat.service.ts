@@ -161,50 +161,72 @@ class ChatService {
             }
             break;
 
-          case ChatRequestType.MODIFY_MESSAGE:
+          case ChatRequestType.MODIFY_MESSAGE: {
             try {
               const messageModified: ChatMessage = message.Data.Data;
               console.log("mensaje modificado : ", messageModified);
 
-              const currentConversation = this._actualConversation.getValue();
+              const allChats = this._allChats.value;
 
-              const messagePosition =
-                currentConversation.ChatMessages.findIndex(
-                  (m) => m.Id === messageModified.Id
-                );
+              if (allChats) {
+                // Update message in all conversations
+                const updatedChats = allChats.map((chat) => {
+                  const updatedMessages = chat.ChatMessages.map((message) =>
+                    message.Id === messageModified.Id
+                      ? messageModified
+                      : message
+                  );
+                  return { ...chat, ChatMessages: updatedMessages };
+                });
 
-              if (messagePosition !== -1) {
-                const updatedMessages = [...currentConversation.ChatMessages];
-                updatedMessages[messagePosition] = messageModified;
+                this._allChats.next(updatedChats);
 
-                const updatedConversation = {
-                  ...currentConversation,
-                  ChatMessages: updatedMessages,
-                };
-
-                this._actualConversation.next(updatedConversation);
-
-                this.sendGetAllChatsRequest();
+                // Update message in the actual conversation if exist
+                const currentConversation = this._actualConversation.value;
+                if (currentConversation) {
+                  const updatedCurrent = updatedChats.find(
+                    (chat) => chat.Id === currentConversation.Id
+                  );
+                  if (updatedCurrent) {
+                    this._actualConversation.next(updatedCurrent);
+                  }
+                }
               }
             } catch (e) {
               console.error(e);
             }
             break;
-          case ChatRequestType.DELETE_MESSAGE:
+          }
+
+          case ChatRequestType.DELETE_MESSAGE: {
             const messageId: number = message.Data.Data;
 
-            const currentConversation = this._actualConversation.value;
+            // Delete message in all conversations
+            const allChats = this._allChats.value;
+            if (allChats) {
+              const updatedChats = allChats.map((chat) => {
+                const filteredMessages = chat.ChatMessages.filter(
+                  (message) => message.Id !== messageId
+                );
+                return { ...chat, ChatMessages: filteredMessages };
+              });
 
-            const updatedConversation = {
-              ...currentConversation,
-              ChatMessages: currentConversation.ChatMessages.filter(
-                (message) => message.Id !== messageId
-              ),
-            };
+              this._allChats.next(updatedChats);
 
-            this._actualConversation.next(updatedConversation);
+              // Delete message in the actual conversation if exist
+              const currentConversation = this._actualConversation.value;
+              if (currentConversation) {
+                const updatedCurrentChat = updatedChats.find(
+                  (chat) => chat.Id === currentConversation.Id
+                );
+                if (updatedCurrentChat) {
+                  this._actualConversation.next(updatedCurrentChat);
+                }
+              }
+            }
 
             break;
+          }
           default:
             console.error("Tipo de solicitud no reconocido");
         }
@@ -326,6 +348,11 @@ class ChatService {
     console.log(`Eliminando el mensaje ${messageId}`, socketMessage);
 
     websocketService.send(JSON.stringify(socketMessage));
+  }
+
+  public cleanService() {
+    this._allChats.next(null);
+    this._actualConversation.next(null);
   }
 }
 

@@ -3,6 +3,7 @@ import { webSocket, WebSocketSubject } from "rxjs/webSocket";
 import apiService from "./api.service";
 import { Alert } from "react-native";
 import { ServerUrl } from "@/constants/ServerUrl";
+import { router } from "expo-router";
 
 class WebSocketService {
   private readonly SOCKET_URL = `${ServerUrl}/socket`;
@@ -24,8 +25,12 @@ class WebSocketService {
   private onError(error: any) {
     console.error("Error:", error);
     this.disconnect();
-    Alert.alert("Error", "Error de conexión");
+    Alert.alert(
+      "Error de conexión",
+      "Redirección a la pantalla principal necesario"
+    );
     this.onDisconnected();
+    router.push("/");
   }
 
   private onDisconnected() {
