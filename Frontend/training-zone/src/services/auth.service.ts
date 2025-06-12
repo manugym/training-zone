@@ -17,7 +17,7 @@ class AuthService {
       credential: request.credential,
       password: request.password,
     });
-    
+
     if (!response.success || !response.data?.accessToken) {
       throw new Error("Login failed: Token not received");
     }
@@ -27,7 +27,7 @@ class AuthService {
     this.setSession(response.data.accessToken, remember);
 
     const user = await userService.getAuthenticatedUser();
-    if(user){
+    if (user) {
       useUserStore.getState().clearUser();
       useUserStore.getState().setCurrentUser(user);
     }
@@ -55,6 +55,11 @@ class AuthService {
 
     console.log("Registration successful:", response);
     this.setSession(response.data.accessToken, remember);
+    const user = await userService.getAuthenticatedUser();
+    if (user) {
+      useUserStore.getState().clearUser();
+      useUserStore.getState().setCurrentUser(user);
+    }
   }
 
   async logout(): Promise<void> {
