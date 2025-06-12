@@ -3,31 +3,35 @@ import { AuthResponse } from "../models/auth-response";
 import { NewUserRequest } from "../models/new-user-request";
 import { useUserStore } from "../store/userStore";
 import ApiService from "./api.service";
+import chatService from "./chat.service";
 import userService from "./user.service";
+import websocketService from "./websocket.service";
 
 class AuthService {
   private readonly TOKEN_KEY = "token";
   private readonly LOGIN_URL = "Auth/login";
   private readonly REGISTER_URL = "Auth/register";
 
-  constructor() { }
+  constructor() {}
 
   async login(request: AuthRequest, remember: boolean): Promise<void> {
     const response = await ApiService.post<AuthResponse>(this.LOGIN_URL, {
       credential: request.credential,
       password: request.password,
     });
-    
+
     if (!response.success || !response.data?.accessToken) {
       throw new Error("Login failed: Token not received");
     }
 
     console.log("Login successful:", response);
 
+    this.logout();
+
     this.setSession(response.data.accessToken, remember);
 
     const user = await userService.getAuthenticatedUser();
-    if(user){
+    if (user) {
       useUserStore.getState().clearUser();
       useUserStore.getState().setCurrentUser(user);
     }
@@ -53,6 +57,8 @@ class AuthService {
       throw new Error("Registration failed: Token not received");
     }
 
+    this.logout();
+
     console.log("Registration successful:", response);
     this.setSession(response.data.accessToken, remember);
   }
@@ -63,6 +69,11 @@ class AuthService {
     localStorage.removeItem(this.TOKEN_KEY);
     ApiService.jwt = null;
     useUserStore.getState().clearUser();
+
+    //Clear all services
+    userService.cleanService();
+    chatService.cleanService();
+    websocketService.disconnect();
   }
 
   private async setSession(token: string, remember: boolean): Promise<void> {
