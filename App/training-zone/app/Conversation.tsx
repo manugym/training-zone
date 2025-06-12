@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -9,7 +9,7 @@ import {
   View,
   Animated,
 } from "react-native";
-import { Stack } from "expo-router";
+import { Stack, useFocusEffect } from "expo-router";
 import {
   Text,
   TextInput,
@@ -42,6 +42,14 @@ export default function Conversation() {
   const inputRef = useRef<any>(null);
 
   const animatedValuesRef = useRef<{ [key: number]: Animated.Value }>({});
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        chatService.setActualConversation(null);
+      };
+    }, [])
+  );
 
   // Scroll to the end of the conversation when it updates
   useEffect(() => {
