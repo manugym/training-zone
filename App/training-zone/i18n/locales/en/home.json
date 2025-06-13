@@ -1,0 +1,10 @@
+{
+  "welcome": "Welcome,",
+  "logout": "Log out",
+  "login": "Log in",
+  "register": "Sign up",
+  "logout_title": "Log out?",
+  "logout_message": "Are you sure you want to log out?",
+  "cancel": "Cancel",
+  "confirm_logout": "Log out"
+}
