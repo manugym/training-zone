@@ -7,6 +7,7 @@ import NavBar from "../../components/NavBar/NavBar";
 import defaultAvatar from "../../assets/default-avatar-.jpg";
 import "./UserProfile.css";
 import authService from "../../services/auth.service";
+import { useTranslation } from "react-i18next";
 
 export default function EditUser() {
   const SERVER_IMAGE_URL = `${
@@ -14,7 +15,7 @@ export default function EditUser() {
   }/UserProfilePicture`;
 
   const navigate = useNavigate();
-
+  const { t } = useTranslation("user");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -159,7 +160,7 @@ export default function EditUser() {
             <div className="form-group">
               <input
                 type="text"
-                placeholder="Ej. Juan Pérez"
+                placeholder={t("placeholder_name")}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
@@ -169,7 +170,7 @@ export default function EditUser() {
             <div className="form-group">
               <input
                 type="email"
-                placeholder="Ej. juan@email.com"
+                placeholder={t("placeholder_email")}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -179,7 +180,7 @@ export default function EditUser() {
             <div className="form-group">
               <input
                 type="text"
-                placeholder="Ej. 123456789"
+                placeholder={t("placeholder_phone")}
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 required
@@ -189,7 +190,7 @@ export default function EditUser() {
             <div className="form-group">
               <input
                 type="password"
-                placeholder="Nueva contraseña (opcional)"
+                placeholder={t("placeholder_new_password")}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -198,7 +199,7 @@ export default function EditUser() {
             <div className="form-group">
               <input
                 type="password"
-                placeholder="Confirmar nueva contraseña"
+                placeholder={t("placeholder_confirm_password")}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
@@ -206,7 +207,7 @@ export default function EditUser() {
 
             {error && <p className="error">{error}</p>}
 
-            <button type="submit">Actualizar</button>
+            <button type="submit">{t("update_button")}</button>
           </form>
         </div>
       </main>
