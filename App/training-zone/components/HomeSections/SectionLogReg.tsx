@@ -14,6 +14,8 @@ const logoDark = require("@/assets/images/home-logo-dark.png");
 export default function SectionLogReg() {
   const router = useRouter();
   const theme = useTheme();
+  const { t } = useTranslation("home");
+
 
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
@@ -53,14 +55,14 @@ export default function SectionLogReg() {
         {currentUser ? (
           <View style={styles(theme).authButtons}>
             <ThemedText style={styles(theme).welcomeText}>
-              ¡Hola, {currentUser.Name}!
+              {t("welcome")} {currentUser.Name}!
             </ThemedText>
             <TouchableOpacity
               style={[styles(theme).button, styles(theme).registerButton]}
               onPress={handleLogoutPress}
             >
               <ThemedText style={styles(theme).registerText}>
-                Cerrar sesión
+                {t("logout")}
               </ThemedText>
             </TouchableOpacity>
           </View>
@@ -71,7 +73,7 @@ export default function SectionLogReg() {
               onPress={() => router.push("/Auth")}
             >
               <ThemedText style={styles(theme).loginText}>
-                Inicia Sesión
+                {t("login")}
               </ThemedText>
             </TouchableOpacity>
             <TouchableOpacity
@@ -79,7 +81,7 @@ export default function SectionLogReg() {
               onPress={() => router.push("/Auth")}
             >
               <ThemedText style={styles(theme).registerText}>
-                Regístrate
+                {t("register")}
               </ThemedText>
             </TouchableOpacity>
           </View>
@@ -91,15 +93,17 @@ export default function SectionLogReg() {
           visible={showLogoutDialog}
           onDismiss={() => setShowLogoutDialog(false)}
         >
-          <Dialog.Title>¿Cerrar sesión?</Dialog.Title>
+          <Dialog.Title>{t("logout_title")}</Dialog.Title>
           <Dialog.Content>
             <ThemedText>
-              ¿Estás seguro de que quieres cerrar tu sesión?
+              {t("logout_message")}
             </ThemedText>
           </Dialog.Content>
           <Dialog.Actions>
-            <Button onPress={() => setShowLogoutDialog(false)}>Cancelar</Button>
-            <Button onPress={confirmLogout}>Cerrar sesión</Button>
+            <Button onPress={() => setShowLogoutDialog(false)}>
+              {t("cancel")}
+            </Button>
+            <Button onPress={confirmLogout}>{t("confirm_logout")}</Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>
