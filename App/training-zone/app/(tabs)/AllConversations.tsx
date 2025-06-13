@@ -21,8 +21,11 @@ import websocketService from "@/services/websocket.service";
 import userService from "@/services/user.service";
 import { Shapes } from "@/constants/Shapes";
 import { ThemedView } from "@/components/ThemedView";
+import { useTranslation } from "react-i18next";
 
 export default function AllConversations() {
+  const { t } = useTranslation("chat");
+
   const SERVER_IMAGE_URL = `${ServerUrl}/UserProfilePicture`;
 
   const theme = useTheme();
@@ -61,7 +64,7 @@ export default function AllConversations() {
 
   return (
     <>
-      <Stack.Screen options={{ title: "Your conversations" }} />
+      <Stack.Screen options={{ title: t("conversations") }} />
 
       <ThemedView style={{ height: "100%" }}>
         <GestureHandlerRootView style={{ flex: 1, paddingTop: 50 }}>
@@ -84,7 +87,7 @@ export default function AllConversations() {
                   ? lastMessage.Message.length > 30
                     ? lastMessage.Message.slice(0, 30) + "..."
                     : lastMessage.Message
-                  : "No hay mensajes";
+                  : t("noMessages");
 
                 const lastMessageTime = lastMessage
                   ? new Date(lastMessage.MessageDateTime).toLocaleTimeString(
@@ -119,7 +122,7 @@ export default function AllConversations() {
                     ]}
                   >
                     <List.Item
-                      title={destinationUser?.Name || "Usuario"}
+                      title={destinationUser?.Name || t("defaultUser")}
                       titleStyle={{
                         color: theme.colors.onSurface,
                         fontWeight: "bold",
@@ -174,7 +177,7 @@ export default function AllConversations() {
                     marginBottom: 8,
                   }}
                 >
-                  No tienes chats
+                  {t("noChatsTitle")}
                 </Text>
 
                 <Text
@@ -186,8 +189,7 @@ export default function AllConversations() {
                     paddingHorizontal: 20,
                   }}
                 >
-                  Envía un mensaje a un entrenador para iniciar una
-                  conversación.
+                  {t("noChatsMessage")}
                 </Text>
               </View>
             )}

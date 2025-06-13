@@ -11,10 +11,13 @@ import classEs from "./locales/es/class.json";
 import authEn from "./locales/en/auth.json";
 import authEs from "./locales/es/auth.json";
 
+import chatEn from "./locales/en/chat.json";
+import chatEs from "./locales/es/chat.json";
+
 i18n.use(initReactI18next).init({
   lng: Localization.getLocales()[0]?.languageCode || "es",
   fallbackLng: "es",
-  ns: ["home", "trainer", "class", "auth"],
+  ns: ["home", "trainer", "class", "auth", "chat"],
   defaultNS: "home",
   resources: {
     en: {
@@ -22,12 +25,14 @@ i18n.use(initReactI18next).init({
       trainer: trainerEn,
       class: classEn,
       auth: authEn,
+      chat: chatEn,
     },
     es: {
       home: homeEs,
       trainer: trainerEs,
       class: classEs,
       auth: authEs,
+      chat: chatEs,
     },
   },
   interpolation: {
