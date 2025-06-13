@@ -246,14 +246,14 @@ export default function TrainerView() {
                     }}
                   />
 
-                  {classesOfSelectedDay.map((item) => (
+                  {classesOfSelectedDay.map((selectedDayClass) => (
                     <TableWrapper
-                      key={item.Id}
+                      key={selectedDayClass.Id}
                       style={{ flexDirection: "row", height: 80 }}
                     >
                       <Cell
                         style={styles.tableCell}
-                        data={ClassType[item.Type]}
+                        data={ClassType[selectedDayClass.Type]}
                         textStyle={{
                           color: theme.colors.onBackground,
                           textAlign: "center",
@@ -262,7 +262,7 @@ export default function TrainerView() {
                       />
                       <Cell
                         style={styles.tableCell}
-                        data={item.Description}
+                        data={selectedDayClass.Description}
                         textStyle={{
                           color: theme.colors.onBackground,
                           padding: 8,
@@ -274,7 +274,10 @@ export default function TrainerView() {
                           <Button
                             mode="contained"
                             onPress={() => {
-                              /* Implementar acción de ver las clases */
+                              router.push({
+                                pathname: "/ClassDetail",
+                                params: { id: selectedDayClass.Id },
+                              });
                             }}
                             style={{ marginBottom: 2 }}
                             contentStyle={{ paddingVertical: 6 }}

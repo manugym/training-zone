@@ -256,7 +256,7 @@ export default function AllTrainersPage() {
 const styles = StyleSheet.create({
   viewContainer: {
     flex: 1,
-    paddingTop: 20,
+    paddingTop: 50,
   },
   searchContainer: {
     flexDirection: "column",

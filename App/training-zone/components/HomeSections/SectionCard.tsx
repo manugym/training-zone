@@ -3,7 +3,11 @@ import { View, Text, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import { ThemedView } from "@/components/ThemedView";
 import HomeCard from "@/components/HomeSections/HomeCard";
-import { MaterialCommunityIcons, Ionicons, FontAwesome6 } from "@expo/vector-icons";
+import {
+  MaterialCommunityIcons,
+  Ionicons,
+  FontAwesome6,
+} from "@expo/vector-icons";
 import { useTheme } from "react-native-paper";
 import { useTranslation } from 'react-i18next';
 
@@ -13,7 +17,9 @@ export default function SectionCards() {
   const { t } = useTranslation('home');
 
   return (
-    <ThemedView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <ThemedView
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+    >
       <View style={styles.offerContainer}>
         <Text style={[styles.offerTitle, { color: theme.colors.onBackground }]}>
           {t('sectionCards.title')}
