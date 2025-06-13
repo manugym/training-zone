@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import { View, Image, ScrollView, StyleSheet } from "react-native";
 import { Text, Button, ActivityIndicator, useTheme } from "react-native-paper";
 import { Stack, useLocalSearchParams } from "expo-router";
+import { useNavigation } from "@react-navigation/native";
 import { Calendar } from "react-native-calendars";
 import classService from "@/services/class.service";
 import reservationService from "@/services/reservation.service";
@@ -10,6 +11,7 @@ import { Schedule } from "@/models/schedule";
 import { Reservation } from "@/models/reservation";
 import { ServerUrl } from "@/constants/ServerUrl";
 import { Shapes } from "@/constants/Shapes";
+import { useTranslation } from "react-i18next";
 
 function formatDate(date: Date) {
   return date.toISOString().split("T")[0];
@@ -18,7 +20,8 @@ function formatDate(date: Date) {
 export default function ClassDetail() {
   const { id } = useLocalSearchParams();
   const theme = useTheme();
-
+  const { t } = useTranslation("class");
+const navigation = useNavigation();
   const [selectedDay, setSelectedDay] = useState(() => new Date());
   const [classes, setClasses] = useState<Schedule[]>([]);
   const [reservationMap, setReservationMap] = useState<Map<number, number>>(new Map());
@@ -33,6 +36,8 @@ export default function ClassDetail() {
   }, [classes]);
 
   useEffect(() => {
+    navigation.setOptions({ title: t("detailTitle") });
+
     if (!id || isNaN(Number(id))) return;
     let isMounted = true;
 
@@ -52,7 +57,7 @@ export default function ClassDetail() {
         setReservationMap(map);
       } catch (err) {
         if (!isMounted) return;
-        setError("Error al cargar datos.");
+        setError(t("errorLoading"));
         setClasses([]);
       } finally {
         if (isMounted) setLoading(false);
@@ -61,7 +66,7 @@ export default function ClassDetail() {
 
     fetchData();
     return () => { isMounted = false; };
-  }, [selectedDay, id]);
+  }, [selectedDay, id, t]);
 
   const themedStyles = {
     viewContainer: {
@@ -93,7 +98,6 @@ export default function ClassDetail() {
 
   return (
     <View style={[styles.viewContainer, themedStyles.viewContainer]}>
-      <Stack.Screen options={{ title: "Detalle de Clase" }} />
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
@@ -136,7 +140,7 @@ export default function ClassDetail() {
           }}
         />
         <Text style={[styles.sectionTitle, { color: theme.colors.onSurface }]}>
-          Clases del día seleccionado
+          {t("dayClasses")}
         </Text>
         {loading ? (
           <ActivityIndicator animating size="large" style={{ marginTop: 40 }} />
@@ -145,9 +149,9 @@ export default function ClassDetail() {
         ) : classes.length > 0 ? (
           <View style={[styles.tableContainer, themedStyles.tableContainer]}>
             <View style={[styles.tableHeader, themedStyles.tableHeader]}>
-              <Text style={[styles.headerText, themedStyles.headerText, { flex: 1 }]}>Tipo</Text>
-              <Text style={[styles.headerText, themedStyles.headerText, { flex: 1 }]}>Horario</Text>
-              <Text style={[styles.headerText, themedStyles.headerText, { flex: 1 }]}>Acción</Text>
+              <Text style={[styles.headerText, themedStyles.headerText, { flex: 1 }]}>{t("type")}</Text>
+              <Text style={[styles.headerText, themedStyles.headerText, { flex: 1 }]}>{t("time")}</Text>
+              <Text style={[styles.headerText, themedStyles.headerText, { flex: 1 }]}>{t("action")}</Text>
             </View>
             {classes.map((c) => {
               const reservationId = reservationMap.get(c.Id);
@@ -171,7 +175,7 @@ export default function ClassDetail() {
                         textColor={theme.colors.error}
                         compact
                       >
-                        Cancelar
+                        {t("cancel")}
                       </Button>
                     ) : (
                       <Button
@@ -184,7 +188,7 @@ export default function ClassDetail() {
                         textColor="#fff"
                         compact
                       >
-                        Apuntarse
+                        {t("join")}
                       </Button>
                     )}
                   </View>
@@ -193,7 +197,7 @@ export default function ClassDetail() {
             })}
           </View>
         ) : (
-          <Text style={styles.noClassesText}>No hay clases disponibles este día.</Text>
+          <Text style={styles.noClassesText}>{t("noDayClasses")}</Text>
         )}
       </ScrollView>
     </View>
