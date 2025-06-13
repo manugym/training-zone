@@ -89,6 +89,9 @@ Esquema E/R utilizado:
 
 ### WEB
 
+[Ver](https://training-zone-final.vercel.app)
+
+
 ### Android (APK):
 
 [Descargar APK](https://drive.google.com/file/d/1mZhf6vSjB8J9pnyOHAFvkeCu--3yySLC/view?usp=sharing)
