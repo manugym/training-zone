@@ -9,8 +9,10 @@ import authService from "@/services/auth.service";
 import Toast from "react-native-toast-message";
 import { useRouter } from "expo-router";
 import { Shapes } from "@/constants/Shapes";
+import { useTranslation } from "react-i18next";
 
 export default function Register() {
+  const { t } = useTranslation("auth");
   const theme = useTheme();
   const router = useRouter();
 
@@ -36,11 +38,10 @@ export default function Register() {
   const validateForm = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phoneRegex = /^[0-9]{9}$/;
-    if (!emailRegex.test(email.trim())) return "Correo electrónico inválido.";
-    if (!phoneRegex.test(phone)) return "El teléfono debe tener 9 dígitos.";
-    if (password.length < 6)
-      return "La contraseña debe tener al menos 6 caracteres.";
-    if (password !== confirmPassword) return "Las contraseñas no coinciden.";
+    if (!emailRegex.test(email.trim())) return t("error.invalidEmail");
+    if (!phoneRegex.test(phone)) return t("error.invalidPhone");
+    if (password.length < 6) return t("error.shortPassword");
+    if (password !== confirmPassword) return t("error.passwordMismatch");
     return "";
   };
 
@@ -49,7 +50,7 @@ export default function Register() {
     if (validationError) {
       Toast.show({
         type: "error",
-        text1: "Error",
+        text1: t("error.title"),
         text2: validationError,
         position: "bottom",
       });
@@ -65,14 +66,14 @@ export default function Register() {
         image,
       });
 
-      Alert.alert("Registro exitoso", "¡Te has registrado correctamente!");
+      Alert.alert(t("success.registerTitle"), t("success.registerSuccess"));
       router.push("/");
     } catch (err) {
-      const message = err.message || "Ocurrió un error. Intenta de nuevo.";
+      const message = err.message || t("error.generic");
 
       Toast.show({
         type: "error",
-        text1: "Error",
+        text1: t("error.title"),
         text2: message,
         position: "bottom",
       });
@@ -92,75 +93,53 @@ export default function Register() {
       </TouchableOpacity>
 
       <TextInput
-        label="Nombre completo"
+        label={t("form.fullName")}
         value={name}
         onChangeText={setName}
         mode="outlined"
-        theme={{
-          colors: {
-            primary: theme.colors.surface,
-          },
-        }}
+        theme={{ colors: { primary: theme.colors.surface } }}
       />
       <TextInput
-        label="Correo electrónico"
+        label={t("form.email")}
         value={email}
         onChangeText={(text) => setEmail(text.trim())}
         mode="outlined"
         keyboardType="email-address"
         autoCapitalize="none"
-        theme={{
-          colors: {
-            primary: theme.colors.surface,
-          },
-        }}
+        theme={{ colors: { primary: theme.colors.surface } }}
       />
       <TextInput
-        label="Teléfono"
+        label={t("form.phone")}
         value={phone}
         onChangeText={(text) => setPhone(text.trim())}
         mode="outlined"
         keyboardType="phone-pad"
-        theme={{
-          colors: {
-            primary: theme.colors.surface,
-          },
-        }}
+        theme={{ colors: { primary: theme.colors.surface } }}
       />
       <TextInput
-        label="Contraseña"
+        label={t("form.password")}
         value={password}
         onChangeText={setPassword}
         mode="outlined"
         secureTextEntry
-        theme={{
-          colors: {
-            primary: theme.colors.surface,
-          },
-        }}
+        theme={{ colors: { primary: theme.colors.surface } }}
       />
       <TextInput
-        label="Confirmar contraseña"
+        label={t("form.confirmPassword")}
         value={confirmPassword}
         onChangeText={setConfirmPassword}
         mode="outlined"
         secureTextEntry
-        theme={{
-          colors: {
-            primary: theme.colors.surface,
-          },
-        }}
+        theme={{ colors: { primary: theme.colors.surface } }}
       />
 
       <Button
         mode="contained"
         onPress={handleSubmit}
         labelStyle={{ fontSize: 18, paddingVertical: 6 }}
-        style={{
-          borderRadius: Shapes.medium,
-        }}
+        style={{ borderRadius: Shapes.medium }}
       >
-        Registrarse
+        {t("form.registerButton")}
       </Button>
     </ThemedView>
   );
@@ -173,7 +152,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 20,
   },
-
   imageContainer: {
     marginBottom: 20,
     position: "relative",
