@@ -6,5 +6,17 @@
   "logout_title": "Log out?",
   "logout_message": "Are you sure you want to log out?",
   "cancel": "Cancel",
-  "confirm_logout": "Log out"
+  "confirm_logout": "Log out",
+  "sectionCards": {
+    "title": "What services do we offer?",
+    "description": "We are committed to offering the best sports service to our clients.\nOur services range from personalized training to group training where clients can achieve their goals in the way that best suits their needs.",
+    "personalTrainingTitle": "Personal Training",
+    "personalTrainingDescription": "Achieve your goals efficiently thanks to your trainer and personalized classes",
+    "groupTrainingTitle": "Group Training",
+    "groupTrainingDescription": "Group training allows you to improve your fitness in a fun way",
+    "aiPlanTitle": "Training Plan",
+    "aiPlanDescription": "Get a personalized training plan thanks to our AI",
+    "knowMore": "Learn more",
+    "seeDescription": "See description"
+  }
 }
