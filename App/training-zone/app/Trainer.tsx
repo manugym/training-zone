@@ -1,11 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import {
-  View,
-  Image,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { View, Image, ScrollView, StyleSheet } from "react-native";
 import { Stack, useLocalSearchParams, router } from "expo-router";
 import { Calendar } from "react-native-calendars";
 import { Text, Button, useTheme, ActivityIndicator } from "react-native-paper";
@@ -20,9 +14,11 @@ import { Class } from "@/models/class";
 import { ClassType } from "@/models/enums/class-type";
 import { Table, TableWrapper, Row, Cell } from "react-native-table-component";
 import { Shapes } from "@/constants/Shapes";
+import { useTranslation } from "react-i18next";
 
 export default function TrainerView() {
   const SERVER_IMAGE_URL = `${ServerUrl}/UserProfilePicture`;
+  const { t } = useTranslation("trainer");
 
   const { id } = useLocalSearchParams();
   const theme = useTheme();
@@ -40,9 +36,8 @@ export default function TrainerView() {
     const fetchTrainer = async () => {
       try {
         const response = await trainerService.getTrainerById(Number(id));
-        if (!response || !response.User) {
+        if (!response || !response.User)
           throw new Error("Trainer or user info not found");
-        }
         setTrainer(response);
       } catch (error) {
         console.error("Error fetching trainer:", error);
@@ -75,7 +70,7 @@ export default function TrainerView() {
 
   const handleClick = async (user: User) => {
     if (!apiService.jwt) {
-      alert("Necesitas iniciar sesión");
+      alert(t("loginRequired"));
       router.push("/Auth");
       return;
     }
@@ -97,7 +92,6 @@ export default function TrainerView() {
 
   const markedDates = useMemo(() => {
     const marked: Record<string, any> = {};
-
     if (!trainer?.TrainerClasses) return marked;
 
     trainer.TrainerClasses.forEach((c) => {
@@ -119,7 +113,7 @@ export default function TrainerView() {
     return (
       <View style={styles.viewContainer}>
         <Text variant="headlineMedium" style={{ textAlign: "center" }}>
-          Trainer id not found
+          {t("idNotFound")}
         </Text>
       </View>
     );
@@ -132,7 +126,9 @@ export default function TrainerView() {
         { backgroundColor: theme.colors.background },
       ]}
     >
-      <Stack.Screen options={{ title: trainer?.User?.Name ?? "Entrenador" }} />
+      <Stack.Screen
+        options={{ title: trainer?.User?.Name ?? t("defaultTrainerTitle") }}
+      />
 
       {trainer?.User && (
         <ScrollView keyboardShouldPersistTaps="handled" style={{ flex: 1 }}>
@@ -168,7 +164,7 @@ export default function TrainerView() {
                   paddingBottom: 4,
                 }}
               >
-                Especialidades
+                {t("specialties")}
               </Text>
 
               {trainer.TrainerClasses.map((c, i) => (
@@ -192,7 +188,7 @@ export default function TrainerView() {
           {/* Schedule & Classes */}
           <View style={[styles.classesContainer, { gap: 20 }]}>
             <Text variant="titleLarge" style={styles.text}>
-              Calendario de clases
+              {t("classCalendar")}
             </Text>
 
             <Calendar
@@ -233,7 +229,7 @@ export default function TrainerView() {
                   style={{ marginTop: 20 }}
                 >
                   <Row
-                    data={["Tipo", "Descripción", "Acciones"]}
+                    data={[t("type"), t("description"), t("actions")]}
                     style={{
                       height: 40,
                       backgroundColor: theme.colors.primary,
@@ -273,17 +269,17 @@ export default function TrainerView() {
                         data={
                           <Button
                             mode="contained"
-                            onPress={() => {
+                            onPress={() =>
                               router.push({
                                 pathname: "/ClassDetail",
                                 params: { id: selectedDayClass.Id },
-                              });
-                            }}
+                              })
+                            }
                             style={{ marginBottom: 2 }}
                             contentStyle={{ paddingVertical: 6 }}
                             labelStyle={{ fontSize: 16 }}
                           >
-                            Ver más
+                            {t("seeMore")}
                           </Button>
                         }
                       />
@@ -292,19 +288,19 @@ export default function TrainerView() {
                 </Table>
               ) : (
                 <Text variant="titleLarge" style={styles.text}>
-                  No hay clases disponibles este día
+                  {t("noClasses")}
                 </Text>
               )
             ) : (
               <Text variant="titleMedium" style={styles.text}>
-                Selecciona un día resaltado para ver las clases disponibles.
+                {t("selectDay")}
               </Text>
             )}
           </View>
 
           <View style={styles.sendMessageContainer}>
             <Text variant="headlineMedium" style={{ textAlign: "center" }}>
-              ¿Tienes alguna duda ?
+              {t("anyQuestion")}
             </Text>
 
             <Button
@@ -314,7 +310,7 @@ export default function TrainerView() {
               contentStyle={{ paddingVertical: 10 }}
               labelStyle={{ fontSize: 20 }}
             >
-              Enviar Mensaje
+              {t("sendMessage")}
             </Button>
           </View>
         </ScrollView>

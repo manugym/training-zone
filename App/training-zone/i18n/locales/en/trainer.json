@@ -4,5 +4,19 @@
   "title": "All Trainers",
   "searchTrainer": "Search for a trainer...",
   "seeProfile": "See Profile",
-  "noTrainersFound": "No trainers found"
+  "noTrainersFound": "No trainers found",
+
+  "loginRequired": "You must log in to continue.",
+  "idNotFound": "Trainer ID not found.",
+  "defaultTrainerTitle": "Trainer",
+  "specialties": "Specialties",
+  "classCalendar": "Class calendar",
+  "type": "Type",
+  "description": "Description",
+  "actions": "Actions",
+  "seeMore": "See more",
+  "noClasses": "No classes on this day.",
+  "selectDay": "Select a day to see classes.",
+  "anyQuestion": "Any questions?",
+  "sendMessage": "Send message"
 }
