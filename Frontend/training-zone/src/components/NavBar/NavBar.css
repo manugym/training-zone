@@ -25,8 +25,14 @@
 }
 
 .icon {
-  width: 1.8em;
-  height: 1.8em;
+  width: 2em;
+  height: 2em;
+  transition: transform 0.4s ease;
+  cursor: pointer;
+}
+
+.nav-logo:hover .icon {
+  transform: scale(1.2);
 }
 
 .nav-links {
