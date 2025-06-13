@@ -166,6 +166,11 @@ export default function RoutinePreferencesScreen() {
             onValueChange={(value) => handleChange("gender", value)}
             value={preferences.gender}
             items={enumToPickerItems(UserGender)}
+            style={{
+              inputIOS: pickerInputStyle,
+              inputAndroid: pickerInputStyle,
+              placeholder: { color: theme.colors.onSurfaceDisabled },
+            }}
           />
         </View>
 
@@ -175,6 +180,11 @@ export default function RoutinePreferencesScreen() {
             onValueChange={(value) => handleChange("goal", value)}
             value={preferences.goal}
             items={enumToPickerItems(UserGoal)}
+            style={{
+              inputIOS: pickerInputStyle,
+              inputAndroid: pickerInputStyle,
+              placeholder: { color: theme.colors.onSurfaceDisabled },
+            }}
           />
         </View>
 
@@ -184,6 +194,11 @@ export default function RoutinePreferencesScreen() {
             onValueChange={(value) => handleChange("level", value)}
             value={preferences.level}
             items={enumToPickerItems(UserLevel)}
+            style={{
+              inputIOS: pickerInputStyle,
+              inputAndroid: pickerInputStyle,
+              placeholder: { color: theme.colors.onSurfaceDisabled },
+            }}
           />
         </View>
 
@@ -193,6 +208,11 @@ export default function RoutinePreferencesScreen() {
             onValueChange={(value) => handleChange("preferredActivities", value)}
             value={preferences.preferredActivities}
             items={enumToPickerItems(UserPreferredActivities)}
+            style={{
+              inputIOS: pickerInputStyle,
+              inputAndroid: pickerInputStyle,
+              placeholder: { color: theme.colors.onSurfaceDisabled },
+            }}
           />
         </View>
 
