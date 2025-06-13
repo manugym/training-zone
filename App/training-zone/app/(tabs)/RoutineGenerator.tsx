@@ -112,7 +112,8 @@ export default function RoutineGenerator() {
     }
   };
 
-  const handleReset = () => {
+  const handleReset = async () => {
+    await AsyncStorage.removeItem("routine_preferences");
     setPreferences(defaultPreferences());
   };
 
@@ -212,7 +213,7 @@ export default function RoutineGenerator() {
             ["heightCm", "height"],
             ["weightKg", "weight"],
             ["daysPerWeek", "daysPerWeek"],
-            ["timeToTrainMinutes", "minutesPerSession"]
+            ["timeToTrainMinutes", "minutesPerSession"],
           ] as [keyof RoutinePreferences, string][]
         ).map(([key, label]) => (
           <View key={key} style={styles.field}>
