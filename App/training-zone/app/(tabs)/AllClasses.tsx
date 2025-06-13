@@ -11,13 +11,12 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import classService from "@/services/class.service";
-import { ThemedView } from "@/components/ThemedView";
-import { ThemedText } from "@/components/ThemedText";
 import { ClassType } from "@/models/enums/class-type";
 import { Class } from "@/models/class";
 import { ServerUrl } from "@/constants/ServerUrl";
 import { Shapes } from "@/constants/Shapes";
 import { useTheme } from "react-native-paper";
+import { useTranslation } from "react-i18next";
 
 const SERVER_IMAGE_URL = `${ServerUrl || ""}/ClassPicture`;
 
@@ -26,6 +25,7 @@ export default function AllClassesScreen() {
   const [loading, setLoading] = useState(false);
   const theme = useTheme();
   const router = useRouter();
+  const { t } = useTranslation("class");
 
   useEffect(() => {
     const fetchClasses = async () => {
@@ -52,7 +52,7 @@ export default function AllClassesScreen() {
         style={{ backgroundColor: theme.colors.background }}
       >
         <Text style={[styles.title, { color: theme.colors.onBackground }]}>
-          Nuestras Clases
+          {t("title")}
         </Text>
 
         {loading && (
@@ -66,7 +66,7 @@ export default function AllClassesScreen() {
         {!loading && (!classes || classes.length === 0) && (
           <View style={styles.noClasses}>
             <Text style={{ fontSize: 20, color: theme.colors.onBackground }}>
-              No se encontraron clases
+              {t("noClasses")}
             </Text>
           </View>
         )}
@@ -124,7 +124,7 @@ export default function AllClassesScreen() {
                       })
                     }
                   >
-                    <Text style={styles.buttonText}>Ver Clase</Text>
+                    <Text style={styles.buttonText}>{t("viewClass")}</Text>
                   </TouchableOpacity>
                 </View>
               </TouchableOpacity>
