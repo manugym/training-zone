@@ -269,23 +269,50 @@ public class Seeder
     {
         Class[] Classes =
         [
-        new Class
-        {
-            Type = ClassType.SPINNING,
-            Description = "Clase de ciclo indoor",
-            ClassImageUrl = "crossfit.jpg"
-        },
-        new Class
-        {
-            Type = ClassType.CROSSFIT,
-            Description = "Entrenamiento funcional en grupo",
-            ClassImageUrl = "crossfit.jpg"
-        },
-        new Class{
-            Type = ClassType.BOXING,
-            Description = "Entrenamiento de boxeo en grupo",
-            ClassImageUrl = "crossfit.jpg"
-        }
+            new Class{
+                Type = ClassType.YOGA,
+                Description = "Respiración, movimiento y equilibrio interior",
+                ClassImageUrl = "yoga.jpg"
+            },
+            new Class{
+                Type = ClassType.PILATES,
+                Description = "Fortalece tu cuerpo desde el control y la respiración",
+                ClassImageUrl = "pilates.jpg"
+            },
+            new Class{
+                Type = ClassType.ZUMBA,
+                Description = "Ritmos latinos que invitan a moverse",
+                ClassImageUrl = "zumba.jpg"
+            },
+               new Class
+            {
+                Type = ClassType.SPINNING,
+                Description = "Pedalea con fuerza, motivación y música que te lleva más allá",
+                ClassImageUrl = "spinning.jpg"
+            },
+            new Class
+            {
+                Type = ClassType.CROSSFIT,
+                Description = "Fuerza, técnica y explosividad en sesiones intensas",
+                ClassImageUrl = "crossfit.jpg"
+            },
+            new Class{
+                Type = ClassType.KICKBOXING,
+                Description = "Golpeo de brazos y piernas unidos a una intensa actividad",
+                ClassImageUrl = "kickboxing.jpg"
+            },new Class{
+                Type = ClassType.BOXING,
+                Description = "Técnica, fuerza y cardio al estilo clásico",
+                ClassImageUrl = "boxing.jpg"
+            },new Class{
+                Type = ClassType.MMA,
+                Description = "La lucha moderna ha llegado a nuestro gimnasio",
+                ClassImageUrl = "mma.jpg"
+            },new Class{
+                Type = ClassType.PERSONALTRAINING,
+                Description = "Entrenamiento personalizado en manos de nuestro profesionales",
+                ClassImageUrl = "personaltraining.jpg"
+            }
 
         ];
         await _trainingZoneContext.Classes.AddRangeAsync(Classes);
@@ -306,7 +333,7 @@ public class Seeder
         [
             new Schedule
             {
-                ClassId = 1,
+                ClassId = 4,
                 Class = spinning,
                 UserId = trainer1.Id,
                 User = trainer1,
@@ -317,7 +344,7 @@ public class Seeder
             },
             new Schedule
             {
-                ClassId = 2,
+                ClassId = 5,
                 Class = crossfit,
                 UserId = trainer2.Id,
                 User = trainer2,
