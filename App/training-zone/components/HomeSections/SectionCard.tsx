@@ -9,12 +9,12 @@ import {
   FontAwesome6,
 } from "@expo/vector-icons";
 import { useTheme } from "react-native-paper";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 export default function SectionCards() {
   const router = useRouter();
   const theme = useTheme();
-  const { t } = useTranslation('home');
+  const { t } = useTranslation("home");
 
   return (
     <ThemedView
@@ -22,32 +22,55 @@ export default function SectionCards() {
     >
       <View style={styles.offerContainer}>
         <Text style={[styles.offerTitle, { color: theme.colors.onBackground }]}>
-          {t('sectionCards.title')}
+          {t("sectionCards.title")}
         </Text>
-        <Text style={[styles.offerDescription, { color: theme.colors.onBackground }]}>
-          {t('sectionCards.description')}
+        <Text
+          style={[
+            styles.offerDescription,
+            { color: theme.colors.onBackground },
+          ]}
+        >
+          {t("sectionCards.description")}
         </Text>
         <View style={styles.cardsGrid}>
           <HomeCard
-            icon={<MaterialCommunityIcons name="karate" size={48} color={theme.colors.primary} />}
-            title={t('sectionCards.personalTrainingTitle')}
-            descriptionText={t('sectionCards.personalTrainingDescription')}
-            buttonText={t('sectionCards.knowMore')}
-            onPress={() => router.push("/Auth")}
+            icon={
+              <MaterialCommunityIcons
+                name="karate"
+                size={48}
+                color={theme.colors.primary}
+              />
+            }
+            title={t("sectionCards.personalTrainingTitle")}
+            descriptionText={t("sectionCards.personalTrainingDescription")}
+            buttonText={t("sectionCards.knowMore")}
+            onPress={() => router.push("/AllTrainers")}
           />
           <HomeCard
-            icon={<FontAwesome6 name="users" size={48} color={theme.colors.primary} />}
-            title={t('sectionCards.groupTrainingTitle')}
-            descriptionText={t('sectionCards.groupTrainingDescription')}
-            buttonText={t('sectionCards.seeDescription')}
-            onPress={() => router.push("/Auth")}
+            icon={
+              <FontAwesome6
+                name="users"
+                size={48}
+                color={theme.colors.primary}
+              />
+            }
+            title={t("sectionCards.groupTrainingTitle")}
+            descriptionText={t("sectionCards.groupTrainingDescription")}
+            buttonText={t("sectionCards.seeDescription")}
+            onPress={() => router.push("/AllClasses")}
           />
           <HomeCard
-            icon={<Ionicons name="phone-portrait-outline" size={48} color={theme.colors.primary} />}
-            title={t('sectionCards.aiPlanTitle')}
-            descriptionText={t('sectionCards.aiPlanDescription')}
-            buttonText={t('sectionCards.knowMore')}
-            onPress={() => router.push("/Auth")}
+            icon={
+              <Ionicons
+                name="phone-portrait-outline"
+                size={48}
+                color={theme.colors.primary}
+              />
+            }
+            title={t("sectionCards.aiPlanTitle")}
+            descriptionText={t("sectionCards.aiPlanDescription")}
+            buttonText={t("sectionCards.knowMore")}
+            onPress={() => router.push("/RoutineGenerator")}
           />
         </View>
       </View>

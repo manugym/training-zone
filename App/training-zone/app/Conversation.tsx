@@ -30,7 +30,7 @@ import { useTranslation } from "react-i18next";
 
 export default function Conversation() {
   const theme = useTheme();
-  const { t } = useTranslation("conversation");
+  const { t } = useTranslation("chat");
 
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [conversation, setConversation] = useState<Chat | null>(null);
