@@ -1,22 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { View, Image, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, useColorScheme, Text, Dimensions } from "react-native";
+import {
+  View,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+  Dimensions,
+  Text,
+} from "react-native";
 import { useRouter } from "expo-router";
 import classService from "@/services/class.service";
 import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
-import { Colors } from "@/constants/Colors";
 import { ClassType } from "@/models/enums/class-type";
 import { Class } from "@/models/class";
 import { ServerUrl } from "@/constants/ServerUrl";
 import { Shapes } from "@/constants/Shapes";
+import { useTheme } from "react-native-paper";
 
 const SERVER_IMAGE_URL = `${ServerUrl || ""}/ClassPicture`;
 
 export default function AllClassesScreen() {
   const [classes, setClasses] = useState<Class[] | null>(null);
   const [loading, setLoading] = useState(false);
-  const colorScheme = useColorScheme() || "light";
-  const theme = Colors[colorScheme];
+  const theme = useTheme();
   const router = useRouter();
 
   useEffect(() => {
@@ -35,49 +43,57 @@ export default function AllClassesScreen() {
   }, []);
 
   return (
-    <ThemedView style={[styles.container, { backgroundColor: theme.background }]}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <ScrollView
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
+        style={{ backgroundColor: theme.colors.background }}
       >
-        <ThemedText type="title" style={[styles.title, { color: theme.text }]}>
+        <Text style={[styles.title, { color: theme.colors.onBackground }]}>
           Nuestras Clases
-        </ThemedText>
+        </Text>
+
         {loading && (
-          <ActivityIndicator size="large" color={theme.primary} style={{ marginTop: 48 }} />
+          <ActivityIndicator size="large" color={theme.colors.primary} style={{ marginTop: 48 }} />
         )}
+
         {!loading && (!classes || classes.length === 0) && (
           <View style={styles.noClasses}>
-            <ThemedText type="subtitle" style={{ fontSize: 20 }}>
+            <Text style={{ fontSize: 20, color: theme.colors.onBackground }}>
               No se encontraron clases
-            </ThemedText>
+            </Text>
           </View>
         )}
+
         {!loading && classes && (
           <View style={styles.classesContainer}>
             {classes.map((activity) => (
               <TouchableOpacity
                 key={activity.Id}
-                style={[styles.classCard, { backgroundColor: theme.details, borderColor: theme.primary }]}
+                style={[
+                  styles.classCard,
+                  {
+                    backgroundColor: theme.colors.surfaceVariant,
+                    borderColor: theme.colors.primary,
+                  },
+                ]}
                 activeOpacity={0.9}
                 onPress={() => router.push({ pathname: "/ClassDetail", params: { id: activity.Id } })}
               >
                 <Image
-                  source={{
-                    uri: `${SERVER_IMAGE_URL}/${activity.ClassImageUrl}`,
-                  }}
+                  source={{ uri: `${SERVER_IMAGE_URL}/${activity.ClassImageUrl}` }}
                   style={styles.classImage}
                   resizeMode="cover"
                 />
                 <View style={styles.infoContainer}>
-                  <ThemedText type="subtitle" style={[styles.classType, { color: theme.primary }]}>
+                  <Text style={[styles.classType, { color: theme.colors.primary }]}>
                     {ClassType[activity.Type]}
-                  </ThemedText>
-                  <ThemedText style={[styles.classDescription, { color: theme.text }]}>
+                  </Text>
+                  <Text style={[styles.classDescription, { color: theme.colors.onBackground }]}>
                     {activity.Description}
-                  </ThemedText>
+                  </Text>
                   <TouchableOpacity
-                    style={[styles.button, { backgroundColor: theme.primary }]}
+                    style={[styles.button, { backgroundColor: theme.colors.primary }]}
                     onPress={() => router.push({ pathname: "/ClassDetail", params: { id: activity.Id } })}
                   >
                     <Text style={styles.buttonText}>Ver Clase</Text>
@@ -88,7 +104,7 @@ export default function AllClassesScreen() {
           </View>
         )}
       </ScrollView>
-    </ThemedView>
+    </View>
   );
 }
 
@@ -152,7 +168,6 @@ const styles = StyleSheet.create({
   },
   button: {
     paddingVertical: 10,
-    paddingHorizontal: 0,
     borderRadius: 99,
     alignItems: "center",
     marginTop: 6,
