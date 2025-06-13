@@ -1,0 +1,21 @@
+{
+  "title": "Generate a personalized routine",
+  "headerTitle": "Preferences and Routine",
+  "gender": "Gender",
+  "goal": "Goal",
+  "level": "Level",
+  "preferredActivities": "Preferred activity",
+  "age": "Age",
+  "height": "Height (cm)",
+  "weight": "Weight (kg)",
+  "daysPerWeek": "Days per week",
+  "minutesPerSession": "Minutes per session",
+  "generate": "Save and generate routine",
+  "reset": "Reset values",
+  "incompleteTitle": "Incomplete fields",
+  "incompleteMessage": "Please complete all fields correctly.",
+  "fileReadyTitle": "File ready",
+  "fileReadyMessage": "Sharing is not available on this device.",
+  "errorTitle": "Error",
+  "errorGeneric": "Could not generate routine"
+}

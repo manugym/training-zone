@@ -14,11 +14,13 @@ import chatEn from "./locales/en/chat.json";
 import chatEs from "./locales/es/chat.json";
 import userEn from "./locales/en/user.json";
 import userEs from "./locales/es/user.json";
+import routineEn from "./locales/en/routine.json";
+import routineEs from "./locales/es/routine.json";
 
 i18n.use(initReactI18next).init({
   lng: Localization.getLocales()[0]?.languageCode || "es",
   fallbackLng: "es",
-  ns: ["home", "trainer", "class", "auth", "chat"],
+  ns: ["home", "trainer", "class", "auth", "chat", "routine"],
   defaultNS: "home",
   resources: {
     en: {
@@ -28,6 +30,7 @@ i18n.use(initReactI18next).init({
       auth: authEn,
       chat: chatEn,
       user: userEn,
+      routine: routineEn
     },
     es: {
       home: homeEs,
@@ -36,6 +39,7 @@ i18n.use(initReactI18next).init({
       auth: authEs,
       chat: chatEs,
       user: userEs,
+      routine: routineEs
     },
   },
   interpolation: {

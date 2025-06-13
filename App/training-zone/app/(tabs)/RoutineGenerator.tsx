@@ -13,6 +13,7 @@ import { UserLevel } from "@/models/enums/user-level";
 import { UserPreferredActivities } from "@/models/enums/user-preferred-activities";
 import * as Localization from "expo-localization";
 import routineService from "@/services/routine.service";
+import { useTranslation } from "react-i18next";
 
 const enumToPickerItems = (e: any) => [
   ...Object.entries(e)
@@ -38,6 +39,7 @@ const defaultPreferences = (): RoutinePreferences => {
 
 export default function RoutineGenerator() {
   const theme = useTheme();
+  const { t } = useTranslation("routine");
 
   const [preferences, setPreferences] = useState<RoutinePreferences>(
     defaultPreferences()
@@ -86,10 +88,7 @@ export default function RoutineGenerator() {
 
   const handleSaveAndGenerate = async () => {
     if (!isValid()) {
-      Alert.alert(
-        "Campos incompletos",
-        "Por favor completa todos los campos correctamente."
-      );
+      Alert.alert(t("incompleteTitle"), t("incompleteMessage"));
       return;
     }
 
@@ -104,13 +103,10 @@ export default function RoutineGenerator() {
       if (isAvailable) {
         await Sharing.shareAsync(fileUri);
       } else {
-        Alert.alert(
-          "Archivo listo",
-          "No se puede compartir desde este dispositivo."
-        );
+        Alert.alert(t("fileReadyTitle"), t("fileReadyMessage"));
       }
     } catch (error: any) {
-      Alert.alert("Error", error.message || "No se pudo generar la rutina");
+      Alert.alert(t("errorTitle"), error.message || t("errorGeneric"));
     } finally {
       setProcessing(false);
     }
@@ -146,14 +142,14 @@ export default function RoutineGenerator() {
         { backgroundColor: theme.colors.background },
       ]}
     >
-      <Stack.Screen options={{ title: "Preferencias y Rutina" }} />
+      <Stack.Screen options={{ title: t("headerTitle") }} />
       <ScrollView contentContainerStyle={styles.formContainer}>
         <Text variant="headlineMedium" style={styles.title}>
-          Genera una rutina personalizada
+          {t("title")}
         </Text>
 
         <View style={styles.field}>
-          <Text>Género</Text>
+          <Text>{t("gender")}</Text>
           <RNPickerSelect
             onValueChange={(value) => handleChange("gender", value)}
             value={preferences.gender}
@@ -167,7 +163,7 @@ export default function RoutineGenerator() {
         </View>
 
         <View style={styles.field}>
-          <Text>Objetivo</Text>
+          <Text>{t("goal")}</Text>
           <RNPickerSelect
             onValueChange={(value) => handleChange("goal", value)}
             value={preferences.goal}
@@ -181,7 +177,7 @@ export default function RoutineGenerator() {
         </View>
 
         <View style={styles.field}>
-          <Text>Nivel</Text>
+          <Text>{t("level")}</Text>
           <RNPickerSelect
             onValueChange={(value) => handleChange("level", value)}
             value={preferences.level}
@@ -195,7 +191,7 @@ export default function RoutineGenerator() {
         </View>
 
         <View style={styles.field}>
-          <Text>Actividad preferida</Text>
+          <Text>{t("preferredActivities")}</Text>
           <RNPickerSelect
             onValueChange={(value) =>
               handleChange("preferredActivities", value)
@@ -212,15 +208,15 @@ export default function RoutineGenerator() {
 
         {(
           [
-            ["age", "Edad"],
-            ["heightCm", "Altura (cm)"],
-            ["weightKg", "Peso (kg)"],
-            ["daysPerWeek", "Días por semana"],
-            ["timeToTrainMinutes", "Minutos por sesión"],
+            ["age", "age"],
+            ["heightCm", "height"],
+            ["weightKg", "weight"],
+            ["daysPerWeek", "daysPerWeek"],
+            ["timeToTrainMinutes", "minutesPerSession"]
           ] as [keyof RoutinePreferences, string][]
         ).map(([key, label]) => (
           <View key={key} style={styles.field}>
-            <Text>{label}</Text>
+            <Text>{t(label)}</Text>
             <TextInput
               keyboardType="numeric"
               value={preferences[key] === 0 ? "" : preferences[key].toString()}
@@ -245,7 +241,7 @@ export default function RoutineGenerator() {
           labelStyle={{ fontSize: 18 }}
           disabled={processing}
         >
-          Guardar y generar rutina
+          {t("generate")}
         </Button>
 
         <Button
@@ -256,7 +252,7 @@ export default function RoutineGenerator() {
           labelStyle={{ fontSize: 18 }}
           disabled={processing}
         >
-          Restablecer valores
+          {t("reset")}
         </Button>
 
         {processing && (

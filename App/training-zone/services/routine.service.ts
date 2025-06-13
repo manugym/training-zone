@@ -28,7 +28,6 @@ class RoutineService {
     if (!info.exists) {
       throw new Error("No se pudo guardar el archivo PDF");
     }
-
     return fileUri;
   }
 }
