@@ -7,11 +7,11 @@ import { TrainerFilter } from "../../models/trainer-filter";
 import { ClassType } from "../../models/enums/class-type";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../../components/Spinner/Spinner";
+import { useTranslation } from "react-i18next";
 
 function AllTrainersView() {
-  const SERVER_IMAGE_URL = `${
-    import.meta.env.VITE_SERVER_URL
-  }/UserProfilePicture`;
+  const SERVER_IMAGE_URL = `${import.meta.env.VITE_SERVER_URL
+    }/UserProfilePicture`;
 
   const navigate = useNavigate();
 
@@ -21,7 +21,7 @@ function AllTrainersView() {
   const [name, setName] = useState<string>("");
   const [entitiesPerPage, setEntitiesPerPage] = useState<number>(5);
   const [actualPage, setActualPage] = useState<number>(1);
-
+  const { t } = useTranslation("trainer");
   // Initial filter
   const [filter, setFilter] = useState<TrainerFilter>({
     ClassType: null,
@@ -81,14 +81,14 @@ function AllTrainersView() {
         {!loading && (
           <div className="content-container">
             <div className="top-section">
-              <h1>Nuestros Entrenadores</h1>
+              <h1>{t("title")}</h1>
 
               <div className="search-container">
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Buscar entrenador..."
+                  placeholder={t("search_placeholder")}
                 />
 
                 <select
@@ -101,7 +101,7 @@ function AllTrainersView() {
                     )
                   }
                 >
-                  <option value="">Todas las clases</option>
+                  <option value="">{t("all_classes")}</option>
                   {Object.keys(ClassType)
                     .filter((key) => isNaN(Number(key)))
                     .map((key) => (
@@ -123,9 +123,8 @@ function AllTrainersView() {
                     <div key={trainer.User.Id} className="trainer-card">
                       <div className="trainer-image-container">
                         <img
-                          src={`${SERVER_IMAGE_URL}/${
-                            trainer.User.AvatarImageUrl || "default.png"
-                          }`}
+                          src={`${SERVER_IMAGE_URL}/${trainer.User.AvatarImageUrl || "default.png"
+                            }`}
                           alt="Trainer"
                           className="trainer-image"
                         />
@@ -152,7 +151,7 @@ function AllTrainersView() {
                             navigate(`/trainer/${trainer.User.Id}`)
                           }
                         >
-                          Ver Perfil
+                          {t("view_profile")}
                         </button>
                       </div>
                     </div>
@@ -226,7 +225,7 @@ function AllTrainersView() {
 
         {!loading && (!allTrainers || allTrainers.Trainers.length === 0) && (
           <div className="no-trainers-message">
-            <h2>No se encontraron entrenadores</h2>
+            <h2>{t("no_trainers")}</h2>
           </div>
         )}
 
