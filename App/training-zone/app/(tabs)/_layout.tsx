@@ -27,6 +27,7 @@ export default function TabLayout() {
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
+        tabBarLabelPosition: "below-icon",
         tabBarStyle: Platform.select({
           ios: {
             position: "absolute",
@@ -54,7 +55,7 @@ export default function TabLayout() {
         options={{
           title: "Entrenadores",
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="account-tie" size={28} color={color} />
+            <MaterialCommunityIcons name="account-tie" size={30} color={color} />
           ),
         }}
       />
@@ -63,7 +64,7 @@ export default function TabLayout() {
         options={{
           title: "Clases",
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="dumbbell" size={28} color={color} />
+            <MaterialCommunityIcons name="dumbbell" size={30} color={color} />
           ),
         }}
       />
@@ -72,7 +73,16 @@ export default function TabLayout() {
         options={{
           title: "Rutinas",
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="dumbbell" size={28} color={color} />
+            <MaterialCommunityIcons name="script-text" size={30} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="Preferences"
+        options={{
+          title: "Preferencias",
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="archive" size={30} color={color} />
           ),
         }}
       />
