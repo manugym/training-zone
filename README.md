@@ -1,4 +1,4 @@
-# Proyecto: TrainingZone
+# TrainingZone
 
 ## Índice
 
@@ -29,18 +29,17 @@ Este proyecto consiste en un servidor que proporcionará información y almacena
 
 **Características principales:**
 
+- Vistas de entrenadores, clases, usuario actual y administración de estas
 - Vistas adaptadas según el rol (user/admin)
-- Envío de recordatorios antes de cada clase
-- Chat directo con el administrador y posibilidad de chat grupal
+- Chat en tiempo real con los entrenadores
 - Sistema de almacenamiento de imágenes en servidor
-- Persistencia local para rutinas generadas por IA
+- Persistencia local para crear rutinas generadas por IA
 - Idioma inglés/español
 - Tema claro y oscuro
 
 **Opcionales en estudio:**
 
 - Implementación de pagos
-- Búsqueda por centro o entrenador
 
 ---
 
@@ -50,11 +49,8 @@ Este proyecto consiste en un servidor que proporcionará información y almacena
 
 - Aplicación multiplataforma para gestionar reservas deportivas
 - Interacción entre usuarios y entrenadores
-
-**Secundarios:**
-
 - Generación de rutinas mediante IA
-- Seguimiento de métricas y gráficas de rendimiento
+
 
 ---
 
@@ -62,7 +58,7 @@ Este proyecto consiste en un servidor que proporcionará información y almacena
 
 - **Frontend Web:** React
 - **Aplicación Móvil:** React Native
-- **Backend:** ASP .NET
+- **Backend:** ASP .NET core
 - **Base de Datos:** SQLite en desarrollo | MySQL en producción
 
 ---
