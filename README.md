@@ -108,7 +108,7 @@ Esquema E/R utilizado:
 
 ## Presentación PDF
 
-[Presentación en PDF](assets/Training Zone.pdf)
+[Presentación en PDF](./assets/Training Zone.pdf)
 ---
 
 ## Bitácora de Tareas
