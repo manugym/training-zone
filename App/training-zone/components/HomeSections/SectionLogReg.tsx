@@ -1,32 +1,21 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  useColorScheme,
-} from "react-native";
+import { View, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import userService from "@/services/user.service";
 import apiService from "@/services/api.service";
 import authService from "@/services/auth.service";
-import { Colors } from "@/constants/Colors";
-import {
-  Dialog,
-  Portal,
-  Button,
-  Provider as PaperProvider,
-} from "react-native-paper";
+import { Dialog, Portal, Button, useTheme } from "react-native-paper";
+import { useTranslation } from "react-i18next";
 
 const logoLight = require("@/assets/images/home-logo-light.png");
 const logoDark = require("@/assets/images/home-logo-dark.png");
 
 export default function SectionLogReg() {
   const router = useRouter();
-  const colorScheme = useColorScheme() || "light";
-  const theme = Colors[colorScheme];
+  const theme = useTheme();
+  const { t } = useTranslation("home");
 
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
@@ -50,77 +39,73 @@ export default function SectionLogReg() {
     router.push("/Auth");
   };
 
-  const logoSource = colorScheme === "dark" ? logoDark : logoLight;
+  const logoSource = theme.dark ? logoDark : logoLight;
 
   return (
-    <PaperProvider>
-      <ThemedView style={styles(theme).section}>
-        <View style={styles(theme).sectionContent}>
-          <View style={styles(theme).logoWrapper}>
-            <Image
-              source={logoSource}
-              style={{ width: 640, height: 560 }}
-              resizeMode="contain"
-            />
-          </View>
-
-          {currentUser ? (
-            <View style={styles(theme).authButtons}>
-              <ThemedText style={styles(theme).welcomeText}>
-                ¡Hola, {currentUser.Name}!
-              </ThemedText>
-              <TouchableOpacity
-                style={[styles(theme).button, styles(theme).registerButton]}
-                onPress={handleLogoutPress}
-              >
-                <ThemedText style={styles(theme).registerText}>
-                  Cerrar sesión
-                </ThemedText>
-              </TouchableOpacity>
-            </View>
-          ) : (
-            <View style={styles(theme).authButtons}>
-              <TouchableOpacity
-                style={[styles(theme).button, styles(theme).loginButton]}
-                onPress={() => router.push("/Auth")}
-              >
-                <ThemedText style={styles(theme).loginText}>
-                  Inicia Sesión
-                </ThemedText>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles(theme).button, styles(theme).registerButton]}
-                onPress={() => router.push("/Auth")}
-              >
-                <ThemedText style={styles(theme).registerText}>
-                  Regístrate
-                </ThemedText>
-              </TouchableOpacity>
-            </View>
-          )}
+    <ThemedView style={styles(theme).section}>
+      <View style={styles(theme).sectionContent}>
+        <View style={styles(theme).logoWrapper}>
+          <Image
+            source={logoSource}
+            style={{ width: 640, height: 560 }}
+            resizeMode="contain"
+          />
         </View>
 
-        <Portal>
-          <Dialog
-            visible={showLogoutDialog}
-            onDismiss={() => setShowLogoutDialog(false)}
-          >
-            <Dialog.Title>¿Cerrar sesión?</Dialog.Title>
-            <Dialog.Content>
-              <ThemedText>
-                ¿Estás seguro de que quieres cerrar tu sesión?
+        {currentUser ? (
+          <View style={styles(theme).authButtons}>
+            <ThemedText style={styles(theme).welcomeText}>
+              {t("welcome")} {currentUser.Name}!
+            </ThemedText>
+            <TouchableOpacity
+              style={[styles(theme).button, styles(theme).registerButton]}
+              onPress={handleLogoutPress}
+            >
+              <ThemedText style={styles(theme).registerText}>
+                {t("logout")}
               </ThemedText>
-            </Dialog.Content>
-            <Dialog.Actions>
-              <Button onPress={() => setShowLogoutDialog(false)}>
-                Cancelar
-              </Button>
-              <Button onPress={confirmLogout}>Cerrar sesión</Button>
-            </Dialog.Actions>
-          </Dialog>
-        </Portal>
-      </ThemedView>
-    </PaperProvider>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View style={styles(theme).authButtons}>
+            <TouchableOpacity
+              style={[styles(theme).button, styles(theme).loginButton]}
+              onPress={() => router.push("/Auth")}
+            >
+              <ThemedText style={styles(theme).loginText}>
+                {t("login")}
+              </ThemedText>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles(theme).button, styles(theme).registerButton]}
+              onPress={() => router.push("/Auth")}
+            >
+              <ThemedText style={styles(theme).registerText}>
+                {t("register")}
+              </ThemedText>
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
+
+      <Portal>
+        <Dialog
+          visible={showLogoutDialog}
+          onDismiss={() => setShowLogoutDialog(false)}
+        >
+          <Dialog.Title>{t("logout_title")}</Dialog.Title>
+          <Dialog.Content>
+            <ThemedText>{t("logout_message")}</ThemedText>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={() => setShowLogoutDialog(false)}>
+              {t("cancel")}
+            </Button>
+            <Button onPress={confirmLogout}>{t("confirm_logout")}</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+    </ThemedView>
   );
 }
 
@@ -131,7 +116,7 @@ const styles = (theme: any) =>
       justifyContent: "center",
       paddingVertical: 20,
       paddingHorizontal: 16,
-      backgroundColor: theme.background,
+      backgroundColor: theme.colors.background,
     },
     sectionContent: {
       width: "100%",
@@ -158,10 +143,10 @@ const styles = (theme: any) =>
       width: "80%",
     },
     loginButton: {
-      backgroundColor: theme.secondary,
+      backgroundColor: theme.colors.secondary,
     },
     registerButton: {
-      backgroundColor: theme.primary,
+      backgroundColor: theme.colors.primary,
     },
     loginText: {
       color: "#fff",
@@ -174,7 +159,7 @@ const styles = (theme: any) =>
       fontWeight: "600",
     },
     welcomeText: {
-      color: theme.text,
+      color: theme.colors.onBackground,
       fontSize: 19,
       fontWeight: "600",
       marginBottom: 8,

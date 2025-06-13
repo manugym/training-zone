@@ -1,6 +1,6 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet, useColorScheme } from "react-native";
-import { Colors } from "@/constants/Colors";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { useTheme } from "react-native-paper";
 
 interface CardProps {
   icon: React.ReactNode;
@@ -17,16 +17,15 @@ const HomeCard: React.FC<CardProps> = ({
   buttonText,
   onPress,
 }) => {
-  const colorScheme = useColorScheme() || "light";
-  const theme = Colors[colorScheme];
+  const theme = useTheme();
 
   return (
-    <View style={[styles.card, { backgroundColor: theme.details }]}>
+    <View style={[styles.card, { backgroundColor: theme.colors.surfaceVariant }]}>
       <View style={styles.icon}>{icon}</View>
-      <Text style={[styles.title, { color: theme.text }]}>{title}</Text>
-      <Text style={[styles.description, { color: theme.text }]}>{descriptionText}</Text>
+      <Text style={[styles.title, { color: theme.colors.onSurface }]}>{title}</Text>
+      <Text style={[styles.description, { color: theme.colors.onSurface }]}>{descriptionText}</Text>
       <TouchableOpacity
-        style={[styles.button, { backgroundColor: theme.primary }]}
+        style={[styles.button, { backgroundColor: theme.colors.primary }]}
         onPress={onPress}
         activeOpacity={0.88}
       >

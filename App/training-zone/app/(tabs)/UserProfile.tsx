@@ -12,8 +12,11 @@ import userService from "@/services/user.service";
 import apiService from "@/services/api.service";
 import authService from "@/services/auth.service";
 import { ServerUrl } from "@/constants/ServerUrl";
+import { useTranslation } from "react-i18next";
 
 export default function UserProfile() {
+  const { t } = useTranslation("user");
+
   const SERVER_IMAGE_URL = `${ServerUrl}/UserProfilePicture`;
 
   const theme = useTheme();
@@ -28,7 +31,7 @@ export default function UserProfile() {
 
   useEffect(() => {
     if (!apiService.jwt) {
-      Alert.alert("Necesitas iniciar sesión");
+      Alert.alert(t("needLoginAlert"));
       router.push("/Auth");
     }
 
@@ -68,11 +71,11 @@ export default function UserProfile() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phoneRegex = /^[0-9]{9}$/;
 
-    if (!email || !emailRegex.test(email)) return "Correo inválido.";
-    if (!phone || !phoneRegex.test(phone)) return "Teléfono inválido.";
-    if (password && password.length < 6) return "Contraseña muy corta.";
+    if (!email || !emailRegex.test(email)) return t("invalidEmail");
+    if (!phone || !phoneRegex.test(phone)) return t("invalidPhone");
+    if (password && password.length < 6) return t("passwordTooShort");
     if (password && password !== confirmPassword)
-      return "Las contraseñas no coinciden.";
+      return t("passwordsDoNotMatch");
 
     return "";
   };
@@ -82,7 +85,7 @@ export default function UserProfile() {
     if (validationError) {
       Toast.show({
         type: "error",
-        text1: "Error",
+        text1: t("errorTitle"),
         text2: validationError,
         position: "bottom",
       });
@@ -98,19 +101,19 @@ export default function UserProfile() {
         image,
       });
 
-      Alert.alert("¡Datos actualizados correctamente correctamente!");
+      Alert.alert(t("updateSuccess"));
 
       if (password) {
         authService.logout();
-        Alert.alert("Necesitas iniciar sesión de nuevo");
+        Alert.alert(t("needRelogin"));
         router.push("/Auth");
       }
     } catch (err) {
-      const message = err.message || "Ocurrió un error. Intenta de nuevo.";
+      const message = err.message || t("updateError");
 
       Toast.show({
         type: "error",
-        text1: "Error",
+        text1: t("errorTitle"),
         text2: message,
         position: "bottom",
       });
@@ -130,7 +133,7 @@ export default function UserProfile() {
       </TouchableOpacity>
 
       <TextInput
-        label="Nombre completo"
+        label={t("fullName")}
         value={name}
         onChangeText={setName}
         mode="outlined"
@@ -141,7 +144,7 @@ export default function UserProfile() {
         }}
       />
       <TextInput
-        label="Correo electrónico"
+        label={t("email")}
         value={email}
         onChangeText={(text) => setEmail(text.trim())}
         mode="outlined"
@@ -154,7 +157,7 @@ export default function UserProfile() {
         }}
       />
       <TextInput
-        label="Teléfono"
+        label={t("phone")}
         value={phone}
         onChangeText={(text) => setPhone(text.trim())}
         mode="outlined"
@@ -166,7 +169,7 @@ export default function UserProfile() {
         }}
       />
       <TextInput
-        label="Contraseña (opcional)"
+        label={t("passwordOptional")}
         value={password}
         onChangeText={setPassword}
         mode="outlined"
@@ -178,7 +181,7 @@ export default function UserProfile() {
         }}
       />
       <TextInput
-        label="Confirmar contraseña"
+        label={t("confirmPassword")}
         value={confirmPassword}
         onChangeText={setConfirmPassword}
         mode="outlined"
@@ -198,7 +201,7 @@ export default function UserProfile() {
           borderRadius: Shapes.medium,
         }}
       >
-        Actualizar
+        {t("updateButton")}
       </Button>
     </ThemedView>
   );

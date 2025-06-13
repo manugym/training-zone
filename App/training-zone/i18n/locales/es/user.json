@@ -1,0 +1,17 @@
+{
+  "needLoginAlert": "Necesitas iniciar sesión",
+  "invalidEmail": "Correo inválido.",
+  "invalidPhone": "Teléfono inválido.",
+  "passwordTooShort": "Contraseña muy corta.",
+  "passwordsDoNotMatch": "Las contraseñas no coinciden.",
+  "updateSuccess": "¡Datos actualizados correctamente correctamente!",
+  "needRelogin": "Necesitas iniciar sesión de nuevo",
+  "updateError": "Ocurrió un error. Intenta de nuevo.",
+  "errorTitle": "Error",
+  "fullName": "Nombre completo",
+  "email": "Correo electrónico",
+  "phone": "Teléfono",
+  "passwordOptional": "Contraseña (opcional)",
+  "confirmPassword": "Confirmar contraseña",
+  "updateButton": "Actualizar"
+}

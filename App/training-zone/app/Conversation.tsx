@@ -26,9 +26,11 @@ import { User } from "@/models/user";
 import { Chat } from "@/models/chat";
 import { ChatMessage } from "@/models/chat-message";
 import { Shapes } from "@/constants/Shapes";
+import { useTranslation } from "react-i18next";
 
 export default function Conversation() {
   const theme = useTheme();
+  const { t } = useTranslation("conversation");
 
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [conversation, setConversation] = useState<Chat | null>(null);
@@ -126,12 +128,12 @@ export default function Conversation() {
 
   const handleDeleteMessage = (messageId: number) => {
     Alert.alert(
-      "¿Estás seguro de que quieres eliminar el mensaje?",
-      "Esta acción no se puede deshacer.",
+      t("deleteMessageConfirmTitle"),
+      t("deleteMessageConfirmDescription"),
       [
-        { text: "Cancelar", style: "cancel" },
+        { text: t("cancel"), style: "cancel" },
         {
-          text: "Sí, eliminarlo",
+          text: t("delete"),
           style: "destructive",
           onPress: () => {
             Animated.timing(animatedValuesRef.current[messageId], {
@@ -153,8 +155,8 @@ export default function Conversation() {
     const yesterday = new Date();
     yesterday.setDate(today.getDate() - 1);
 
-    if (date.toDateString() === today.toDateString()) return "Hoy";
-    if (date.toDateString() === yesterday.toDateString()) return "Ayer";
+    if (date.toDateString() === today.toDateString()) return t("today");
+    if (date.toDateString() === yesterday.toDateString()) return t("yesterday");
 
     return date.toLocaleDateString(undefined, {
       weekday: "long",
@@ -335,18 +337,15 @@ export default function Conversation() {
                   variant="titleLarge"
                 >
                   No tienes mensajes con{" "}
-                  <Text
-                    style={{ color: theme.colors.secondary }}
-                    variant="titleLarge"
-                  >
-                    {conversation?.UserOriginId === currentUser?.Id
-                      ? conversation?.UserDestination?.Name ?? "Entrenador"
-                      : conversation?.UserOrigin?.Name ?? "Entrenador"}
-                  </Text>{" "}
-                  aún.
+                  {t("noMessagesTitle", {
+                    name:
+                      conversation?.UserOriginId === currentUser?.Id
+                        ? conversation?.UserDestination?.Name ?? t("trainer")
+                        : conversation?.UserOrigin?.Name ?? t("trainer"),
+                  })}
                 </Text>
                 <Text style={styles.noMessagesSubtitle} variant="bodyMedium">
-                  Envía el primero para comenzar la conversación
+                  {t("noMessagesSubtitle")}
                 </Text>
               </View>
             )}
@@ -360,7 +359,7 @@ export default function Conversation() {
             ]}
           >
             <TextInput
-              label="Escribe un mensaje"
+              label={t("writeAMessage")}
               ref={inputRef}
               mode="outlined"
               multiline

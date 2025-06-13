@@ -69,21 +69,21 @@ class ApiService {
   async post<T = void>(
     path: string,
     body: any = {},
-    contentType?: string
+    contentType: string = "application/json",
+    asBinary = false
   ): Promise<Result<T>> {
     const config: AxiosRequestConfig = {
       headers: this.getHeaders(undefined, contentType),
+      ...(asBinary ? { responseType: "arraybuffer" } : {}),
     };
 
-    // If the body is a FormData instance, set the Content-Type to multipart/form-data
     if (body instanceof FormData) {
-      config.headers["Content-Type"] = "multipart/form-data";
+      config.headers!["Content-Type"] = "multipart/form-data";
     }
 
-    return this.sendRequest<T>(
-      axios.post(`${this.BASE_URL}${path}`, body, config)
-    );
+    return this.sendRequest<T>(axios.post<T>(`${this.BASE_URL}${path}`, body, config));
   }
+
 
   async put<T = void>(
     path: string,

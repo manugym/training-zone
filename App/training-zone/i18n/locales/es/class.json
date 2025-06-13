@@ -1,0 +1,14 @@
+{
+  "title": "Nuestras Clases",
+  "noClasses": "No se encontraron clases",
+  "viewClass": "Ver Clase",
+  "detailTitle": "Detalle de Clase",
+  "dayClasses": "Clases del día seleccionado",
+  "noDayClasses": "No hay clases disponibles este día.",
+  "type": "Tipo",
+  "time": "Horario",
+  "action": "Acción",
+  "join": "Apuntarse",
+  "cancel": "Cancelar",
+  "errorLoading": "Error al cargar datos."
+}

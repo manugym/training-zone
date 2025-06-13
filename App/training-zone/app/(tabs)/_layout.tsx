@@ -27,6 +27,7 @@ export default function TabLayout() {
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
+        tabBarLabelPosition: "below-icon",
         tabBarStyle: Platform.select({
           ios: {
             position: "absolute",
@@ -54,7 +55,7 @@ export default function TabLayout() {
         options={{
           title: "Entrenadores",
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="account-tie" size={28} color={color} />
+            <MaterialCommunityIcons name="run" size={30} color={color} />
           ),
         }}
       />
@@ -63,7 +64,37 @@ export default function TabLayout() {
         options={{
           title: "Clases",
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="dumbbell" size={28} color={color} />
+            <MaterialCommunityIcons name="dumbbell" size={30} color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="RoutineGenerator"
+        options={{
+          title: "Rutina",
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="robot" size={30} color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="AllConversations"
+        options={{
+          title: "Chat",
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="chat" size={30} color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="UserProfile"
+        options={{
+          title: "Perfil",
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="account" size={30} color={color} />
           ),
         }}
       />
