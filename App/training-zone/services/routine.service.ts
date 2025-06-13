@@ -19,7 +19,6 @@ class RoutineService {
     }
 
     const b64 = Buffer.from(response.data).toString("base64");
-
     const fileUri = FileSystem.documentDirectory + "RutinaGimnasio.pdf";
     await FileSystem.writeAsStringAsync(fileUri, b64, {
       encoding: FileSystem.EncodingType.Base64,

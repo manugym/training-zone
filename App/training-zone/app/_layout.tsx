@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Provider as PaperProvider } from "react-native-paper";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
@@ -17,29 +17,52 @@ import {
   OpenSans_600SemiBold,
 } from "@expo-google-fonts/open-sans";
 import Toast from "react-native-toast-message";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === "dark";
+  const systemColorScheme = useColorScheme();
+  const [themePreference, setThemePreference] = useState<"light" | "dark" | "system">("system");
 
-  const [loaded] = useFonts({
+  const [fontsLoaded] = useFonts({
     BebasNeue_400Regular,
     OpenSans_400Regular,
     OpenSans_600SemiBold,
   });
+  const [appReady, setAppReady] = useState(false);
+
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
+    const loadPreferences = async () => {
+      try {
+        const stored = await AsyncStorage.getItem("routine_preferences");
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (["light", "dark", "system"].includes(parsed.themePreference)) {
+            setThemePreference(parsed.themePreference);
+          }
+        }
+      } catch (error) {
+        console.error("Error al cargar preferencias del tema:", error);
+      } finally {
+        setAppReady(true);
+        SplashScreen.hideAsync();
+      }
+    };
+
+    if (fontsLoaded) {
+      loadPreferences();
     }
-  }, [loaded]);
+  }, [fontsLoaded]);
 
-  if (!loaded) {
-    return null;
-  }
+  if (!appReady) return null;
+  
 
-  const theme = isDark ? CustomPaperDarkTheme : CustomPaperLightTheme;
+  const resolvedTheme =
+    themePreference === "system" ? systemColorScheme : themePreference;
+
+  const theme =
+    resolvedTheme === "dark" ? CustomPaperDarkTheme : CustomPaperLightTheme;
 
   return (
     <>
@@ -55,7 +78,7 @@ export default function RootLayout() {
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
         </Stack>
-        <StatusBar style={isDark ? "light" : "dark"} />
+        <StatusBar style={resolvedTheme === "dark" ? "light" : "dark"} />
       </PaperProvider>
       <Toast />
     </>
