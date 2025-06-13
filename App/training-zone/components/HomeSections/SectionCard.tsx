@@ -3,7 +3,11 @@ import { View, Text, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import { ThemedView } from "@/components/ThemedView";
 import HomeCard from "@/components/HomeSections/HomeCard";
-import { MaterialCommunityIcons, Ionicons, FontAwesome6 } from "@expo/vector-icons";
+import {
+  MaterialCommunityIcons,
+  Ionicons,
+  FontAwesome6,
+} from "@expo/vector-icons";
 import { useTheme } from "react-native-paper";
 
 export default function SectionCards() {
@@ -11,38 +15,64 @@ export default function SectionCards() {
   const theme = useTheme();
 
   return (
-    <ThemedView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <ThemedView
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+    >
       <View style={styles.offerContainer}>
         <Text style={[styles.offerTitle, { color: theme.colors.onBackground }]}>
           ¿Qué servicios ofrecemos?
         </Text>
-        <Text style={[styles.offerDescription, { color: theme.colors.onBackground }]}>
-          Nos comprometemos a ofrecer el mejor servicio deportivo a nuestros clientes.{"\n"}
-          Nuestros servicios van desde el entrenamiento personalizado a los entrenamientos
-          grupales donde nuestros clientes pueden alcanzar sus objetivos de la forma que más
-          se amolde a sus necesidades.
+        <Text
+          style={[
+            styles.offerDescription,
+            { color: theme.colors.onBackground },
+          ]}
+        >
+          Nos comprometemos a ofrecer el mejor servicio deportivo a nuestros
+          clientes.{"\n"}
+          Nuestros servicios van desde el entrenamiento personalizado a los
+          entrenamientos grupales donde nuestros clientes pueden alcanzar sus
+          objetivos de la forma que más se amolde a sus necesidades.
         </Text>
         <View style={styles.cardsGrid}>
           <HomeCard
-            icon={<MaterialCommunityIcons name="karate" size={48} color={theme.colors.primary} />}
+            icon={
+              <MaterialCommunityIcons
+                name="karate"
+                size={48}
+                color={theme.colors.primary}
+              />
+            }
             title="Entrenamiento Personal"
             descriptionText="Logra tus objetivos de manera eficiente gracias a tu entrenador y clases personalizadas"
             buttonText="Conocer más"
-            onPress={() => router.push("/Auth")}
+            onPress={() => router.push("/AllTrainers")}
           />
           <HomeCard
-            icon={<FontAwesome6 name="users" size={48} color={theme.colors.primary} />}
+            icon={
+              <FontAwesome6
+                name="users"
+                size={48}
+                color={theme.colors.primary}
+              />
+            }
             title="Entrenamiento en Grupo"
             descriptionText="El entrenamiento en grupo permite mejorar tu físico de una manera divertida"
             buttonText="Ver descripción"
-            onPress={() => router.push("/Auth")}
+            onPress={() => router.push("/AllClasses")}
           />
           <HomeCard
-            icon={<Ionicons name="phone-portrait-outline" size={48} color={theme.colors.primary} />}
+            icon={
+              <Ionicons
+                name="phone-portrait-outline"
+                size={48}
+                color={theme.colors.primary}
+              />
+            }
             title="Plan de entrenamiento"
             descriptionText="Consigue un plan de entrenamiento personalizado gracias a nuestra IA"
             buttonText="Conocer más"
-            onPress={() => router.push("/Auth")}
+            onPress={() => router.push("/Routine")}
           />
         </View>
       </View>
