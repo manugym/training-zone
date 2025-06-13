@@ -1,0 +1,21 @@
+{
+  "title": "Genera una rutina personalizada",
+  "headerTitle": "Preferencias y Rutina",
+  "gender": "Género",
+  "goal": "Objetivo",
+  "level": "Nivel",
+  "preferredActivities": "Actividad preferida",
+  "age": "Edad",
+  "height": "Altura (cm)",
+  "weight": "Peso (kg)",
+  "daysPerWeek": "Días por semana",
+  "minutesPerSession": "Minutos por sesión",
+  "generate": "Guardar y generar rutina",
+  "reset": "Restablecer valores",
+  "incompleteTitle": "Campos incompletos",
+  "incompleteMessage": "Por favor completa todos los campos correctamente.",
+  "fileReadyTitle": "Archivo listo",
+  "fileReadyMessage": "No se puede compartir desde este dispositivo.",
+  "errorTitle": "Error",
+  "errorGeneric": "No se pudo generar la rutina"
+}
