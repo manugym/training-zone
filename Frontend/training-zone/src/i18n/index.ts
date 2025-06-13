@@ -12,6 +12,8 @@ import chat_en from "./en/chat.json";
 import chat_es from "./es/chat.json";
 import trainer_en from "./en/trainers.json";
 import trainer_es from "./es/trainers.json";
+import class_en from "./en/class.json";
+import class_es from "./es/class.json";
 
 i18n
   .use(LanguageDetector)
@@ -23,18 +25,20 @@ i18n
         dropdown: dropdown_en,
         home: home_en,
         chat: chat_en,
-        trainer: trainer_en
+        trainer: trainer_en,
+        class: class_en
       },
       es: {
         navbar: navbar_es,
         dropdown: dropdown_es,
         home: home_es,
         chat: chat_es,
-        trainer: trainer_es
+        trainer: trainer_es,
+        class: class_es
       },
     },
     fallbackLng: ['es', 'en'],
-    ns: ['navbar', 'dropdown', 'home', 'chat', 'trainer'],
+    ns: ['navbar', 'dropdown', 'home', 'chat', 'trainer', 'class'],
     defaultNS: 'navbar',
     interpolation: {
       escapeValue: false,

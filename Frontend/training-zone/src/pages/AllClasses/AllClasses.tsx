@@ -6,6 +6,7 @@ import Spinner from "../../components/Spinner/Spinner";
 import { ClassType } from "../../models/enums/class-type";
 import { Class } from "../../models/class";
 import "./AllClasses.css";
+import { useTranslation } from "react-i18next";
 
 function AllClassesView() {
   const SERVER_IMAGE_URL = `${import.meta.env.VITE_SERVER_URL
@@ -15,6 +16,7 @@ function AllClassesView() {
 
   const [classes, setClasses] = useState<Class[] | null>(null);
   const [loading, setLoading] = useState(false);
+  const { t } = useTranslation("class");
 
   useEffect(() => {
     const fetchClasses = async () => {
@@ -38,16 +40,18 @@ function AllClassesView() {
         {!loading && (
           <div className="content-container">
             <div className="top-section">
-              <h1>Nuestras Clases</h1>
+              <h1>{t("all_classes_title")}</h1>
             </div>
             {classes && classes.length > 0 && (
               <div className="all-classes-container">
                 {classes.map((activity) => (
                   <div key={activity.Id} className="class-card">
                     <div className="class-image-container">
-                      <img src={`${SERVER_IMAGE_URL}/${activity.ClassImageUrl}`}
+                      <img
+                        src={`${SERVER_IMAGE_URL}/${activity.ClassImageUrl}`}
                         alt="Class"
-                        className="class-image" />
+                        className="class-image"
+                      />
                     </div>
                     <div className="class-information-container">
                       <div className="class-info-top">
@@ -56,10 +60,8 @@ function AllClassesView() {
                           {activity.Description}
                         </p>
                       </div>
-                      <button onClick={() =>
-                        navigate(`/class/${activity.Id}`)
-                      }>
-                        Ver Clase
+                      <button onClick={() => navigate(`/class/${activity.Id}`)}>
+                        {t("view_class")}
                       </button>
                     </div>
                   </div>
@@ -68,12 +70,12 @@ function AllClassesView() {
             )}
             {!classes || classes.length === 0 && (
               <div className="no-classes-message">
-                <h2>No se encontraron clases</h2>
+                <h2>{t("no_classes_found")}</h2>
               </div>
             )}
           </div>
         )}
-        {loading && (<Spinner />)}
+        {loading && <Spinner />}
       </main>
     </>
   );

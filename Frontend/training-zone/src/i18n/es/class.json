@@ -1,0 +1,11 @@
+{
+  "all_classes_title": "Nuestras Clases",
+  "view_class": "Ver Clase",
+  "no_classes_found": "No se encontraron clases",
+  "class_type": "Tipo",
+  "class_description": "Descripción",
+  "class_schedule": "Horario",
+  "cancel": "Cancelar",
+  "signup": "Apuntarse",
+  "no_classes_for_day": "No hay clases disponibles este día."
+}
