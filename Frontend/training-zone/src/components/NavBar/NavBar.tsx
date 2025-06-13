@@ -6,9 +6,11 @@ import ToggleTheme from "../ToggleTheme/ToggleTheme";
 import "./NavBar.css";
 import UserDropdownMenu from "../DropdownMenu/UserDropdownMenu";
 import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 
 function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { t } = useTranslation("navbar");
 
   const toggleMenu = () => setMenuOpen((prev) => !prev);
   const closeMenu = () => setMenuOpen(false);
@@ -20,9 +22,9 @@ function NavBar() {
         </Link>
       </div>
       <div className={`nav-links ${menuOpen ? "open" : ""}`}>
-        <Link to="/trainers" onClick={closeMenu}>Entrenadores</Link>
-        <Link to="/classes" onClick={closeMenu}>Clases</Link>
-        <Link to="/chat" onClick={closeMenu}>Chat</Link>
+        <Link to="/trainers" onClick={closeMenu}>{t("trainers")}</Link>
+        <Link to="/classes" onClick={closeMenu}>{t("classes")}</Link>
+        <Link to="/chat" onClick={closeMenu}>{t("chat")}</Link>
       </div>
       <div className="navbar-right">
         <ToggleTheme />

@@ -1,0 +1,17 @@
+{
+  "login": "Login",
+  "register": "Register",
+  "trainers": "Trainers",
+  "book": "Book",
+  "section_title": "What services do we offer?",
+  "section_description": "We are committed to providing the best sports service to our clients.\nOur services range from personal training to group workouts so our clients can reach their goals in the way that best suits them.",
+  "card_1_title": "Personal Training",
+  "card_1_description": "Achieve your goals efficiently with a trainer and personalized sessions.",
+  "card_1_button": "Learn more",
+  "card_2_title": "Group Training",
+  "card_2_description": "Group training helps you improve physically in a fun way.",
+  "card_2_button": "See description",
+  "card_3_title": "Training Plan",
+  "card_3_description": "Get a custom plan powered by our AI system.",
+  "card_3_button": "Learn more"
+}

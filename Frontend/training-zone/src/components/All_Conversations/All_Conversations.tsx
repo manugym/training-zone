@@ -4,16 +4,17 @@ import { User } from "../../models/user";
 import "./All_Conversations.css";
 import { Chat } from "../../models/chat";
 import userService from "../../services/user.service";
+import { useTranslation } from "react-i18next";
 
 function All_Users_With_Conversation() {
-  const SERVER_IMAGE_URL = `${
-    import.meta.env.VITE_SERVER_URL
-  }/UserProfilePicture`;
+  const SERVER_IMAGE_URL = `${import.meta.env.VITE_SERVER_URL
+    }/UserProfilePicture`;
 
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   const [allChats, setAllChats] = useState<Chat[] | null>(null);
   const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
+  const { t } = useTranslation("chat");
 
   //subscription to get the current user
   useEffect(() => {
@@ -82,11 +83,10 @@ function All_Users_With_Conversation() {
               onClick={() => setSelectedChat(chat)}
             >
               <img
-                src={`${SERVER_IMAGE_URL}/${
-                  chat.UserOriginId === currentUser.Id
+                src={`${SERVER_IMAGE_URL}/${chat.UserOriginId === currentUser.Id
                     ? chat.UserDestination?.AvatarImageUrl || "default.png"
                     : chat.UserOrigin?.AvatarImageUrl || "default.png"
-                }`}
+                  }`}
                 alt="Avatar"
                 className="avatar"
               />
@@ -107,19 +107,19 @@ function All_Users_With_Conversation() {
                 <p className="last-message">
                   {chat.ChatMessages && chat.ChatMessages.length > 0
                     ? chat.ChatMessages[chat.ChatMessages.length - 1].Message
-                        .length > 20
+                      .length > 20
                       ? chat.ChatMessages[
-                          chat.ChatMessages.length - 1
-                        ].Message.slice(0, 20) + "..."
+                        chat.ChatMessages.length - 1
+                      ].Message.slice(0, 20) + "..."
                       : chat.ChatMessages[chat.ChatMessages.length - 1].Message
-                    : "No hay mensajes"}
+                    : t("no_messages")}
                 </p>
               </div>
             </div>
           );
         })
       ) : (
-        <p>No hay usuarios con conversaciones.</p>
+        <p>{t("no_conversations")}</p>
       )}
     </section>
   );
