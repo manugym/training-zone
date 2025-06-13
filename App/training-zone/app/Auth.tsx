@@ -10,10 +10,13 @@ import { Text, Surface, useTheme, TouchableRipple } from "react-native-paper";
 
 import Login from "@/components/AuthForms/Login";
 import Register from "@/components/AuthForms/Register";
+import { useTranslation } from "react-i18next";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
 export default function AuthScreen() {
+  const { t } = useTranslation("auth");
+
   const theme = useTheme();
   const [formType, setFormType] = useState<"login" | "register">("login");
   const position = useRef(new Animated.Value(0)).current;
@@ -51,11 +54,11 @@ export default function AuthScreen() {
     >
       <View style={styles.switchContainer}>
         <TouchableRipple onPress={() => slideTo("login")} borderless>
-          <Text style={getTitleStyle("login")}>Login</Text>
+          <Text style={getTitleStyle("login")}>{t("login")}</Text>
         </TouchableRipple>
 
         <TouchableRipple onPress={() => slideTo("register")} borderless>
-          <Text style={getTitleStyle("register")}>Register</Text>
+          <Text style={getTitleStyle("register")}>{t("register")}</Text>
         </TouchableRipple>
       </View>
 
