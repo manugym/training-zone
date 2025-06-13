@@ -16,8 +16,11 @@ import { ClassType } from "@/models/enums/class-type";
 import { TrainerFilter } from "@/models/trainer-filter";
 import trainerService from "@/services/trainer.service";
 import { Shapes } from "@/constants/Shapes";
+import { useTranslation } from "react-i18next";
 
 export default function AllTrainersPage() {
+  const { t } = useTranslation("trainer");
+
   const theme = useTheme();
   const router = useRouter();
 
@@ -79,7 +82,7 @@ export default function AllTrainersPage() {
 
   // Dropdown options for class types
   const classTypeOptions = [
-    { label: "Todas las clases", value: null },
+    { label: t("allClasses"), value: null },
     ...Object.keys(ClassType)
       .filter((key) => isNaN(Number(key)))
       .map((key) => ({
@@ -91,7 +94,7 @@ export default function AllTrainersPage() {
   // Get label for current classType value
   const currentClassLabel =
     classTypeOptions.find((opt) => opt.value === classType)?.label ||
-    "Selecciona clase";
+    t("selectClass");
 
   return (
     <View
@@ -100,14 +103,14 @@ export default function AllTrainersPage() {
         { backgroundColor: theme.colors.background },
       ]}
     >
-      <Stack.Screen options={{ title: "All Trainers" }} />
+      <Stack.Screen options={{ title: t("title") }} />
 
       {/*Searcher */}
       <View style={styles.searchContainer}>
         <TextInput
           mode="outlined"
           style={styles.textInput}
-          label="Buscar entrenador..."
+          label={t("searchTrainer")}
           value={name}
           onChangeText={setName}
           theme={{
@@ -174,8 +177,7 @@ export default function AllTrainersPage() {
                   <Image
                     source={{
                       uri: `${SERVER_IMAGE_URL}/${
-                        trainer.User.AvatarImageUrl ||
-                        "UserProfilePicture/default.png"
+                        trainer.User.AvatarImageUrl || "default.png"
                       }`,
                     }}
                     style={styles.trainerImage}
@@ -224,7 +226,7 @@ export default function AllTrainersPage() {
                       contentStyle={{ paddingVertical: 4 }}
                       labelStyle={{ fontSize: 14, fontWeight: "700" }}
                     >
-                      Ver Perfil
+                      {t("seeProfile")}
                     </Button>
                   </View>
                 </View>
@@ -237,7 +239,7 @@ export default function AllTrainersPage() {
               variant="titleMedium"
               style={{ color: theme.colors.onSurface }}
             >
-              No se encontraron entrenadores
+              {t("noTrainersFound")}
             </Text>
           </View>
         ) : (
@@ -256,7 +258,7 @@ export default function AllTrainersPage() {
 const styles = StyleSheet.create({
   viewContainer: {
     flex: 1,
-    paddingTop: 20,
+    paddingTop: 50,
   },
   searchContainer: {
     flexDirection: "column",

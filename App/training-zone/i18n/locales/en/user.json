@@ -1,0 +1,17 @@
+{
+  "needLoginAlert": "You need to log in",
+  "invalidEmail": "Invalid email.",
+  "invalidPhone": "Invalid phone number.",
+  "passwordTooShort": "Password is too short.",
+  "passwordsDoNotMatch": "Passwords do not match.",
+  "updateSuccess": "Data updated successfully!",
+  "needRelogin": "You need to log in again",
+  "updateError": "An error occurred. Please try again.",
+  "errorTitle": "Error",
+  "fullName": "Full Name",
+  "email": "Email",
+  "phone": "Phone",
+  "passwordOptional": "Password (optional)",
+  "confirmPassword": "Confirm Password",
+  "updateButton": "Update"
+}

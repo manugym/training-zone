@@ -1,28 +1,26 @@
 import React from "react";
-import { ScrollView, StyleSheet, useColorScheme } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import SectionLogReg from "@/components/HomeSections/SectionLogReg";
 import SectionCards from "@/components/HomeSections/SectionCard";
-import { ThemedView } from "@/components/ThemedView";
-import { Colors } from "@/constants/Colors";
+import { useTheme } from "react-native-paper";
 
 export default function Home() {
-  const colorScheme = useColorScheme() || "light";
-  const theme = Colors[colorScheme];
+  const theme = useTheme();
 
   return (
-    <ThemedView style={[styles.container, { backgroundColor: theme.background }]}>
-      <ScrollView contentContainerStyle={styles.content}>
-        <SectionLogReg />
-        <SectionCards />
-      </ScrollView>
-    </ThemedView>
+    <ScrollView
+      contentContainerStyle={[
+        styles.content,
+        { backgroundColor: theme.colors.background },
+      ]}
+    >
+      <SectionLogReg />
+      <SectionCards />
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   content: {
     flexGrow: 1,
     justifyContent: "flex-start",

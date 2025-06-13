@@ -6,8 +6,11 @@ import authService from "@/services/auth.service";
 import { useRouter } from "expo-router";
 import Toast from "react-native-toast-message";
 import { Shapes } from "@/constants/Shapes";
+import { useTranslation } from "react-i18next";
 
-function Login() {
+export default function Login() {
+  const { t } = useTranslation("auth");
+
   const theme = useTheme();
   const router = useRouter();
 
@@ -15,16 +18,16 @@ function Login() {
   const [password, setPassword] = useState("");
 
   const validateForm = () => {
-    if (!credentials) return "Email o teléfono requerido.";
+    if (!credentials) return t("error.emailOrPhoneRequired");
 
     const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(credentials);
     const isPhone = /^[0-9]{9}$/.test(credentials);
 
     if (!isEmail && !isPhone) {
-      return "Ingresa un email o número de teléfono válido.";
+      return t("error.invalidEmailOrPhone");
     }
 
-    if (!password) return "Contraseña requerida.";
+    if (!password) return t("error.passwordRequired");
 
     return "";
   };
@@ -35,7 +38,7 @@ function Login() {
     if (validationError) {
       Toast.show({
         type: "error",
-        text1: "Error",
+        text1: t("error.title"),
         text2: validationError,
         position: "bottom",
       });
@@ -48,14 +51,14 @@ function Login() {
         password: password,
       });
 
-      Alert.alert("Inicio de sesión exitoso", "Bienvenido de nuevo!");
+      Alert.alert(t("success.loginTitle"), t("success.welcomeBack"));
       router.push("/");
     } catch (err) {
-      const message = err.message || "Ocurrió un error. Intenta de nuevo.";
+      const message = err.message || t("error.generic");
 
       Toast.show({
         type: "error",
-        text1: "Error",
+        text1: t("error.title"),
         text2: message,
         position: "bottom",
       });
@@ -65,7 +68,7 @@ function Login() {
   return (
     <ThemedView style={styles.container}>
       <TextInput
-        label="Email o Teléfono"
+        label={t("form.emailOrPhone")}
         value={credentials}
         onChangeText={(text) => setCredentials(text.trim())}
         mode="outlined"
@@ -79,7 +82,7 @@ function Login() {
       />
 
       <TextInput
-        label="Contraseña"
+        label={t("form.password")}
         value={password}
         onChangeText={setPassword}
         secureTextEntry
@@ -94,15 +97,10 @@ function Login() {
       <Button
         mode="contained"
         onPress={handleSubmit}
-        style={{
-          borderRadius: Shapes.medium,
-        }}
-        labelStyle={{
-          fontSize: 18,
-          paddingVertical: 6,
-        }}
+        style={{ borderRadius: Shapes.medium }}
+        labelStyle={{ fontSize: 18, paddingVertical: 6 }}
       >
-        Iniciar sesión
+        {t("form.loginButton")}
       </Button>
     </ThemedView>
   );
@@ -116,5 +114,3 @@ const styles = StyleSheet.create({
     gap: 20,
   },
 });
-
-export default Login;

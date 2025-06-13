@@ -1,0 +1,22 @@
+{
+  "allClasses": "Todas las clases",
+  "selectClass": "Selecciona una clase",
+  "title": "Todos los entrenadores",
+  "searchTrainer": "Busca un entrenador...",
+  "seeProfile": "Ver perfil",
+  "noTrainersFound": "No se encontraron entrenadores",
+
+  "loginRequired": "Debes iniciar sesión para continuar.",
+  "idNotFound": "ID de entrenador no encontrado.",
+  "defaultTrainerTitle": "Entrenador",
+  "specialties": "Especialidades",
+  "classCalendar": "Calendario de clases",
+  "type": "Tipo",
+  "description": "Descripción",
+  "actions": "Acciones",
+  "seeMore": "Ver más",
+  "noClasses": "No hay clases para este día.",
+  "selectDay": "Selecciona un día para ver las clases.",
+  "anyQuestion": "¿Tienes alguna duda?",
+  "sendMessage": "Enviar mensaje"
+}

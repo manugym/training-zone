@@ -1,0 +1,17 @@
+{
+  "conversations": "Your conversations",
+  "noChatsTitle": "No chats",
+  "noChatsMessage": "Send a message to a coach to start a conversation.",
+  "defaultUser": "User",
+  "noMessages": "No messages",
+
+  "deleteMessageConfirmTitle": "¿Estás seguro de que quieres eliminar el mensaje?",
+  "deleteMessageConfirmDescription": "Esta acción no se puede deshacer.",
+  "cancel": "Cancelar",
+  "delete": "Sí, eliminarlo",
+  "today": "Hoy",
+  "yesterday": "Ayer",
+  "writeAMessage": "Escribe un mensaje",
+  "noMessagesTitle": "No tienes mensajes con {{name}} aún.",
+  "noMessagesSubtitle": "Envía el primero para comenzar la conversación"
+}
