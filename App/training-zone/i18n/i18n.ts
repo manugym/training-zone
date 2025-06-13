@@ -1,18 +1,26 @@
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
-import * as Localization from 'expo-localization';
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
+import * as Localization from "expo-localization";
 
-import homeEn from './locales/en/home.json';
-import homeEs from './locales/es/home.json';
+import homeEn from "./locales/en/home.json";
+import homeEs from "./locales/es/home.json";
+import trainerEn from "./locales/en/trainer.json";
+import trainerEs from "./locales/es/trainer.json";
 
 i18n.use(initReactI18next).init({
-  lng: Localization.getLocales()[0]?.languageCode || 'es',
-  fallbackLng: 'es',
-  ns: ['home'],
-  defaultNS: 'home',
+  lng: Localization.getLocales()[0]?.languageCode || "es",
+  fallbackLng: "es",
+  ns: ["home", "trainer"],
+  defaultNS: "home",
   resources: {
-    en: { home: homeEn },
-    es: { home: homeEs },
+    en: {
+      home: homeEn,
+      trainer: trainerEn,
+    },
+    es: {
+      home: homeEs,
+      trainer: trainerEs,
+    },
   },
   interpolation: {
     escapeValue: false,
