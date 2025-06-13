@@ -239,7 +239,7 @@ export default function AllTrainersPage() {
               variant="titleMedium"
               style={{ color: theme.colors.onSurface }}
             >
-              {t("notTrainerFounded")}
+              {t("noTrainersFound")}
             </Text>
           </View>
         ) : (

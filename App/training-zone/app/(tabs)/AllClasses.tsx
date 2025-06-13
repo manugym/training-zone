@@ -100,7 +100,10 @@ export default function AllClassesScreen() {
                 />
                 <View style={styles.infoContainer}>
                   <Text
-                    style={[styles.classType, { color: theme.colors.primary }]}
+                    style={[
+                      styles.classType,
+                      { color: theme.colors.onBackground },
+                    ]}
                   >
                     {ClassType[activity.Type]}
                   </Text>

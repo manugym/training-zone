@@ -29,7 +29,7 @@
     "expo-blur": "~14.0.3",
     "expo-checkbox": "~4.0.1",
     "expo-constants": "~17.0.8",
-    "expo-file-system": "^18.1.10",
+    "expo-file-system": "~18.0.12",
     "expo-font": "~13.0.4",
     "expo-haptics": "~14.0.1",
     "expo-image-picker": "~16.0.6",
@@ -60,7 +60,8 @@
     "react-native-toast-message": "^2.3.0",
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.5",
-    "rxjs": "^7.5.7"
+    "rxjs": "^7.5.7",
+    "expo-modules-core": "~2.2.3"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
