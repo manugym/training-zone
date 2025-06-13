@@ -17,5 +17,4 @@ export interface RoutinePreferences {
   daysPerWeek: number;
   timeToTrainMinutes: number;
   preferredActivities: UserPreferredActivities | -1;
-  themePreference?: ThemePreference;
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, ScrollView, StyleSheet, TextInput, Platform } from "react-native";
+import { View, ScrollView, StyleSheet, TextInput } from "react-native";
 import { Stack, router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Text, Button, useTheme, ActivityIndicator } from "react-native-paper";
@@ -10,6 +10,7 @@ import { UserGender } from "@/models/enums/user-gender";
 import { UserGoal } from "@/models/enums/user-goal";
 import { UserLevel } from "@/models/enums/user-level";
 import { UserPreferredActivities } from "@/models/enums/user-preferred-activities";
+import * as Localization from "expo-localization";
 
 const enumToPickerItems = (e: any) => [
   { label: "Selecciona una opción...", value: -1 },
@@ -43,8 +44,8 @@ export default function RoutinePreferencesScreen() {
     daysPerWeek: 0,
     timeToTrainMinutes: 0,
     preferredActivities: -1,
-    themePreference: "system",
   });
+
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
@@ -52,10 +53,29 @@ export default function RoutinePreferencesScreen() {
     const loadPreferences = async () => {
       try {
         const saved = await AsyncStorage.getItem("routine_preferences");
+        let initialPrefs: RoutinePreferences = {
+          language: -1,
+          age: 0,
+          gender: -1,
+          heightCm: 0,
+          weightKg: 0,
+          goal: -1,
+          level: -1,
+          daysPerWeek: 0,
+          timeToTrainMinutes: 0,
+          preferredActivities: -1,
+        };
+
         if (saved) {
-          const parsed: RoutinePreferences = JSON.parse(saved);
-          setPreferences(parsed);
+          initialPrefs = JSON.parse(saved);
         }
+
+        //detects the system language
+        const langCode = Localization.getLocales()[0].languageCode;
+        initialPrefs.language =
+          langCode === "es" ? UserLanguage.Spanish : UserLanguage.English;
+
+        setPreferences(initialPrefs);
       } catch (error) {
         console.error("Error al cargar preferencias guardadas", error);
       } finally {
@@ -75,7 +95,6 @@ export default function RoutinePreferencesScreen() {
 
   const isValid = () => {
     return (
-      preferences.language !== -1 &&
       preferences.gender !== -1 &&
       preferences.goal !== -1 &&
       preferences.level !== -1 &&
@@ -120,45 +139,16 @@ export default function RoutinePreferencesScreen() {
 
   return (
     <View
-      style={[styles.viewContainer, { backgroundColor: theme.colors.background }]}
+      style={[
+        styles.viewContainer,
+        { backgroundColor: theme.colors.background },
+      ]}
     >
       <Stack.Screen options={{ title: "Tus preferencias" }} />
       <ScrollView contentContainerStyle={styles.formContainer}>
         <Text variant="headlineMedium" style={styles.title}>
           Preferencias para la rutina
         </Text>
-
-        <View style={styles.field}>
-          <Text>Tema</Text>
-          <RNPickerSelect
-            onValueChange={(value) => handleChange("themePreference", value)}
-            value={preferences.themePreference}
-            items={[
-              { label: "Claro", value: "light" },
-              { label: "Oscuro", value: "dark" },
-              { label: "Sistema", value: "system" },
-            ]}
-            style={{
-              inputIOS: pickerInputStyle,
-              inputAndroid: pickerInputStyle,
-              placeholder: { color: theme.colors.onSurfaceDisabled },
-            }}
-          />
-        </View>
-
-        <View style={styles.field}>
-          <Text>Idioma</Text>
-          <RNPickerSelect
-            onValueChange={(value) => handleChange("language", value)}
-            value={preferences.language}
-            items={enumToPickerItems(UserLanguage)}
-            style={{
-              inputIOS: pickerInputStyle,
-              inputAndroid: pickerInputStyle,
-              placeholder: { color: theme.colors.onSurfaceDisabled },
-            }}
-          />
-        </View>
 
         <View style={styles.field}>
           <Text>Género</Text>
@@ -205,7 +195,9 @@ export default function RoutinePreferencesScreen() {
         <View style={styles.field}>
           <Text>Actividad preferida</Text>
           <RNPickerSelect
-            onValueChange={(value) => handleChange("preferredActivities", value)}
+            onValueChange={(value) =>
+              handleChange("preferredActivities", value)
+            }
             value={preferences.preferredActivities}
             items={enumToPickerItems(UserPreferredActivities)}
             style={{
@@ -216,24 +208,29 @@ export default function RoutinePreferencesScreen() {
           />
         </View>
 
-        {([
-          ["age", "Edad"],
-          ["heightCm", "Altura (cm)"],
-          ["weightKg", "Peso (kg)"],
-          ["daysPerWeek", "Días por semana"],
-          ["timeToTrainMinutes", "Minutos por sesión"],
-        ] as [keyof RoutinePreferences, string][]).map(([key, label]) => (
+        {(
+          [
+            ["age", "Edad"],
+            ["heightCm", "Altura (cm)"],
+            ["weightKg", "Peso (kg)"],
+            ["daysPerWeek", "Días por semana"],
+            ["timeToTrainMinutes", "Minutos por sesión"],
+          ] as [keyof RoutinePreferences, string][]
+        ).map(([key, label]) => (
           <View key={key} style={styles.field}>
             <Text>{label}</Text>
             <TextInput
               keyboardType="numeric"
-              value={
-                preferences[key] === 0 ? "" : preferences[key].toString()
-              }
-              onChangeText={(text) =>
-                handleChange(key, parseInt(text) || 0)
-              }
-              style={[styles.input, { backgroundColor: theme.colors.surface, borderColor: theme.colors.outline, color: theme.colors.onBackground, }]}
+              value={preferences[key] === 0 ? "" : preferences[key].toString()}
+              onChangeText={(text) => handleChange(key, parseInt(text) || 0)}
+              style={[
+                styles.input,
+                {
+                  backgroundColor: theme.colors.surface,
+                  borderColor: theme.colors.outline,
+                  color: theme.colors.onBackground,
+                },
+              ]}
             />
           </View>
         ))}
@@ -250,11 +247,7 @@ export default function RoutinePreferencesScreen() {
         </Button>
 
         {saving && (
-          <ActivityIndicator
-            animating
-            size="large"
-            style={{ marginTop: 20 }}
-          />
+          <ActivityIndicator animating size="large" style={{ marginTop: 20 }} />
         )}
       </ScrollView>
     </View>
