@@ -17,7 +17,6 @@ export default function SectionLogReg() {
   const theme = useTheme();
   const { t } = useTranslation("home");
 
-
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
 
@@ -96,9 +95,7 @@ export default function SectionLogReg() {
         >
           <Dialog.Title>{t("logout_title")}</Dialog.Title>
           <Dialog.Content>
-            <ThemedText>
-              {t("logout_message")}
-            </ThemedText>
+            <ThemedText>{t("logout_message")}</ThemedText>
           </Dialog.Content>
           <Dialog.Actions>
             <Button onPress={() => setShowLogoutDialog(false)}>
