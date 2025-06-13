@@ -7,6 +7,7 @@ import userService from "@/services/user.service";
 import apiService from "@/services/api.service";
 import authService from "@/services/auth.service";
 import { Dialog, Portal, Button, useTheme } from "react-native-paper";
+import { useTranslation } from "react-i18next";
 
 const logoLight = require("@/assets/images/home-logo-light.png");
 const logoDark = require("@/assets/images/home-logo-dark.png");
