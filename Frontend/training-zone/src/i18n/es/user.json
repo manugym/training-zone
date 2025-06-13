@@ -1,0 +1,8 @@
+{
+  "placeholder_name": "Ej. Juan Pérez",
+  "placeholder_email": "Ej. juan@email.com",
+  "placeholder_phone": "Ej. 123456789",
+  "placeholder_new_password": "Nueva contraseña (opcional)",
+  "placeholder_confirm_password": "Confirmar nueva contraseña",
+  "update_button": "Actualizar"
+}

@@ -13,11 +13,11 @@ import Swal from "sweetalert2";
 import websocketService from "../../services/websocket.service";
 import { Class } from "../../models/class";
 import { ClassType } from "../../models/enums/class-type";
+import { useTranslation } from "react-i18next";
 
 function TrainerPage() {
-  const SERVER_IMAGE_URL = `${
-    import.meta.env.VITE_SERVER_URL
-  }/UserProfilePicture`;
+  const SERVER_IMAGE_URL = `${import.meta.env.VITE_SERVER_URL
+    }/UserProfilePicture`;
 
   const { id } = useParams<{ id: string }>();
 
@@ -29,7 +29,7 @@ function TrainerPage() {
 
   const [trainer, setTrainer] = useState<Trainer | null>(null);
   const [loading, setLoading] = useState(true);
-
+  const { t } = useTranslation("trainer");
   type ValuePiece = Date | null;
   type Value = ValuePiece | [ValuePiece, ValuePiece];
 
@@ -62,7 +62,6 @@ function TrainerPage() {
     if (!trainer || !selectedDay) return;
 
     const selectedDate = selectedDay as Date;
-
     const matchingClasses = trainer.TrainerClasses.filter((classItem) =>
       classItem.Schedules.some((schedule) => {
         const scheduleDate = new Date(schedule.StartDateTime);
@@ -119,20 +118,19 @@ function TrainerPage() {
                 <div className="trainer-info">
                   <h1>{trainer.User.Name}</h1>
                   <img
-                    src={`${SERVER_IMAGE_URL}/${
-                      trainer.User.AvatarImageUrl || "default.png"
-                    }`}
+                    src={`${SERVER_IMAGE_URL}/${trainer.User.AvatarImageUrl || "default.png"
+                      }`}
                     alt="Trainer"
                     className="trainer-image"
                   />
 
                   <div className="question-container">
-                    <h2>¿Tienes alguna duda?</h2>
+                    <h2>{t("have_questions")}</h2>
 
                     <button
                       onClick={async () => await handleClick(trainer.User)}
                     >
-                      Enviar Mensaje
+                      {t("send_message")}
                     </button>
                   </div>
                 </div>
@@ -146,14 +144,12 @@ function TrainerPage() {
                       tileClassName={({ date, view }) => {
                         const trainerClasses = trainer?.TrainerClasses || [];
 
-                        /*If the day have a trainer class, is marked with a new class */
                         if (view === "month") {
                           const dayHasClass = trainerClasses.some((c) =>
                             c.Schedules.some((s) => {
                               const classDate = new Date(s.StartDateTime);
                               return (
-                                classDate.getFullYear() ===
-                                  date.getFullYear() &&
+                                classDate.getFullYear() === date.getFullYear() &&
                                 classDate.getMonth() === date.getMonth() &&
                                 classDate.getDate() === date.getDate()
                               );
@@ -171,13 +167,13 @@ function TrainerPage() {
                   <div className="class-container">
                     {selectedDay ? (
                       classesOfSelectedDay &&
-                      classesOfSelectedDay.length > 0 ? (
+                        classesOfSelectedDay.length > 0 ? (
                         <table className="class-table">
                           <thead>
                             <tr>
-                              <th>Tipo</th>
-                              <th>Descripción</th>
-                              <th>Acciones</th>
+                              <th>{t("class_type")}</th>
+                              <th>{t("class_description")}</th>
+                              <th>{t("class_actions")}</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -189,7 +185,7 @@ function TrainerPage() {
                                   <button
                                     onClick={() => navigate(`/class/${c.Id}`)}
                                   >
-                                    Ver Precios y Horarios
+                                    {t("view_schedule")}
                                   </button>
                                 </td>
                               </tr>
@@ -197,13 +193,10 @@ function TrainerPage() {
                           </tbody>
                         </table>
                       ) : (
-                        <p>No hay clases disponibles este día</p>
+                        <p>{t("no_classes")}</p>
                       )
                     ) : (
-                      <p>
-                        Selecciona un día resaltado en azul para ver las clases
-                        disponibles.
-                      </p>
+                      <p>{t("select_day")}</p>
                     )}
                   </div>
                 </div>
@@ -213,7 +206,7 @@ function TrainerPage() {
 
           {!loading && !trainer && (
             <div className="trainer-not-found">
-              <h2>Entrenador no encontrado</h2>
+              <h2>{t("not_found")}</h2>
             </div>
           )}
 

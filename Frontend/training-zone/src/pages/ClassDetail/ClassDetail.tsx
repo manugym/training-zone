@@ -11,6 +11,7 @@ import { Reservation } from "../../models/reservation";
 import { useParams } from "react-router-dom";
 import { addDays, subDays, format } from "date-fns";
 import { FaCalendarAlt } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 function ActivitiesPage() {
   const [selectedDay, setSelectedDay] = useState<Date>(new Date());
@@ -25,7 +26,7 @@ function ActivitiesPage() {
     classes && classes.length > 0 && ClassType[classes[0].ClassType]
       ? ClassType[classes[0].ClassType].toLowerCase()
       : "default";
-
+  const { t } = useTranslation("class");
   if (!classId || isNaN(Number(classId))) {
     return <h1>No se encontró la actividad buscada</h1>;
   }
@@ -122,9 +123,9 @@ function ActivitiesPage() {
                 <table className="class-table">
                   <thead>
                     <tr>
-                      <th>Tipo</th>
-                      <th>Descripción</th>
-                      <th>Horario</th>
+                      <th>{t("class_type")}</th>
+                      <th>{t("class_description")}</th>
+                      <th>{t("class_schedule")}</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -142,14 +143,14 @@ function ActivitiesPage() {
                                 className="cancel-button"
                                 onClick={() => handleCancel(reservationId)}
                               >
-                                Cancelar
+                                {t("cancel")}
                               </button>
                             ) : (
                               <button
                                 className="signup-button"
                                 onClick={() => handleSignup(c.Id)}
                               >
-                                Apuntarse
+                                {t("signup")}
                               </button>
                             )}
                           </td>
@@ -159,7 +160,7 @@ function ActivitiesPage() {
                   </tbody>
                 </table>
               ) : (
-                <p>No hay clases disponibles este día.</p>
+                <p>{t("no_classes_for_day")}</p>
               )}
             </div>
           </div>

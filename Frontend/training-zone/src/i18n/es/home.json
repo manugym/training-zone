@@ -1,0 +1,17 @@
+{
+  "login": "Inicia Sesión",
+  "register": "Regístrate",
+  "trainers": "Entrenadores",
+  "book": "Reservar",
+  "section_title": "¿Qué servicios ofrecemos?",
+  "section_description": "Nos comprometemos a ofrecer el mejor servicio deportivo a nuestros clientes.\nNuestros servicios van desde el entrenamiento personalizado a los entrenamientos grupales donde nuestros clientes pueden alcanzar sus objetivos de la forma que más se amolde a sus necesidades.",
+  "card_1_title": "Entrenamiento Personal",
+  "card_1_description": "Logra tus objetivos de manera eficiente gracias a tu entrenador y clases personalizadas",
+  "card_1_button": "Conocer más",
+  "card_2_title": "Entrenamiento en Grupo",
+  "card_2_description": "El entrenamiento en grupo permite mejorar tu físico de una manera divertida",
+  "card_2_button": "Ver descripción",
+  "card_3_title": "Plan de entrenamiento",
+  "card_3_description": "Consigue un plan de entrenamiento personalizado gracias a nuestra IA",
+  "card_3_button": "Conocer más"
+}

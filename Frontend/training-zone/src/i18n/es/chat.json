@@ -1,0 +1,11 @@
+{
+  "no_conversations": "No hay usuarios con conversaciones.",
+  "no_messages": "No hay mensajes",
+  "no_messages_with": "No tienes mensajes con {{name}} aún",
+  "send_first_message": "Envía el primero para comenzar la conversación",
+  "no_chat_selected_title": "Ningún chat seleccionado",
+  "no_chat_selected_description": "Selecciona un chat para empezar a hablar",
+  "placeholder": "Escribe un mensaje",
+  "edit_message": "Editar mensaje",
+  "delete_message": "Eliminar mensaje"
+}
