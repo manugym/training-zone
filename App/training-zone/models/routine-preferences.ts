@@ -4,6 +4,8 @@ import { UserLanguage } from "./enums/user-language";
 import { UserLevel } from "./enums/user-level";
 import { UserPreferredActivities } from "./enums/user-preferred-activities";
 
+export type ThemePreference = "light" | "dark" | "system";
+
 export interface RoutinePreferences {
   language: UserLanguage | -1;
   age: number;
@@ -15,4 +17,5 @@ export interface RoutinePreferences {
   daysPerWeek: number;
   timeToTrainMinutes: number;
   preferredActivities: UserPreferredActivities | -1;
+  themePreference: ThemePreference;
 }

@@ -20,6 +20,18 @@ const enumToPickerItems = (e: any) => [
 
 export default function RoutinePreferencesScreen() {
   const theme = useTheme();
+
+  const pickerInputStyle = {
+    backgroundColor: theme.colors.surface,
+    borderColor: theme.colors.outline,
+    color: theme.colors.onBackground,
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    fontSize: 16,
+  };
+
   const [preferences, setPreferences] = useState<RoutinePreferences>({
     language: -1,
     age: 0,
@@ -31,6 +43,7 @@ export default function RoutinePreferencesScreen() {
     daysPerWeek: 0,
     timeToTrainMinutes: 0,
     preferredActivities: -1,
+    themePreference: "system",
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -52,7 +65,7 @@ export default function RoutinePreferencesScreen() {
 
     loadPreferences();
   }, []);
-  
+
   const handleChange = <K extends keyof RoutinePreferences>(
     key: K,
     value: RoutinePreferences[K]
@@ -116,11 +129,34 @@ export default function RoutinePreferencesScreen() {
         </Text>
 
         <View style={styles.field}>
+          <Text>Tema</Text>
+          <RNPickerSelect
+            onValueChange={(value) => handleChange("themePreference", value)}
+            value={preferences.themePreference}
+            items={[
+              { label: "Claro", value: "light" },
+              { label: "Oscuro", value: "dark" },
+              { label: "Sistema", value: "system" },
+            ]}
+            style={{
+              inputIOS: pickerInputStyle,
+              inputAndroid: pickerInputStyle,
+              placeholder: { color: theme.colors.onSurfaceDisabled },
+            }}
+          />
+        </View>
+
+        <View style={styles.field}>
           <Text>Idioma</Text>
           <RNPickerSelect
             onValueChange={(value) => handleChange("language", value)}
             value={preferences.language}
             items={enumToPickerItems(UserLanguage)}
+            style={{
+              inputIOS: pickerInputStyle,
+              inputAndroid: pickerInputStyle,
+              placeholder: { color: theme.colors.onSurfaceDisabled },
+            }}
           />
         </View>
 
