@@ -272,23 +272,23 @@ public class Seeder
             new Class{
                 Type = ClassType.YOGA,
                 Description = "Respiración, movimiento y equilibrio interior",
-                ClassImageUrl = ".jpg"
+                ClassImageUrl = "yoga.jpg"
             },
             new Class{
                 Type = ClassType.PILATES,
                 Description = "Fortalece tu cuerpo desde el control y la respiración",
-                ClassImageUrl = ".jpg"
+                ClassImageUrl = "pilates.jpg"
             },
             new Class{
                 Type = ClassType.ZUMBA,
                 Description = "Ritmos latinos que invitan a moverse",
-                ClassImageUrl = ".jpg"
+                ClassImageUrl = "zumba.jpg"
             },
                new Class
             {
                 Type = ClassType.SPINNING,
                 Description = "Pedalea con fuerza, motivación y música que te lleva más allá",
-                ClassImageUrl = ".jpg"
+                ClassImageUrl = "spinning.jpg"
             },
             new Class
             {
@@ -299,19 +299,19 @@ public class Seeder
             new Class{
                 Type = ClassType.KICKBOXING,
                 Description = "Golpeo de brazos y piernas unidos a una intensa actividad",
-                ClassImageUrl = ".jpg"
+                ClassImageUrl = "kickboxing.jpg"
             },new Class{
                 Type = ClassType.BOXING,
                 Description = "Técnica, fuerza y cardio al estilo clásico",
-                ClassImageUrl = ".jpg"
+                ClassImageUrl = "boxing.jpg"
             },new Class{
                 Type = ClassType.MMA,
                 Description = "La lucha moderna ha llegado a nuestro gimnasio",
-                ClassImageUrl = ".jpg"
+                ClassImageUrl = "mma.jpg"
             },new Class{
                 Type = ClassType.PERSONALTRAINING,
                 Description = "Entrenamiento personalizado en manos de nuestro profesionales",
-                ClassImageUrl = ".jpg"
+                ClassImageUrl = "personaltraining.jpg"
             }
 
         ];
