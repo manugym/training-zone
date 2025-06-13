@@ -1,4 +1,11 @@
 {
   "no_conversations": "No users with conversations.",
-  "no_messages": "No messages"
+  "no_messages": "No messages",
+  "no_messages_with": "You have no messages with {{name}} yet",
+  "send_first_message": "Send the first one to start the conversation",
+  "no_chat_selected_title": "No chat selected",
+  "no_chat_selected_description": "Select a chat to start talking",
+  "placeholder": "Type a message",
+  "edit_message": "Edit message",
+  "delete_message": "Delete message"
 }

@@ -9,6 +9,7 @@ import { ChatMessage } from "../../models/chat-message";
 import Swal from "sweetalert2";
 import { IoCheckmarkDoneSharp, IoSend } from "react-icons/io5";
 import { MdDeleteForever, MdEditSquare } from "react-icons/md";
+import { useTranslation } from "react-i18next";
 
 function Conversation() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -21,6 +22,7 @@ function Conversation() {
   const [showEditMessage, setShowEditMessage] = useState(false);
 
   const timerRef = useRef(null);
+  const { t } = useTranslation("chat");
 
   //scroll to the bottom of the message
   const bottomRef = useRef<HTMLDivElement | null>(null);
@@ -205,10 +207,8 @@ function Conversation() {
           <>
             {conversation.ChatMessages.map((message, index) => {
               const isMine = message.UserId === currentUser.Id;
-
               const messageDate = new Date(message.MessageDateTime);
 
-              // check that the date changes
               const showDateHeader =
                 index === 0 ||
                 new Date(
@@ -237,7 +237,7 @@ function Conversation() {
                     {messageToEdit && messageToEdit === message ? (
                       <div ref={editAreaRef}>
                         <MdEditSquare
-                          title="Editar mensaje"
+                          title={t("edit_message")}
                           color="white"
                           size={22}
                           onClick={() => {
@@ -249,11 +249,10 @@ function Conversation() {
                         <MdDeleteForever
                           color="red"
                           size={24}
-                          title="Eliminar mensaje"
+                          title={t("delete_message")}
                           onClick={() => handleDeleteMessage(message.Id)}
                         />
 
-                        {/*If the user is going to modify the message, a text area appears */}
                         {showEditMessage ? (
                           <form
                             onSubmit={handleEditMessageSubmit}
@@ -261,15 +260,14 @@ function Conversation() {
                           >
                             <textarea
                               className="edit-textarea"
-                              placeholder="Escribe un mensaje"
+                              placeholder={t("placeholder")}
                               value={messageToEditContent}
-                              onChange={(e) => {
-                                setMessageToEditContent(e.target.value);
-                              }}
+                              onChange={(e) =>
+                                setMessageToEditContent(e.target.value)
+                              }
                               onKeyDown={handleKeyDown}
                               required
                             />
-
                             <button type="submit">
                               <IoSend size={20} color="white" />
                             </button>
@@ -282,17 +280,13 @@ function Conversation() {
                       <p className="message-text">{message.Message}</p>
                     )}
 
-                    {/*time and check mark icon */}
                     <span className="message-info">
-                      {new Date(message.MessageDateTime).toLocaleTimeString(
-                        [],
-                        {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        }
-                      )}
+                      {new Date(message.MessageDateTime).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
 
-                      {message.UserId == currentUser.Id && (
+                      {message.UserId === currentUser.Id && (
                         <IoCheckmarkDoneSharp
                           size={16}
                           color={message.IsViewed ? "var(--color-details)" : ""}
@@ -308,23 +302,23 @@ function Conversation() {
         ) : conversation ? (
           <div className="no-messages">
             <h2>
-              No tienes mensajes con <b>{conversation.UserDestination.Name}</b>{" "}
-              aún
+              {t("no_messages_with", {
+                name: conversation.UserDestination.Name,
+              })}
             </h2>
-            <p>Envía el primero para comenzar la conversación</p>
+            <p>{t("send_first_message")}</p>
           </div>
         ) : (
           <div className="no-messages">
-            <h2>Ningún chat seleccionado </h2>
-            <p>Selecciona un chat para empezar a hablar</p>
+            <h2>{t("no_chat_selected_title")}</h2>
+            <p>{t("no_chat_selected_description")}</p>
           </div>
         )}
       </div>
 
-      {/*Form for send messages */}
       <form onSubmit={handleSendMessageSubmit} className="message-form">
         <textarea
-          placeholder="Escribe un mensaje"
+          placeholder={t("placeholder")}
           value={messageToSend}
           onChange={(e) => setMessageToSend(e.target.value)}
           onKeyDown={handleKeyDown}

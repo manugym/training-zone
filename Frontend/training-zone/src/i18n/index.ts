@@ -8,8 +8,8 @@ import dropdown_en from "./en/dropDrownMenu.json"
 import dropdown_es from "./es/dropDrownMenu.json"
 import home_en from "./en/home.json";
 import home_es from "./es/home.json";
-import chat_en from "./en/home.json";
-import chat_es from "./es/home.json";
+import chat_en from "./en/chat.json";
+import chat_es from "./es/chat.json";
 
 i18n
   .use(LanguageDetector)
