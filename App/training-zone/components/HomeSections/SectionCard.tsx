@@ -72,7 +72,7 @@ export default function SectionCards() {
             title="Plan de entrenamiento"
             descriptionText="Consigue un plan de entrenamiento personalizado gracias a nuestra IA"
             buttonText="Conocer más"
-            onPress={() => router.push("/Routine")}
+            onPress={() => router.push("/RoutineGenerator")}
           />
         </View>
       </View>

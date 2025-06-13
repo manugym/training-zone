@@ -1,40 +1,29 @@
 import React, { useEffect, useState } from "react";
-import { View, ScrollView, StyleSheet, TextInput } from "react-native";
-import { Stack, router } from "expo-router";
+import { View, ScrollView, StyleSheet, TextInput, Alert } from "react-native";
+import { Stack } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Sharing from "expo-sharing";
 import { Text, Button, useTheme, ActivityIndicator } from "react-native-paper";
-import { RoutinePreferences } from "@/models/routine-preferences";
 import RNPickerSelect from "react-native-picker-select";
+import { RoutinePreferences } from "@/models/routine-preferences";
 import { UserLanguage } from "@/models/enums/user-language";
 import { UserGender } from "@/models/enums/user-gender";
 import { UserGoal } from "@/models/enums/user-goal";
 import { UserLevel } from "@/models/enums/user-level";
 import { UserPreferredActivities } from "@/models/enums/user-preferred-activities";
 import * as Localization from "expo-localization";
+import routineService from "@/services/routine.service";
 
 const enumToPickerItems = (e: any) => [
-  { label: "Selecciona una opción...", value: -1 },
   ...Object.entries(e)
     .filter(([k, v]) => !isNaN(Number(v)))
     .map(([label, value]) => ({ label, value: Number(value) })),
 ];
 
-export default function RoutinePreferencesScreen() {
-  const theme = useTheme();
-
-  const pickerInputStyle = {
-    backgroundColor: theme.colors.surface,
-    borderColor: theme.colors.outline,
-    color: theme.colors.onBackground,
-    borderWidth: 1,
-    borderRadius: 10,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    fontSize: 16,
-  };
-
-  const [preferences, setPreferences] = useState<RoutinePreferences>({
-    language: -1,
+const defaultPreferences = (): RoutinePreferences => {
+  const langCode = Localization.getLocales()[0].languageCode;
+  return {
+    language: langCode === "es" ? UserLanguage.Spanish : UserLanguage.English,
     age: 0,
     gender: -1,
     heightCm: 0,
@@ -44,45 +33,33 @@ export default function RoutinePreferencesScreen() {
     daysPerWeek: 0,
     timeToTrainMinutes: 0,
     preferredActivities: -1,
-  });
+  };
+};
 
+export default function RoutineGenerator() {
+  const theme = useTheme();
+
+  const [preferences, setPreferences] = useState<RoutinePreferences>(
+    defaultPreferences()
+  );
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
+  const [processing, setProcessing] = useState(false);
 
+  //Load user preferences to local storage
   useEffect(() => {
     const loadPreferences = async () => {
       try {
         const saved = await AsyncStorage.getItem("routine_preferences");
-        let initialPrefs: RoutinePreferences = {
-          language: -1,
-          age: 0,
-          gender: -1,
-          heightCm: 0,
-          weightKg: 0,
-          goal: -1,
-          level: -1,
-          daysPerWeek: 0,
-          timeToTrainMinutes: 0,
-          preferredActivities: -1,
-        };
-
         if (saved) {
-          initialPrefs = JSON.parse(saved);
+          const parsed = JSON.parse(saved);
+          setPreferences(parsed);
         }
-
-        //detects the system language
-        const langCode = Localization.getLocales()[0].languageCode;
-        initialPrefs.language =
-          langCode === "es" ? UserLanguage.Spanish : UserLanguage.English;
-
-        setPreferences(initialPrefs);
-      } catch (error) {
-        console.error("Error al cargar preferencias guardadas", error);
+      } catch (e) {
+        console.error("Error al cargar preferencias", e);
       } finally {
         setLoading(false);
       }
     };
-
     loadPreferences();
   }, []);
 
@@ -107,26 +84,40 @@ export default function RoutinePreferencesScreen() {
     );
   };
 
-  const handleSave = async () => {
+  const handleSaveAndGenerate = async () => {
     if (!isValid()) {
-      alert("Por favor, completa todos los campos correctamente.");
+      Alert.alert(
+        "Campos incompletos",
+        "Por favor completa todos los campos correctamente."
+      );
       return;
     }
 
-    setSaving(true);
+    setProcessing(true);
     try {
       await AsyncStorage.setItem(
         "routine_preferences",
         JSON.stringify(preferences)
       );
-      alert("Preferencias guardadas correctamente.");
-      router.back();
-    } catch (error) {
-      alert("Hubo un error al guardar las preferencias.");
-      console.error(error);
+      const fileUri = await routineService.getRoutine(preferences);
+      const isAvailable = await Sharing.isAvailableAsync();
+      if (isAvailable) {
+        await Sharing.shareAsync(fileUri);
+      } else {
+        Alert.alert(
+          "Archivo listo",
+          "No se puede compartir desde este dispositivo."
+        );
+      }
+    } catch (error: any) {
+      Alert.alert("Error", error.message || "No se pudo generar la rutina");
     } finally {
-      setSaving(false);
+      setProcessing(false);
     }
+  };
+
+  const handleReset = () => {
+    setPreferences(defaultPreferences());
   };
 
   if (loading) {
@@ -137,6 +128,17 @@ export default function RoutinePreferencesScreen() {
     );
   }
 
+  const pickerInputStyle = {
+    backgroundColor: theme.colors.surface,
+    borderColor: theme.colors.outline,
+    color: theme.colors.onBackground,
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    fontSize: 16,
+  };
+
   return (
     <View
       style={[
@@ -144,10 +146,10 @@ export default function RoutinePreferencesScreen() {
         { backgroundColor: theme.colors.background },
       ]}
     >
-      <Stack.Screen options={{ title: "Tus preferencias" }} />
+      <Stack.Screen options={{ title: "Preferencias y Rutina" }} />
       <ScrollView contentContainerStyle={styles.formContainer}>
         <Text variant="headlineMedium" style={styles.title}>
-          Preferencias para la rutina
+          Genera una rutina personalizada
         </Text>
 
         <View style={styles.field}>
@@ -237,16 +239,27 @@ export default function RoutinePreferencesScreen() {
 
         <Button
           mode="contained"
-          onPress={handleSave}
+          onPress={handleSaveAndGenerate}
           style={styles.button}
           contentStyle={{ paddingVertical: 10 }}
           labelStyle={{ fontSize: 18 }}
-          disabled={saving}
+          disabled={processing}
         >
-          Guardar preferencias
+          Guardar y generar rutina
         </Button>
 
-        {saving && (
+        <Button
+          mode="outlined"
+          onPress={handleReset}
+          style={styles.button}
+          contentStyle={{ paddingVertical: 10 }}
+          labelStyle={{ fontSize: 18 }}
+          disabled={processing}
+        >
+          Restablecer valores
+        </Button>
+
+        {processing && (
           <ActivityIndicator animating size="large" style={{ marginTop: 20 }} />
         )}
       </ScrollView>
@@ -257,7 +270,7 @@ export default function RoutinePreferencesScreen() {
 const styles = StyleSheet.create({
   viewContainer: {
     flex: 1,
-    paddingVertical: 20,
+    paddingVertical: 100,
   },
   formContainer: {
     paddingHorizontal: 20,
@@ -279,7 +292,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   button: {
-    marginTop: 30,
+    marginTop: 20,
     borderRadius: 12,
     alignSelf: "center",
     width: "100%",
