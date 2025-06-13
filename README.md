@@ -125,3 +125,4 @@ Esquema E/R utilizado:
 
 ## Vídeo del Proyecto
 [ver vídeo en Vimeo](https://vimeo.com/1080301345/d42ce29c58?share=copy)
+[vídeo proyecto terminado](https://vimeo.com/1093243718/4a2d4f3380?share=copy)
