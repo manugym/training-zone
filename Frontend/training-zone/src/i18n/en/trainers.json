@@ -1,0 +1,16 @@
+{
+  "title": "Our Trainers",
+  "search_placeholder": "Search trainer...",
+  "all_classes": "All classes",
+  "view_profile": "View Profile",
+  "no_trainers_found": "No trainers found",
+  "not_found": "Trainer not found",
+  "send_message": "Send Message",
+  "have_questions": "Do you have any questions?",
+  "class_type": "Type",
+  "class_description": "Description",
+  "class_actions": "Actions",
+  "view_schedule": "View Prices and Schedule",
+  "no_classes": "No classes available this day",
+  "select_day": "Select a highlighted day to view available classes."
+}

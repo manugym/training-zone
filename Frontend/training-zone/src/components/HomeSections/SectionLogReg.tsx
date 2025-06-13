@@ -4,11 +4,13 @@ import "./SectionLogReg.css";
 import logoDark from "../../assets/home-logo-dark.svg";
 import logoLight from "../../assets/home-logo-light.svg";
 import { useCurrentUser } from "../../hooks/useCurrentUser";
+import { useTranslation } from "react-i18next";
 
 const SectionLogReg: React.FC = () => {
   const navigate = useNavigate();
   const [isDarkTheme, setIsDarkTheme] = useState(false);
   const user = useCurrentUser();
+  const { t } = useTranslation("home");
 
   useEffect(() => {
     const currentTheme = document.body.getAttribute("data-theme");
@@ -42,16 +44,20 @@ const SectionLogReg: React.FC = () => {
         <div className="auth-buttons">
           {user ? (
             <>
-              <button className="activities-button" onClick={() => navigate("/trainers")}>Entrenadores</button>
-              <button className="activities-button" onClick={() => navigate("/classes")}>Reservar</button>
+              <button className="activities-button" onClick={() => navigate("/trainers")}>
+                {t("trainers")}
+              </button>
+              <button className="activities-button" onClick={() => navigate("/classes")}>
+                {t("book")}
+              </button>
             </>
           ) : (
             <>
               <button className="login-button" onClick={() => navigate("/auth")}>
-                Inicia Sesión{" "}
+                {t("login")}
               </button>
               <button className="register-button" onClick={() => navigate("/auth")}>
-                Regístrate
+                {t("register")}
               </button>
             </>
           )}

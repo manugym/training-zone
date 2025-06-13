@@ -1,0 +1,16 @@
+{
+  "title": "Nuestros Entrenadores",
+  "search_placeholder": "Buscar entrenador...",
+  "all_classes": "Todas las clases",
+  "view_profile": "Ver Perfil",
+  "no_trainers_found": "No se encontraron entrenadores",
+  "not_found": "Entrenador no encontrado",
+  "send_message": "Enviar Mensaje",
+  "have_questions": "¿Tienes alguna duda?",
+  "class_type": "Tipo",
+  "class_description": "Descripción",
+  "class_actions": "Acciones",
+  "view_schedule": "Ver Precios y Horarios",
+  "no_classes": "No hay clases disponibles este día",
+  "select_day": "Selecciona un día resaltado en azul para ver las clases disponibles."
+}
