@@ -55,7 +55,7 @@ export default function TabLayout() {
         options={{
           title: "Entrenadores",
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="account-tie" size={30} color={color} />
+            <MaterialCommunityIcons name="run" size={30} color={color} />
           ),
         }}
       />
@@ -68,21 +68,33 @@ export default function TabLayout() {
           ),
         }}
       />
+
       <Tabs.Screen
-        name="Routine"
+        name="RoutineGenerator"
         options={{
-          title: "Rutinas",
+          title: "Rutina",
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="script-text" size={30} color={color} />
+            <MaterialCommunityIcons name="robot" size={30} color={color} />
           ),
         }}
       />
+
       <Tabs.Screen
-        name="Preferences"
+        name="AllConversations"
         options={{
-          title: "Preferencias",
+          title: "Chat",
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="archive" size={30} color={color} />
+            <MaterialCommunityIcons name="chat" size={30} color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="UserProfile"
+        options={{
+          title: "Perfil",
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="account" size={30} color={color} />
           ),
         }}
       />

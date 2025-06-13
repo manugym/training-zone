@@ -1,23 +1,12 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { View, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import userService from "@/services/user.service";
 import apiService from "@/services/api.service";
 import authService from "@/services/auth.service";
-import {
-  Dialog,
-  Portal,
-  Button,
-  useTheme,
-} from "react-native-paper";
-import { useTranslation } from 'react-i18next';
+import { Dialog, Portal, Button, useTheme } from "react-native-paper";
 
 const logoLight = require("@/assets/images/home-logo-light.png");
 const logoDark = require("@/assets/images/home-logo-dark.png");
@@ -26,6 +15,7 @@ export default function SectionLogReg() {
   const router = useRouter();
   const theme = useTheme();
   const { t } = useTranslation("home");
+
 
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);

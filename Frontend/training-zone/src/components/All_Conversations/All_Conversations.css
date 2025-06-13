@@ -19,7 +19,7 @@
 }
 
 .user_item:hover,
-.selected {
+.user_item.selected {
   background-color: var(--color-background-secondary);
 }
 
@@ -32,8 +32,41 @@
   border: 2px solid var(--color-primary);
 }
 
+.user_info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.user_name_wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user_name {
+  font-weight: bold;
+  font-size: 1rem;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .last-message {
   font-size: 0.9rem;
   font-style: italic;
   opacity: 0.8;
+  margin-top: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.counter {
+  background-color: var(--color-secondary);
+  color: white;
+  font-size: 1rem;
+  padding: 2px 6px;
+  border-radius: 100px;
 }

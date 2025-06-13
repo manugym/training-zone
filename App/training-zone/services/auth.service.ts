@@ -4,6 +4,8 @@ import { AuthResponse } from "../models/auth-response";
 import { NewUserRequest } from "../models/new-user-request";
 import ApiService from "./api.service";
 import userService from "./user.service";
+import chatService from "./chat.service";
+import websocketService from "./websocket.service";
 
 class AuthService {
   private readonly TOKEN_KEY = "token";
@@ -22,6 +24,7 @@ class AuthService {
       throw new Error("Login failed: Token not received");
     }
 
+    this.logout();
     console.log("Login successful:", response);
 
     this.setSession(response.data.accessToken);
@@ -33,6 +36,10 @@ class AuthService {
     try {
       await AsyncStorage.removeItem(this.TOKEN_KEY);
       ApiService.jwt = null;
+      //Clear all services
+      userService.cleanService();
+      chatService.cleanService();
+      websocketService.disconnect();
       console.log("Logged out successfully", ApiService.jwt);
     } catch (error) {
       console.error("Error while logging out:", error);
@@ -70,6 +77,8 @@ class AuthService {
     if (!response.success || !response.data?.accessToken) {
       throw new Error("Registration failed: Token not received");
     }
+
+    this.logout();
 
     console.log("Registration successful:", response);
     this.setSession(response.data.accessToken);
