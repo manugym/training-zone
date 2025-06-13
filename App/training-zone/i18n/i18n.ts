@@ -18,10 +18,12 @@ i18n.use(initReactI18next).init({
     en: {
       home: homeEn,
       trainer: trainerEn,
+      class: classEn
     },
     es: {
       home: homeEs,
       trainer: trainerEs,
+      class: classEs
     },
   },
   interpolation: {
