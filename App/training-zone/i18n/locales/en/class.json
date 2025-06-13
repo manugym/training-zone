@@ -1,0 +1,14 @@
+{
+  "title": "Our Classes",
+  "noClasses": "No classes found",
+  "viewClass": "View Class",
+  "screenTitle": "Class Details",
+  "dayClasses": "Classes on selected day",
+  "noDayClasses": "No classes available this day.",
+  "type": "Type",
+  "time": "Time",
+  "action": "Action",
+  "join": "Join",
+  "cancel": "Cancel",
+  "error": "Error loading data."
+}
