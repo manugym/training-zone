@@ -79,9 +79,7 @@ Esquema E/R utilizado:
 
 ## Tutorial de Uso
 
-*Aquí irán capturas de pantalla, instrucciones paso a paso, y demostraciones del uso de la aplicación.*
-
-> ⚠️ **En desarrollo.**
+[Explicación en PDF](https://drive.google.com/file/d/1YrMqZefeGwScY9j_dBYRc9hoE5crGM5h/view?usp=sharing)
 
 ---
 
@@ -105,11 +103,6 @@ Esquema E/R utilizado:
 > Actualmente, la versión iOS **solo funciona en simuladores (Xcode)** y **no puede instalarse en iPhones físicos sin una cuenta de desarrollador de Apple**.
 ---
 
-
-## Presentación PDF
-
-[Ver PDF](./assets/Training%Zone.pdf)
----
 
 ## Bitácora de Tareas
 
